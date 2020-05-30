@@ -1,19 +1,10 @@
-#!/usr/bin/env bash
-
-git pull origin master;
-
 function install() {
-	apply_system_configurtion
+	for DOTFILE in system/.{functions,aliases}; 
+	do
+		[ -f "$DOTFILE" ] && source "$DOTFILE" && echo "1"
+	done
 	cp ./git/.gitconfig ~/
-	chmod 755 ./terminal/banner.sh && ./terminal/banner.sh
-}
-
-function apply_system_configurtion() {
-	for DOTFILE in ./system/.{function,aliases}; do
-		echo "$DOTFILE"
-  		[ -f "$DOTFILE" ] && echo "1"
-done
-
+	chmod 755 ./terminal/launch.sh && ./terminal/launch.sh
 }
 
 if [ "$1" == "--force" -o "$1" == "-f" ]; then

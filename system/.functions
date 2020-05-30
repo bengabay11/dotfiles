@@ -1,3 +1,4 @@
+#!/bin/bash
 
 # get environment variable (usage: get-env "VAR")
 get-env() {

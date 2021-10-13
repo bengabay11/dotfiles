@@ -1,10 +1,8 @@
 function install() {
-	for DOTFILE in system/.{functions,aliases}; 
-	do
-		[ -f "$DOTFILE" ] && source "$DOTFILE" && echo "1"
-	done
-	cp ./git/.gitconfig ~/
-	chmod 755 ./terminal/launch.sh && ./terminal/launch.sh
+	system/install.sh
+	git/install.sh
+	terminal/install.sh
+	python/install.sh
 }
 
 if [ "$1" == "--force" -o "$1" == "-f" ]; then

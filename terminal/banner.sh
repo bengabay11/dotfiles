@@ -1,3 +1,5 @@
+#!/bin/bash
+
 echo '      _  ***                             |.--- *** ---.|'
 echo '     ( `\( ) *   A Prayer to my          || (`\( )/`) ||'
 echo '      `> /~\_I    COMPUTER ANGELS:       ||  > /~\ <  ||'

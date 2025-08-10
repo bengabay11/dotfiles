@@ -193,7 +193,8 @@ main() {
     
     # Test shell utilities are available
     if [[ -f "$HOME/.zshrc" ]]; then
-        run_test "Shell utilities are sourced" "grep -q '.shell-utils' '$HOME/.zshrc'"
+        run_test "Modular shell utilities system is configured" "grep -q '.config/shell-utils' '$HOME/.zshrc'"
+        run_test "Shell utilities are installed" "test -f '$HOME/.config/shell-utils/shell-utils.sh'"
     fi
     echo ""
     

@@ -133,9 +133,14 @@ export PATH="$PATH:/opt/mssql-tools18/bin"
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-# Load shell utilities
-if [[ -f "$HOME/.shell-utils" ]]; then
-    source "$HOME/.shell-utils"
+# Load shell utilities from modular system
+SHELL_UTILS_DIR="$HOME/.config/shell-utils"
+if [[ -d "$SHELL_UTILS_DIR" ]]; then
+    for util_file in "$SHELL_UTILS_DIR"/* "$SHELL_UTILS_DIR"/.*; do
+        if [[ -r "$util_file" && -f "$util_file" ]]; then
+            source "$util_file"
+        fi
+    done
 fi
 
 # FZF Configuration

@@ -3,7 +3,7 @@
 # Main dotfiles installation script
 # Supports: macOS (with easy extensibility for other OSs)
 
-set -euo pipefail
+set -uo pipefail
 
 # Parse command line arguments
 AUTO_YES=false

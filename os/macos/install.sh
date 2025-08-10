@@ -2,7 +2,7 @@
 
 # macOS-specific installation script
 
-set -euo pipefail
+set -uo pipefail
 
 # Parse command line arguments (inherit from parent script or parse directly)
 if [[ -z "${AUTO_YES:-}" ]]; then
@@ -56,13 +56,18 @@ install_homebrew() {
         # Skip update in CI or when explicitly disabled
         if [[ -z "${CI:-}" ]] && [[ -z "${HOMEBREW_NO_AUTO_UPDATE:-}" ]] && [[ -z "${AUTO_YES:-}" ]]; then
             log_info "Updating Homebrew..."
-            brew update
+            if ! brew update; then
+                log_warning "Failed to update Homebrew - continuing with installation"
+            fi
         else
             log_info "Skipping brew update (CI/auto-update disabled)"
         fi
     else
         log_install "Homebrew package manager"
-        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        if ! /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"; then
+            log_error "Failed to install Homebrew - this will affect other installations"
+            return 1
+        fi
         
         # Add Homebrew to PATH for Apple Silicon Macs
         if [[ -f "/opt/homebrew/bin/brew" ]]; then
@@ -135,7 +140,11 @@ install_cli_tools() {
             esac
         else
             log_install "$tool"
-            brew install "$tool"
+            if ! brew install "$tool"; then
+                log_error "Failed to install $tool - continuing with remaining tools"
+            else
+                log_success "$tool installed successfully"
+            fi
         fi
     done
     
@@ -146,7 +155,11 @@ install_cli_tools() {
         log_found "uv is already installed ($version)"
     else
         log_install "uv (Python package installer)"
-        curl -LsSf https://astral.sh/uv/install.sh | sh
+        if ! curl -LsSf https://astral.sh/uv/install.sh | sh; then
+            log_error "Failed to install uv - continuing with installation"
+        else
+            log_success "uv installed successfully"
+        fi
     fi
 }
 
@@ -156,9 +169,12 @@ install_rust() {
         log_found "Rust is already installed ($version)"
     else
         log_install "Rust programming language"
-        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-        source "$HOME/.cargo/env"
-        log_success "Rust installed successfully"
+        if ! curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y; then
+            log_error "Failed to install Rust - continuing with installation"
+        else
+            source "$HOME/.cargo/env"
+            log_success "Rust installed successfully"
+        fi
     fi
 }
 
@@ -206,8 +222,12 @@ install_applications() {
             log_found "$display_name is already installed"
         else
             log_install "$display_name"
-            brew install --cask "$app"
-            newly_installed_apps+=("$display_name")
+            if ! brew install --cask "$app"; then
+                log_error "Failed to install $display_name - continuing with remaining applications"
+            else
+                log_success "$display_name installed successfully"
+                newly_installed_apps+=("$display_name")
+            fi
         fi
     done
     
@@ -261,8 +281,11 @@ install_oh_my_zsh() {
         log_found "Oh My Zsh is already installed"
     else
         log_install "Oh My Zsh shell framework"
-        RUNZSH=no CHSH=no sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
-        log_success "Oh My Zsh installed successfully"
+        if ! RUNZSH=no CHSH=no sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended; then
+            log_error "Failed to install Oh My Zsh - continuing with installation"
+        else
+            log_success "Oh My Zsh installed successfully"
+        fi
     fi
 }
 
@@ -304,9 +327,15 @@ install_zsh_plugins() {
             
             # Special handling for powerlevel10k (shallow clone for performance)
             if [[ "$name" == "powerlevel10k" ]]; then
-                git clone --depth=1 "$repo_url" "$install_path"
+                if ! git clone --depth=1 "$repo_url" "$install_path"; then
+                    log_error "Failed to install $name - continuing with remaining plugins"
+                    continue
+                fi
             else
-                git clone "$repo_url" "$install_path"
+                if ! git clone "$repo_url" "$install_path"; then
+                    log_error "Failed to install $name - continuing with remaining plugins"
+                    continue
+                fi
             fi
             
             log_success "$name installed successfully"
@@ -349,8 +378,17 @@ configure_pyenv() {
     
     if [[ -n "$latest_python" ]]; then
         log_info "Installing Python $latest_python..."
-        pyenv install "$latest_python" --skip-existing
-        pyenv global "$latest_python"
+        if ! pyenv install "$latest_python" --skip-existing; then
+            log_error "Failed to install Python $latest_python - continuing with installation"
+        else
+            if ! pyenv global "$latest_python"; then
+                log_error "Failed to set global Python version - continuing with installation"
+            else
+                log_success "Python $latest_python installed and set as global version"
+            fi
+        fi
+    else
+        log_warning "Could not determine latest Python version"
     fi
 }
 
@@ -410,7 +448,9 @@ main() {
         
         # Run stage if confirmed
         if confirm_stage "$description" "$default_yes"; then
-            "$function_name"
+            if ! "$function_name"; then
+                log_error "Stage '$description' failed - continuing with remaining stages"
+            fi
         fi
     done
     

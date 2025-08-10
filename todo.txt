@@ -1,2 +1,0 @@
-- system settings scripts
-- test_install.yml should work on github

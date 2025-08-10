@@ -16,7 +16,7 @@ A comprehensive dotfiles setup for macOS with support for development tools and 
 - **Tmux** - Terminal multiplexer with modern setup
 - **Zsh + Oh My Zsh + Powerlevel10k** - Advanced shell with beautiful theme
 - **bat** - Enhanced cat with syntax highlighting
-- **exa** - Modern ls replacement
+- **eza** - Modern ls replacement
 - **ruff** - Fast Python linter
 - **uv** - Ultra-fast Python package installer
 - **pre-commit** - Git hooks framework
@@ -143,7 +143,7 @@ cd ~/.dotfiles
 #### Zsh Configuration
 
 - Oh My Zsh with Powerlevel10k theme for beautiful, informative prompt
-- Enhanced ls commands using `exa`
+- Enhanced ls commands using `eza`
 - Enhanced cat using `bat`
 - Comprehensive git aliases and development shortcuts
 - Useful functions for productivity
@@ -226,7 +226,7 @@ After running the installer, you can verify that everything was installed correc
 **What the test script checks:**
 
 - ✅ **Essential CLI Tools** - Verifies git, python3, vim, tmux, node, npm, yarn, zsh
-- ✅ **Development Tools** - Checks rust, cargo, pyenv, uv, TypeScript, bat, exa, ruff, pre-commit, btop, nmap, htop, ipython, ripgrep, helm
+- ✅ **Development Tools** - Checks rust, cargo, pyenv, uv, TypeScript, bat, eza, ruff, pre-commit, btop, nmap, htop, ipython, ripgrep, helm
 - ✅ **Oh My Zsh** - Validates Oh My Zsh installation and configuration
 - ✅ **Dotfiles Symlinking** - Ensures all dotfiles are properly symlinked
 - ✅ **Python Environment** - Verifies pyenv and Python version setup

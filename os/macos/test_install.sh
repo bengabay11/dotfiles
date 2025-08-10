@@ -83,7 +83,7 @@ main() {
     run_test "uv installation" "test_command_exists uv"
     run_test "TypeScript installation" "test_command_exists tsc"
     run_test "bat installation" "test_command_exists bat"
-    run_test "exa installation" "test_command_exists exa"
+    run_test "eza installation" "test_command_exists eza"
     run_test "ruff installation" "test_command_exists ruff"
     run_test "pre-commit installation" "test_command_exists pre-commit"
     run_test "btop installation" "test_command_exists btop"

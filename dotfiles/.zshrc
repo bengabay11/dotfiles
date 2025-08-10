@@ -118,7 +118,7 @@ source $ZSH/oh-my-zsh.sh
 
 # Aliases
 alias cat=bat
-alias ls="exa --icons"
+alias ls="eza --icons --hyperlink --sort=type"
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     alias open='xdg-open'
 fi

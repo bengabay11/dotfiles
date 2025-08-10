@@ -93,7 +93,7 @@ install_cli_tools() {
         "npm"
         "typescript"
         "bat"
-        "exa"
+        "eza"
         "zsh"
         "ruff"
         "pre-commit"

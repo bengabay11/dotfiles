@@ -41,7 +41,8 @@ DOTFILES_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 source "$DOTFILES_ROOT/dotfiles/.shell-utils"
 source "$DOTFILES_ROOT/utils.sh"
 
-
+# Global array to track failed installations
+declare -a FAILED_INSTALLATIONS=()
 
 # Check if we're on macOS
 if [[ "$(uname -s)" != "Darwin" ]]; then
@@ -142,6 +143,7 @@ install_cli_tools() {
             log_install "$tool"
             if ! brew install "$tool"; then
                 log_error "Failed to install $tool - continuing with remaining tools"
+                FAILED_INSTALLATIONS+=("$tool (CLI tool)")
             else
                 log_success "$tool installed successfully"
             fi
@@ -157,6 +159,7 @@ install_cli_tools() {
         log_install "uv (Python package installer)"
         if ! curl -LsSf https://astral.sh/uv/install.sh | sh; then
             log_error "Failed to install uv - continuing with installation"
+            FAILED_INSTALLATIONS+=("uv (Python package installer)")
         else
             log_success "uv installed successfully"
         fi
@@ -171,6 +174,7 @@ install_rust() {
         log_install "Rust programming language"
         if ! curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y; then
             log_error "Failed to install Rust - continuing with installation"
+            FAILED_INSTALLATIONS+=("Rust (programming language)")
         else
             source "$HOME/.cargo/env"
             log_success "Rust installed successfully"
@@ -224,6 +228,7 @@ install_applications() {
             log_install "$display_name"
             if ! brew install --cask "$app"; then
                 log_error "Failed to install $display_name - continuing with remaining applications"
+                FAILED_INSTALLATIONS+=("$display_name (application)")
             else
                 log_success "$display_name installed successfully"
                 newly_installed_apps+=("$display_name")
@@ -283,6 +288,7 @@ install_oh_my_zsh() {
         log_install "Oh My Zsh shell framework"
         if ! RUNZSH=no CHSH=no sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended; then
             log_error "Failed to install Oh My Zsh - continuing with installation"
+            FAILED_INSTALLATIONS+=("Oh My Zsh (shell framework)")
         else
             log_success "Oh My Zsh installed successfully"
         fi
@@ -329,11 +335,13 @@ install_zsh_plugins() {
             if [[ "$name" == "powerlevel10k" ]]; then
                 if ! git clone --depth=1 "$repo_url" "$install_path"; then
                     log_error "Failed to install $name - continuing with remaining plugins"
+                    FAILED_INSTALLATIONS+=("$name (Zsh plugin/theme)")
                     continue
                 fi
             else
                 if ! git clone "$repo_url" "$install_path"; then
                     log_error "Failed to install $name - continuing with remaining plugins"
+                    FAILED_INSTALLATIONS+=("$name (Zsh plugin/theme)")
                     continue
                 fi
             fi
@@ -380,15 +388,37 @@ configure_pyenv() {
         log_info "Installing Python $latest_python..."
         if ! pyenv install "$latest_python" --skip-existing; then
             log_error "Failed to install Python $latest_python - continuing with installation"
+            FAILED_INSTALLATIONS+=("Python $latest_python (via pyenv)")
         else
             if ! pyenv global "$latest_python"; then
                 log_error "Failed to set global Python version - continuing with installation"
+                FAILED_INSTALLATIONS+=("Python $latest_python global setup (via pyenv)")
             else
                 log_success "Python $latest_python installed and set as global version"
             fi
         fi
     else
         log_warning "Could not determine latest Python version"
+    fi
+}
+
+# Function to display summary of failed installations
+show_failure_summary() {
+    if [[ ${#FAILED_INSTALLATIONS[@]} -gt 0 ]]; then
+        echo ""
+        echo -e "${RED}╭─────────────────────────────────────────────────╮${NC}"
+        echo -e "${RED}│${NC} ${YELLOW}⚠️  Installation Failures Summary${NC}              ${RED}│${NC}"
+        echo -e "${RED}╰─────────────────────────────────────────────────╯${NC}"
+        echo ""
+        log_warning "The following items failed to install:"
+        echo ""
+        for failed_item in "${FAILED_INSTALLATIONS[@]}"; do
+            log_error "  • $failed_item"
+        done
+        echo ""
+        log_info "These failures do not affect the successfully installed tools."
+        log_info "You can try installing the failed items manually later."
+        echo ""
     fi
 }
 
@@ -428,7 +458,7 @@ main() {
         "install/update Homebrew package manager|install_homebrew|true|always"
         "install command-line development tools|install_cli_tools|false|always"
         "install Rust programming language|install_rust|false|always"
-        "install GUI applications (IDEs, browsers, etc.)|install_applications|false|no_ci"
+        "install GUI applications (IDEs, browsers, etc.)|install_applications|false|always"
         "install and configure Oh My Zsh shell framework|install_oh_my_zsh|false|always"
         "install Zsh plugins and themes (autosuggestions, syntax highlighting, powerlevel10k)|install_zsh_plugins|false|always"
         "set up dotfiles (.vimrc, .tmux.conf, .gitconfig, etc.)|setup_dotfiles|true|always"
@@ -440,11 +470,6 @@ main() {
         # Parse stage information (description|function|default_yes|condition)
         IFS='|' read -r description function_name default_yes condition <<< "$stage_info"
         
-        # Check if stage should be skipped based on condition
-        if [[ "$condition" == "no_ci" && -n "${CI:-}" ]]; then
-            log_info "Skipping GUI applications in CI environment"
-            continue
-        fi
         
         # Run stage if confirmed
         if confirm_stage "$description" "$default_yes"; then
@@ -453,6 +478,9 @@ main() {
             fi
         fi
     done
+    
+    # Show summary of any failed installations
+    show_failure_summary
     
     echo ""
     echo -e "${CYAN}╭─────────────────────────────────────────────────╮${NC}"

@@ -1,0 +1,32 @@
+name: Test Dotfiles Installation
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:
+
+jobs:
+  test-macos-install:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Make scripts executable
+        run: |
+          chmod +x install.sh
+          chmod +x os/macos/install.sh
+          chmod +x os/macos/test_install.sh
+
+      - name: Run installation
+        env:
+          HOMEBREW_NO_INSTALL_CLEANUP: 1
+          HOMEBREW_NO_AUTO_UPDATE: 1
+          HOMEBREW_NO_ANALYTICS: 1
+        run: ./install.sh -y
+
+      - name: Validate installation
+        run: ./os/macos/test_install.sh

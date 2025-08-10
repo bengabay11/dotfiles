@@ -1,0 +1,25 @@
+[gpg]
+	format = ssh
+[user]
+	name = beng6666
+	email = ben.g@claroty.com
+[credential "https://github.com"]
+	helper = !/usr/bin/gh auth git-credential
+[core]
+	editor = vim
+	pager = delta
+	autocrlf = input
+	eol = lf
+	safecrlf = warn
+
+[interactive]
+	diffFilter = delta --color-only
+
+[delta]
+	navigate = true    # use n and N to move between diff sections
+	light = false      # set to true if you're in a terminal w/ a light background color (e.g. the default macOS terminal)
+	side-by-side = true
+	line-numbers = true
+
+[merge]
+	conflictstyle = zdiff3

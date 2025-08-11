@@ -19,10 +19,10 @@ run_test() {
     log_check "Testing: $test_name"
     if eval "$test_command"; then
         log_pass "$test_name"
-        ((TESTS_PASSED++))
+        ((TESTS_PASSED+=1))
     else
         log_fail "$test_name"
-        ((TESTS_FAILED++))
+        ((TESTS_FAILED+=1))
     fi
     return 0
 }

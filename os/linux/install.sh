@@ -70,7 +70,7 @@ apt_update_and_basics() {
 }
 
 install_cli_tools() {
-    log_info "Installing command-line tools via apt/npm..."
+    log_info "Installing command-line tools..."
 
     # Core CLI via apt
     local apt_pkgs=(
@@ -92,14 +92,14 @@ install_cli_tools() {
     # Some packages might not exist on older distros; attempt install and continue on failure
     for pkg in "${apt_pkgs[@]}"; do
         if dpkg -s "$pkg" >/dev/null 2>&1; then
-            log_found "$pkg is already installed via apt"
+            log_found "$pkg is already installed"
         else
             log_install "$pkg"
             if ! sudo DEBIAN_FRONTEND=noninteractive apt-get install -y "$pkg"; then
                 log_error "Failed to install $pkg - continuing"
                 FAILED_INSTALLATIONS+=("$pkg (apt)")
             else
-                log_success "$pkg installed via apt"
+                log_success "$pkg installed successfully"
             fi
         fi
     done
@@ -137,27 +137,27 @@ install_cli_tools() {
 
     # Typescript (tsc) and yarn via npm
     if ! command -v tsc >/dev/null 2>&1; then
-        log_install "typescript (npm)"
+        log_install "typescript"
         if ! sudo npm install -g typescript; then
-            log_error "Failed to install typescript via npm"
+            log_error "Failed to install typescript"
             FAILED_INSTALLATIONS+=("typescript (npm)")
         else
-            log_success "typescript installed via npm"
+            log_success "typescript installed successfully"
         fi
     else
-        log_found "typescript already installed ($(tsc --version 2>/dev/null || echo version unknown))"
+        log_found "typescript is already installed ($(tsc --version 2>/dev/null || echo version unknown))"
     fi
 
     if ! command -v yarn >/dev/null 2>&1; then
-        log_install "yarn (npm)"
+        log_install "yarn"
         if ! sudo npm install -g yarn; then
-            log_error "Failed to install yarn via npm"
+            log_error "Failed to install yarn"
             FAILED_INSTALLATIONS+=("yarn (npm)")
         else
-            log_success "yarn installed via npm"
+            log_success "yarn installed successfully"
         fi
     else
-        log_found "yarn already installed ($(yarn --version 2>/dev/null || echo version unknown))"
+        log_found "yarn is already installed ($(yarn --version 2>/dev/null || echo version unknown))"
     fi
 
     # ruff and pre-commit via apt or pipx fallback
@@ -172,30 +172,34 @@ install_cli_tools() {
 
     if ! command -v ruff >/dev/null 2>&1; then
         if sudo DEBIAN_FRONTEND=noninteractive apt-get install -y ruff; then
-            log_success "ruff installed via apt"
+            log_success "ruff installed successfully"
         else
-            log_install "ruff (pipx)"
+            log_install "ruff"
             if ! pipx install ruff; then
                 log_error "Failed to install ruff"
                 FAILED_INSTALLATIONS+=("ruff")
+            else
+                log_success "ruff installed successfully"
             fi
         fi
     else
-        log_found "ruff already installed"
+        log_found "ruff is already installed"
     fi
 
     if ! command -v pre-commit >/dev/null 2>&1; then
         if sudo DEBIAN_FRONTEND=noninteractive apt-get install -y pre-commit; then
-            log_success "pre-commit installed via apt"
+            log_success "pre-commit installed successfully"
         else
-            log_install "pre-commit (pipx)"
+            log_install "pre-commit"
             if ! pipx install pre-commit; then
                 log_error "Failed to install pre-commit"
                 FAILED_INSTALLATIONS+=("pre-commit")
+            else
+                log_success "pre-commit installed successfully"
             fi
         fi
     else
-        log_found "pre-commit already installed"
+        log_found "pre-commit is already installed"
     fi
 
     # uv installer (same as macOS)
@@ -248,21 +252,21 @@ post_rust_fallbacks() {
     # Some tools may not be available in apt repos; install via cargo as fallback
     if command -v cargo >/dev/null 2>&1; then
         if ! command -v eza >/dev/null 2>&1; then
-            log_install "eza (cargo)"
+            log_install "eza"
             if ! cargo install eza; then
                 log_error "Failed to install eza via cargo"
                 FAILED_INSTALLATIONS+=("eza (cargo)")
             else
-                log_success "eza installed via cargo"
+                log_success "eza installed successfully"
             fi
         fi
         if ! command -v delta >/dev/null 2>&1; then
-            log_install "git-delta (cargo)"
+            log_install "git-delta"
             if ! cargo install git-delta; then
                 log_error "Failed to install git-delta via cargo"
                 FAILED_INSTALLATIONS+=("git-delta (cargo)")
             else
-                log_success "git-delta installed via cargo"
+                log_success "git-delta installed successfully"
             fi
         fi
     else
@@ -375,13 +379,17 @@ configure_pyenv() {
         local latest_python
         latest_python=$(pyenv install --list | grep -E '^\s*3\.[0-9]+\.[0-9]+$' | tail -1 | tr -d ' ')
         if [[ -n "$latest_python" ]]; then
-            log_info "Installing Python $latest_python via pyenv..."
+            log_info "Installing Python $latest_python..."
             if ! pyenv install "$latest_python" --skip-existing; then
                 log_error "Failed to install Python $latest_python via pyenv"
                 FAILED_INSTALLATIONS+=("Python $latest_python (pyenv)")
             else
-                pyenv global "$latest_python" || true
-                log_success "Python $latest_python installed (pyenv)"
+                if ! pyenv global "$latest_python"; then
+                    log_error "Failed to set global Python version - continuing with installation"
+                    FAILED_INSTALLATIONS+=("Python $latest_python global setup (via pyenv)")
+                else
+                    log_success "Python $latest_python installed and set as global version"
+                fi
             fi
         fi
     fi
@@ -390,10 +398,18 @@ configure_pyenv() {
 show_failure_summary() {
     if [[ ${#FAILED_INSTALLATIONS[@]} -gt 0 ]]; then
         echo ""
-        echo -e "${RED}Failures Summary${NC}"
+        echo -e "${RED}╭─────────────────────────────────────────────────╮${NC}"
+        echo -e "${RED}│${NC} ${YELLOW}⚠️  Installation Failures Summary${NC}              ${RED}│${NC}"
+        echo -e "${RED}╰─────────────────────────────────────────────────╯${NC}"
+        echo ""
+        log_warning "The following items failed to install:"
+        echo ""
         for failed_item in "${FAILED_INSTALLATIONS[@]}"; do
             log_error "  • $failed_item"
         done
+        echo ""
+        log_info "These failures do not affect the successfully installed tools."
+        log_info "You can try installing the failed items manually later."
         echo ""
     fi
 }

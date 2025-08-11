@@ -10,8 +10,8 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DOTFILES_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 
 # Source shared utilities if available
-if [[ -f "$DOTFILES_ROOT/dotfiles/.shell-utils" ]]; then
-    source "$DOTFILES_ROOT/dotfiles/.shell-utils"
+if [[ -f "$DOTFILES_ROOT/dotfiles/shell-utils.sh" ]]; then
+    source "$DOTFILES_ROOT/dotfiles/shell-utils.sh"
 else
     # Define basic logging functions if utilities aren't available
     log_info() { echo -e "\033[36mℹ\033[0m  $1"; }

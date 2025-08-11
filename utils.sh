@@ -363,6 +363,9 @@ get_cli_tool_version() {
         "vim")
             vim --version 2>/dev/null | head -1 || echo "version unknown"
             ;;
+        "tmux")
+            tmux -V 2>/dev/null || echo "version unknown"
+            ;;
         "zsh")
             zsh --version 2>/dev/null || echo "version unknown"
             ;;
@@ -375,6 +378,9 @@ get_cli_tool_version() {
         "npm")
             npm --version 2>/dev/null || echo "version unknown"
             ;;
+        "yarn")
+            yarn --version 2>/dev/null || echo "version unknown"
+            ;;
         "tsc")
             tsc --version 2>/dev/null || echo "version unknown"
             ;;
@@ -386,6 +392,23 @@ get_cli_tool_version() {
             ;;
         "rg"|"ripgrep")
             rg --version 2>/dev/null || echo "version unknown"
+            ;;
+        "bat"|"batcat")
+            { command -v bat >/dev/null 2>&1 && bat --version; } 2>/dev/null || \
+            { command -v batcat >/dev/null 2>&1 && batcat --version; } 2>/dev/null || \
+            echo "version unknown"
+            ;;
+        "rustc")
+            rustc --version 2>/dev/null || echo "version unknown"
+            ;;
+        "cargo")
+            cargo --version 2>/dev/null || echo "version unknown"
+            ;;
+        "pyenv")
+            pyenv --version 2>/dev/null || echo "version unknown"
+            ;;
+        "uv")
+            uv --version 2>/dev/null || echo "version unknown"
             ;;
         "helm")
             helm version --short 2>/dev/null || helm version 2>/dev/null | head -1 || echo "version unknown"
@@ -401,6 +424,18 @@ get_cli_tool_version() {
             ;;
         "aws")
             aws --version 2>/dev/null || echo "version unknown"
+            ;;
+        "btop")
+            btop --version 2>/dev/null || echo "version unknown"
+            ;;
+        "htop")
+            htop --version 2>/dev/null || echo "version unknown"
+            ;;
+        "nmap")
+            nmap --version 2>/dev/null | head -1 || echo "version unknown"
+            ;;
+        "speedtest-cli")
+            speedtest-cli --version 2>/dev/null || echo "version unknown"
             ;;
         *)
             # Try common version flags in order of preference

@@ -92,7 +92,59 @@ install_cli_tools() {
     # Some packages might not exist on older distros; attempt install and continue on failure
     for pkg in "${apt_pkgs[@]}"; do
         if dpkg -s "$pkg" >/dev/null 2>&1; then
-            log_found "$pkg is already installed"
+            # Determine the corresponding command name for version output
+            cmd_name="$pkg"
+            case "$pkg" in
+                nodejs)
+                    # Prefer node if available, otherwise fall back to nodejs
+                    if command -v node >/dev/null 2>&1; then
+                        cmd_name="node"
+                    else
+                        cmd_name="nodejs"
+                    fi
+                    ;;
+                git-delta)
+                    cmd_name="delta"
+                    ;;
+                ripgrep)
+                    cmd_name="rg"
+                    ;;
+                bat)
+                    if command -v bat >/dev/null 2>&1; then
+                        cmd_name="bat"
+                    elif command -v batcat >/dev/null 2>&1; then
+                        cmd_name="batcat"
+                    else
+                        cmd_name="bat"
+                    fi
+                    ;;
+                python3)
+                    cmd_name="python3"
+                    ;;
+                ipython3)
+                    # Prefer ipython if a shim/symlink exists; else use ipython3
+                    if command -v ipython >/dev/null 2>&1; then
+                        cmd_name="ipython"
+                    else
+                        cmd_name="ipython3"
+                    fi
+                    ;;
+                *)
+                    cmd_name="$pkg"
+                    ;;
+            esac
+
+            if command -v "$cmd_name" >/dev/null 2>&1; then
+                # Use shared version helper for consistent formatting
+                local version
+                version=$(get_cli_tool_version "$cmd_name")
+                log_found "$pkg is already installed ($version)"
+            else
+                # Command is not available (e.g., bat provides batcat); show apt package version instead
+                local pkg_ver
+                pkg_ver=$(dpkg-query -W -f='${Version}' "$pkg" 2>/dev/null || echo "version unknown")
+                log_found "$pkg is already installed (apt package $pkg_ver)"
+            fi
         else
             log_install "$pkg"
             if ! sudo DEBIAN_FRONTEND=noninteractive apt-get install -y "$pkg"; then
@@ -183,7 +235,7 @@ install_cli_tools() {
             fi
         fi
     else
-        log_found "ruff is already installed"
+        log_found "ruff is already installed ($(ruff --version 2>/dev/null || echo version unknown))"
     fi
 
     if ! command -v pre-commit >/dev/null 2>&1; then
@@ -199,7 +251,7 @@ install_cli_tools() {
             fi
         fi
     else
-        log_found "pre-commit is already installed"
+        log_found "pre-commit is already installed ($(pre-commit --version 2>/dev/null || echo version unknown))"
     fi
 
     # uv installer (same as macOS)

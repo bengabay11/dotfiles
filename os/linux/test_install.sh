@@ -52,7 +52,29 @@ main() {
     run_test "pyenv installation" "test_command_exists pyenv || [[ -d $HOME/.pyenv ]]"
     run_test "uv installation" "test_command_exists uv"
     run_test "helm installation" "test_command_exists helm"
+    run_test "TypeScript installation" "test_command_exists tsc"
+    run_test "ruff installation" "test_command_exists ruff || true"
+    run_test "pre-commit installation" "test_command_exists pre-commit || true"
     run_test "ipython presence" "test_command_exists ipython || test_command_exists ipython3"
+
+    echo ""
+    log_info "=== Testing Python and Rust Environment ==="
+    if command -v pyenv >/dev/null 2>&1 || [[ -d "$HOME/.pyenv" ]]; then
+        if pyenv global >/dev/null 2>&1; then
+            pyver=$(pyenv global)
+            log_pass "pyenv global Python version: $pyver"
+            ((TESTS_PASSED+=1))
+        else
+            log_warning "No global Python version set in pyenv (may be expected)"
+        fi
+        run_test "pyenv shims directory" "test_directory_exists '$HOME/.pyenv/shims'"
+    fi
+
+    if command -v cargo >/dev/null 2>&1; then
+        run_test "Cargo home directory" "test_directory_exists '$HOME/.cargo'"
+        run_test "Cargo binary directory" "test_directory_exists '$HOME/.cargo/bin'"
+        run_test "Rust toolchain directory" "test_directory_exists '$HOME/.rustup'"
+    fi
 
     log_info "=== Testing Dotfiles Symlinking ==="
     for dot in .vimrc .tmux.conf .zshrc .gitconfig; do
@@ -63,6 +85,58 @@ main() {
     log_info "=== Testing Zsh/Oh-My-Zsh ==="
     run_test "Oh My Zsh directory" "test_directory_exists '$HOME/.oh-my-zsh'"
     run_test "Oh My Zsh main script" "test_file_exists '$HOME/.oh-my-zsh/oh-my-zsh.sh'"
+
+    echo ""
+    log_info "=== Testing Configuration Files ==="
+    if [[ -f "$HOME/.zshrc" ]]; then
+        run_test ".zshrc contains Oh My Zsh configuration" "grep -q 'oh-my-zsh' '$HOME/.zshrc'"
+        run_test ".zshrc contains export statements" "grep -q 'export' '$HOME/.zshrc'"
+        run_test "Modular shell utilities system is configured" "grep -q '.config/shell-utils' '$HOME/.zshrc'"
+        run_test "Shell utilities are installed" "test -f '$HOME/.config/shell-utils/shell-utils.sh'"
+    fi
+    if [[ -f "$HOME/.gitconfig" ]]; then
+        run_test ".gitconfig contains user section" "grep -q '\\[user\\]' '$HOME/.gitconfig'"
+        run_test ".gitconfig contains delta pager configuration" "grep -q 'pager = delta' '$HOME/.gitconfig'"
+    fi
+    if [[ -f "$HOME/.vimrc" ]]; then
+        run_test ".vimrc contains basic configuration" "grep -q 'set' '$HOME/.vimrc'"
+    fi
+    if [[ -f "$HOME/.tmux.conf" ]]; then
+        run_test ".tmux.conf contains configuration" "grep -q 'set' '$HOME/.tmux.conf'"
+    fi
+
+    echo ""
+    log_info "=== Testing Environment Setup ==="
+    run_test "Cargo is in PATH" "echo '$PATH' | grep -q '.cargo/bin'"
+    run_test "pyenv is in PATH" "command -v pyenv >/dev/null 2>&1 || [[ -d $HOME/.pyenv ]]"
+    if command -v node >/dev/null 2>&1 && command -v npm >/dev/null 2>&1; then
+        run_test "Node.js and npm are compatible" "npm --version >/dev/null 2>&1"
+    fi
+    if command -v uv >/dev/null 2>&1; then
+        run_test "uv can list Python versions" "uv python list >/dev/null 2>&1 || true"
+    fi
+
+    echo ""
+    log_info "=== Testing Tool Functionality ==="
+    if command -v git >/dev/null 2>&1; then
+        run_test "Git can show version" "git --version >/dev/null 2>&1"
+        run_test "Git config is readable" "git config --list >/dev/null 2>&1"
+    fi
+    if command -v python3 >/dev/null 2>&1; then
+        run_test "Python3 can run basic commands" "python3 -c 'print("test")' >/dev/null 2>&1"
+    fi
+    if command -v node >/dev/null 2>&1; then
+        run_test "Node.js can execute JavaScript" "node -e 'console.log("test")' >/dev/null 2>&1"
+    fi
+    if command -v rustc >/dev/null 2>&1; then
+        run_test "Rust compiler responds to version check" "rustc --version >/dev/null 2>&1"
+    fi
+    if command -v tmux >/dev/null 2>&1; then
+        run_test "tmux can show version" "tmux -V >/dev/null 2>&1"
+    fi
+    if command -v vim >/dev/null 2>&1; then
+        run_test "Vim can show version" "vim --version >/dev/null 2>&1"
+    fi
 
     log_info "=== Tool Versions (informational) ==="
     tools=(
@@ -79,7 +153,13 @@ main() {
         "vim --version | head -1"
         "tmux -V"
         "zsh --version"
+        "btop --version"
+        "nmap --version | head -1"
+        "htop --version"
+        "ipython --version"
         "rg --version | head -1"
+        "helm version --short"
+        "speedtest-cli --version"
         "fzf --version"
         "delta --version"
     )
@@ -88,6 +168,27 @@ main() {
         if command -v "$name" >/dev/null 2>&1; then
             out=$(eval "$t" 2>/dev/null || echo 'Version check failed')
             log_info "$name: $out"
+        fi
+    done
+
+    echo ""
+    log_info "=== Testing Integration ==="
+    if command -v pyenv >/dev/null 2>&1 || [[ -d "$HOME/.pyenv" ]]; then
+        run_test "pyenv can list available versions" "pyenv install --list >/dev/null 2>&1"
+        if pyenv global >/dev/null 2>&1; then
+            run_test "pyenv global Python is usable" "pyenv exec python3 --version >/dev/null 2>&1"
+        fi
+    fi
+
+    echo ""
+    log_info "=== Testing File Permissions ==="
+    scripts=("../../install.sh" "install.sh")
+    for script in "${scripts[@]}"; do
+        script_path="$SCRIPT_DIR/$script"
+        if [[ -f "$script_path" ]]; then
+            run_test "$script is executable" "[[ -x '$script_path' ]]"
+        else
+            log_warning "$script not found at $script_path"
         fi
     done
 

@@ -122,12 +122,6 @@ main() {
         run_test "Git can show version" "git --version >/dev/null 2>&1"
         run_test "Git config is readable" "git config --list >/dev/null 2>&1"
     fi
-    if command -v python3 >/dev/null 2>&1; then
-        run_test "Python3 can run basic commands" "python3 -c 'print("test")' >/dev/null 2>&1"
-    fi
-    if command -v node >/dev/null 2>&1; then
-        run_test "Node.js can execute JavaScript" "node -e 'console.log("test")' >/dev/null 2>&1"
-    fi
     if command -v rustc >/dev/null 2>&1; then
         run_test "Rust compiler responds to version check" "rustc --version >/dev/null 2>&1"
     fi

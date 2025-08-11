@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Test script for WSL/Linux dotfiles installation (no GUI checks)
+# Test script for Linux dotfiles installation (no GUI checks)
 
 set -euo pipefail
 
@@ -34,7 +34,7 @@ test_symlink_exists() { [[ -L "$1" ]]; }
 test_symlink_target_exists() { local t; t=$(readlink "$1"); [[ -n "$t" && -e "$t" ]]; }
 
 main() {
-    log_info "Starting WSL/Linux dotfiles installation tests..."
+    log_info "Starting Linux dotfiles installation tests..."
     echo ""
 
     log_info "=== Testing Essential CLI Tools ==="
@@ -98,7 +98,7 @@ main() {
         log_error "Tests failed: $TESTS_FAILED"
         exit 1
     else
-        log_success "All tests passed for WSL/Linux!"
+        log_success "All tests passed for Linux!"
         exit 0
     fi
 }

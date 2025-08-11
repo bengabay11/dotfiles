@@ -21,7 +21,7 @@ while [[ $# -gt 0 ]]; do
             echo "  -h, --help   Show this help message"
             echo ""
             echo "This script installs dotfiles and development tools for your system."
-            echo "Currently supports: macOS, WSL (Ubuntu/Debian-based)"
+            echo "Currently supports: macOS, Linux (Ubuntu/Debian-based, including WSL)"
             exit 0
             ;;
         *)
@@ -50,12 +50,7 @@ detect_os() {
             echo "macos"
             ;;
         Linux*)
-            # Detect WSL specifically (presence of "Microsoft" in kernel version or WSLENV)
-            if grep -qi 'microsoft' /proc/version 2>/dev/null || [[ -n "${WSL_DISTRO_NAME:-}" ]] || [[ -n "${WSLENV:-}" ]]; then
-                echo "wsl"
-            else
-                echo "linux"
-            fi
+            echo "linux"
             ;;
         CYGWIN*|MINGW32*|MSYS*|MINGW*)
             echo "windows"
@@ -73,14 +68,9 @@ check_os_support() {
             log_info "Detected macOS - fully supported"
             return 0
             ;;
-        wsl)
-            log_info "Detected Windows Subsystem for Linux (WSL) - supported"
-            return 0
-            ;;
         linux)
-            log_error "Linux support is not yet implemented"
-            log_info "To add Linux support, create scripts in the 'os/linux/' directory"
-            return 1
+            log_info "Detected Linux - supported"
+            return 0
             ;;
         windows)
             log_error "Windows support is not yet implemented"

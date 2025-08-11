@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# WSL-specific installation script (Ubuntu/Debian-based distros preferred)
+# Linux-specific installation script (Ubuntu/Debian-based distros preferred)
 
 set -uo pipefail
 
@@ -20,7 +20,7 @@ if [[ -z "${AUTO_YES:-}" ]]; then
                 echo "  -y, --yes    Auto-confirm all prompts (non-interactive mode)"
                 echo "  -h, --help   Show this help message"
                 echo ""
-                echo "This script installs dotfiles and development tools for WSL (Linux)."
+                echo "This script installs dotfiles and development tools for Linux (apt-based)."
                 exit 0
                 ;;
             *)
@@ -44,15 +44,15 @@ source "$DOTFILES_ROOT/utils.sh"
 # Global array to track failed installations
 declare -a FAILED_INSTALLATIONS=()
 
-# Ensure we're on Linux (WSL or native)
+# Ensure we're on Linux
 if [[ "$(uname -s)" != "Linux" ]]; then
-    log_error "This script is designed for Linux/WSL only"
+    log_error "This script is designed for Linux only"
     exit 1
 fi
 
-# Confirm apt is available (we target Debian/Ubuntu for WSL)
+# Confirm apt is available (we target Debian/Ubuntu)
 if ! command -v apt >/dev/null 2>&1; then
-    log_error "This WSL installer currently supports apt-based distros (Debian/Ubuntu)."
+    log_error "This Linux installer currently supports apt-based distros (Debian/Ubuntu)."
     exit 1
 fi
 
@@ -121,6 +121,12 @@ install_cli_tools() {
         log_info "Creating convenience wrapper for eza -> exa"
         echo -e "#!/usr/bin/env bash\nexec exa \"$@\"" | sudo tee /usr/local/bin/eza >/dev/null
         sudo chmod +x /usr/local/bin/eza || true
+    fi
+
+    # Ensure 'ipython' command exists when only 'ipython3' is present
+    if ! command -v ipython >/dev/null 2>&1 && command -v ipython3 >/dev/null 2>&1; then
+        log_info "Creating symlink for ipython -> ipython3"
+        sudo ln -sf "$(command -v ipython3)" /usr/local/bin/ipython || true
     fi
 
     # Node often ships as nodejs; ensure `node` command exists
@@ -264,7 +270,7 @@ post_rust_fallbacks() {
     fi
 }
 
-# No GUI apps on WSL; we explicitly skip that stage
+# No GUI apps on Linux; we explicitly skip that stage
 
 install_oh_my_zsh() {
     if [[ -d "$HOME/.oh-my-zsh" ]]; then
@@ -393,16 +399,33 @@ show_failure_summary() {
 }
 
 main() {
-    echo ""
-    echo -e "${CYAN}WSL/Linux Dotfiles Installation Script${NC}"
-    echo ""
+    # Beautiful welcome header (match macOS style)
+    log_header "🚀 Linux Dotfiles Installation Script"
 
+    # Mode info (interactive vs automated)
     if [[ -n "${CI:-}" ]] || [[ -n "${NONINTERACTIVE:-}" ]] || [[ "${AUTO_YES:-false}" == "true" ]]; then
-        :
+        if [[ "${AUTO_YES:-false}" == "true" ]]; then
+            log_info "Running in auto-yes mode - proceeding with all stages"
+        else
+            log_info "Running in automated mode - proceeding with all stages"
+        fi
     else
         log_info "Interactive mode - you'll be prompted for each stage"
         log_info "Tip: Use -y or --yes flag to skip all prompts"
     fi
+
+    echo ""
+    log_step "Installation process includes the following stages:"
+    echo -e "   ${BLUE}1.${NC} ${WHITE}🔄 Update apt and base packages${NC}"
+    echo -e "   ${BLUE}2.${NC} ${WHITE}🛠️  Install command-line tools (git, python, node, etc.)${NC}"
+    echo -e "   ${BLUE}3.${NC} ${WHITE}🦀 Install Rust programming language${NC}"
+    echo -e "   ${BLUE}4.${NC} ${WHITE}🧰 Fallback install for tools via cargo (eza, git-delta)${NC}"
+    echo -e "   ${BLUE}5.${NC} ${WHITE}⎈ Install helm CLI${NC}"
+    echo -e "   ${BLUE}6.${NC} ${WHITE}🐚 Install and configure Oh My Zsh${NC}"
+    echo -e "   ${BLUE}7.${NC} ${WHITE}🔌 Install Zsh plugins and themes${NC}"
+    echo -e "   ${BLUE}8.${NC} ${WHITE}📝 Set up dotfiles and modular shell utilities${NC}"
+    echo -e "   ${BLUE}9.${NC} ${WHITE}🐍 Configure Python environment with pyenv${NC}"
+    echo ""
 
     local stages=(
         "update apt and base packages|apt_update_and_basics|true|always"
@@ -427,7 +450,11 @@ main() {
 
     show_failure_summary
     echo ""
-    log_success "WSL/Linux dotfiles installation completed"
+    echo -e "${CYAN}╭─────────────────────────────────────────────────╮${NC}"
+    echo -e "${CYAN}│${NC} ${GREEN}🎉 Installation Complete!${NC}                     ${CYAN}│${NC}"
+    echo -e "${CYAN}╰─────────────────────────────────────────────────╯${NC}"
+    echo ""
+    log_success "Linux dotfiles installation completed successfully!"
 }
 
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then

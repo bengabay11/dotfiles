@@ -34,7 +34,7 @@ jobs:
       - name: Validate installation
         run: ./os/macos/test_install.sh
 
-  test-wsl-install:
+  test-linux-install:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -43,13 +43,13 @@ jobs:
       - name: Make scripts executable
         run: |
           chmod +x install.sh
-          chmod +x os/wsl/install.sh
-          chmod +x os/wsl/test_install.sh
+          chmod +x os/linux/install.sh
+          chmod +x os/linux/test_install.sh
 
       - name: Run installation (non-interactive)
         env:
           NONINTERACTIVE: 1
-        run: ./os/wsl/install.sh -y
+        run: ./os/linux/install.sh -y
 
       - name: Validate installation
-        run: ./os/wsl/test_install.sh
+        run: ./os/linux/test_install.sh

@@ -356,8 +356,9 @@ install_zsh_plugins() {
 setup_dotfiles() {
     log_info "Setting up dotfiles..."
     
-    # Create dotfiles directory if it doesn't exist
+    # Create necessary directories
     mkdir -p "$HOME/.config"
+    mkdir -p "$HOME/.config/shell-utils"
     
     # Backup existing dotfiles
     local dotfiles=(".vimrc" ".tmux.conf" ".zshrc" ".gitconfig")
@@ -375,6 +376,19 @@ setup_dotfiles() {
     ln -sf "$DOTFILES_ROOT/dotfiles/.tmux.conf" "$HOME/.tmux.conf"
     ln -sf "$DOTFILES_ROOT/dotfiles/.zshrc" "$HOME/.zshrc"
     ln -sf "$DOTFILES_ROOT/dotfiles/.gitconfig" "$HOME/.gitconfig"
+    
+    # Set up modular shell utilities system
+    log_info "Setting up modular shell utilities..."
+    
+    # Copy the shell-utils to the modular directory with .sh extension
+    if [[ -f "$DOTFILES_ROOT/dotfiles/.shell-utils" ]]; then
+        cp "$DOTFILES_ROOT/dotfiles/.shell-utils" "$HOME/.config/shell-utils/shell-utils.sh"
+        log_success "Shell utilities installed to ~/.config/shell-utils/"
+    else
+        log_warning ".shell-utils not found - skipping utilities setup"
+    fi
+    
+    log_info "You can now add more utility files to ~/.config/shell-utils/ and they will be automatically loaded"
 }
 
 configure_pyenv() {
@@ -449,7 +463,7 @@ main() {
     echo -e "   ${BLUE}4.${NC} ${WHITE}💻 Install GUI applications (VS Code, Chrome, etc.)${NC}"
     echo -e "   ${BLUE}5.${NC} ${WHITE}🐚 Install and configure Oh My Zsh${NC}"
     echo -e "   ${BLUE}6.${NC} ${WHITE}🔌 Install Zsh plugins and themes${NC}"
-    echo -e "   ${BLUE}7.${NC} ${WHITE}📝 Set up dotfiles (.shell-utils, .gitconfig, .zshrc, .tmux.conf, .vimrc)${NC}"
+    echo -e "   ${BLUE}7.${NC} ${WHITE}📝 Set up dotfiles and modular shell utilities${NC}"
     echo -e "   ${BLUE}8.${NC} ${WHITE}🐍 Configure Python environment with pyenv${NC}"
     echo ""
     
@@ -461,7 +475,7 @@ main() {
         "install GUI applications (IDEs, browsers, etc.)|install_applications|false|always"
         "install and configure Oh My Zsh shell framework|install_oh_my_zsh|false|always"
         "install Zsh plugins and themes (autosuggestions, syntax highlighting, powerlevel10k)|install_zsh_plugins|false|always"
-        "set up dotfiles (.vimrc, .tmux.conf, .gitconfig, etc.)|setup_dotfiles|true|always"
+        "set up dotfiles and modular shell utilities|setup_dotfiles|true|always"
         "configure Python environment with pyenv|configure_pyenv|false|always"
     )
     

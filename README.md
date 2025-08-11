@@ -52,9 +52,21 @@ A comprehensive dotfiles setup for macOS with support for development tools and 
 
 - `.vimrc` - Comprehensive Vim configuration with modern features, keybindings, and language-specific settings
 - `.tmux.conf` - Tmux setup with Ctrl-a prefix, mouse support, and improved splitting
-- `.zshrc` - Zsh configuration with Oh My Zsh, Powerlevel10k theme, and development aliases
+- `.zshrc` - Zsh configuration with Oh My Zsh, Powerlevel10k theme, and modular utilities loading
 - `.gitconfig` - Git configuration with user settings and credential helpers
-- `.shell-utils` - Shared utility functions and logging for installation scripts
+
+### 🧰 Modular Shell Utilities
+
+The dotfiles include a modular utilities system located at `~/.config/shell-utils/`:
+
+- **`shell-utils.sh`** - Essential functions like `extract()`, `mkcd()`, and beautiful logging functions
+- **Extensible** - Add your own `.sh` files to the directory and they'll be automatically loaded
+
+**Key utilities include:**
+
+- `extract <file>` - Universal archive extractor (zip, tar, rar, etc.)
+- `mkcd <dir>` - Create directory and navigate to it
+- Beautiful logging functions with colors and icons for scripts
 
 ## Installation
 
@@ -91,7 +103,7 @@ cd ~/.dotfiles
 3. **Tool Installation** - Installs all command-line tools via Homebrew
 4. **App Installation** - Installs applications via Homebrew Cask
 5. **Oh My Zsh** - Installs and configures Oh My Zsh
-6. **Dotfiles Setup** - Creates symlinks to configuration files
+6. **Dotfiles Setup** - Creates symlinks to configuration files and sets up modular utilities
 7. **Python Setup** - Configures pyenv with latest Python version
 8. **System Preferences** - Optionally configures macOS system settings
 
@@ -146,7 +158,8 @@ cd ~/.dotfiles
 - Enhanced ls commands using `eza`
 - Enhanced cat using `bat`
 - Comprehensive git aliases and development shortcuts
-- Useful functions for productivity
+- Modular utilities system that automatically loads all `.sh` files from `~/.config/shell-utils/`
+- Useful functions for productivity and development workflows
 - Command history optimization and plugin support
 
 ### System Preferences

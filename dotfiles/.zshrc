@@ -136,7 +136,7 @@ export PATH="$PATH:/opt/mssql-tools18/bin"
 # Load shell utilities from modular system
 SHELL_UTILS_DIR="$HOME/.config/shell-utils"
 if [[ -d "$SHELL_UTILS_DIR" ]]; then
-    for util_file in "$SHELL_UTILS_DIR"/* "$SHELL_UTILS_DIR"/.*; do
+    for util_file in "$SHELL_UTILS_DIR"/*; do
         if [[ -r "$util_file" && -f "$util_file" ]]; then
             source "$util_file"
         fi
@@ -147,27 +147,27 @@ fi
 if command -v fzf >/dev/null 2>&1; then
     # Set up fzf key bindings and fuzzy completion
     source <(fzf --zsh)
-    
+
     # FZF options
     export FZF_DEFAULT_OPTS="
-        --height 40% 
-        --layout=reverse 
-        --border 
+        --height 40%
+        --layout=reverse
+        --border
         --inline-info
         --color=fg:#e4e4e4,bg:#24283b,hl:#f7768e
         --color=fg+:#e4e4e4,bg+:#414868,hl+:#f7768e
         --color=info:#7aa2f7,prompt:#7dcfff,pointer:#bb9af7
         --color=marker:#9ece6a,spinner:#bb9af7,header:#73daca"
-    
+
     # Use ripgrep if available for better search performance
     if command -v rg >/dev/null 2>&1; then
         export FZF_DEFAULT_COMMAND='rg --files --hidden --follow --no-ignore-vcs -g "!{.git,node_modules}/*" 2>/dev/null'
         export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
     fi
-    
+
     # FZF completion settings
     export FZF_COMPLETION_TRIGGER='**'
-    
+
     # Custom fzf functions
     # fd - cd to selected directory
     fd() {
@@ -176,12 +176,7 @@ if command -v fzf >/dev/null 2>&1; then
                         -o -type d -print 2> /dev/null | fzf +m) &&
         cd "$dir"
     }
-    
-    # fh - search in command history
-    fh() {
-        print -z $( ([ -n "$ZSH_NAME" ] && fc -l 1 || history) | fzf +s --tac | sed -E 's/ *[0-9]*\*? *//' | sed -E 's/\\/\\\\/g')
-    }
-    
+
     # fe - edit file with fzf
     fe() {
         local files

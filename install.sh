@@ -39,7 +39,7 @@ export AUTO_YES
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # Source shared utilities
-source "$SCRIPT_DIR/dotfiles/.shell-utils"
+source "$SCRIPT_DIR/dotfiles/shell-utils.sh"
 
 
 
@@ -106,6 +106,12 @@ main() {
     if [[ ! -f "$os_script" ]]; then
         log_error "Installation script not found: $os_script"
         exit 1
+    fi
+    
+    # Ensure the OS-specific script is executable
+    if [[ ! -x "$os_script" ]]; then
+        log_info "Making $os installation script executable..."
+        chmod +x "$os_script"
     fi
     
     log_info "Running $os installation script..."

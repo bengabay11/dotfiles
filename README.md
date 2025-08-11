@@ -200,7 +200,7 @@ All dotfiles are located in the `dotfiles/` directory:
 - `dotfiles/.tmux.conf` - Tmux configuration
 - `dotfiles/.zshrc` - Zsh configuration
 - `dotfiles/.gitconfig` - Git configuration
-- `dotfiles/.shell-utils` - Shared utility functions and logging
+- `dotfiles/shell-utils.sh` - Shared utility functions and logging
 
 After modifying, re-run the installer or create symlinks manually:
 
@@ -267,7 +267,7 @@ dotfiles/
     ├── .tmux.conf          # Tmux configuration
     ├── .zshrc              # Zsh configuration with Oh My Zsh
     ├── .gitconfig          # Git configuration
-    └── .shell-utils        # Shared utility functions and logging
+    └── shell-utils.sh      # Shared utility functions and logging
 ```
 
 ## Contributing

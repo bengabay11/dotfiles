@@ -9,7 +9,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # Source shared utilities for logging (go up two levels to reach dotfiles/)
-source "$SCRIPT_DIR/../../dotfiles/.shell-utils"
+source "$SCRIPT_DIR/../../dotfiles/shell-utils.sh"
 
 # Test results tracking
 TESTS_PASSED=0

@@ -38,7 +38,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DOTFILES_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 
 # Source shared utilities
-source "$DOTFILES_ROOT/dotfiles/.shell-utils"
+source "$DOTFILES_ROOT/dotfiles/shell-utils.sh"
 source "$DOTFILES_ROOT/utils.sh"
 
 # Global array to track failed installations
@@ -381,11 +381,11 @@ setup_dotfiles() {
     log_info "Setting up modular shell utilities..."
     
     # Copy the shell-utils to the modular directory with .sh extension
-    if [[ -f "$DOTFILES_ROOT/dotfiles/.shell-utils" ]]; then
-        cp "$DOTFILES_ROOT/dotfiles/.shell-utils" "$HOME/.config/shell-utils/shell-utils.sh"
+    if [[ -f "$DOTFILES_ROOT/dotfiles/shell-utils.sh" ]]; then
+        cp "$DOTFILES_ROOT/dotfiles/shell-utils.sh" "$HOME/.config/shell-utils/shell-utils.sh"
         log_success "Shell utilities installed to ~/.config/shell-utils/"
     else
-        log_warning ".shell-utils not found - skipping utilities setup"
+        log_warning "shell-utils.sh not found - skipping utilities setup"
     fi
     
     log_info "You can now add more utility files to ~/.config/shell-utils/ and they will be automatically loaded"

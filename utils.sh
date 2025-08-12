@@ -640,7 +640,7 @@ install_zsh_plugins() {
     log_success "All Zsh plugins and themes installed successfully"
 }
 
-configure_pyenv() {
+install_latest_python() {
     log_info "Configuring pyenv..."
     
     # Install latest Python version

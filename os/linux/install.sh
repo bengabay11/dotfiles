@@ -4,6 +4,12 @@
 
 set -uo pipefail
 
+# Source shared utilities
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DOTFILES_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+source "$DOTFILES_ROOT/dotfiles/shell-utils.sh"
+source "$DOTFILES_ROOT/utils.sh"
+
 # Global array to track failed installations
 declare -a FAILED_INSTALLATIONS=()
 
@@ -218,6 +224,25 @@ install_helm() {
     log_success "helm installed successfully"
 }
 
+install_pyenv() {
+    if command -v pyenv >/dev/null 2>&1; then
+        log_found "pyenv is already installed ($(pyenv version --short 2>/dev/null || echo version unknown))"
+        return 0
+    fi
+    log_install "pyenv"
+    if ! curl -fsSL https://pyenv.run | bash; then
+        log_error "Failed to install pyenv"
+        FAILED_INSTALLATIONS+=("pyenv")
+        return 1
+    fi
+    log_success "pyenv installed successfully"
+}
+
+configure_python_env() {
+    install_pyenv
+    install_latest_python
+}
+
 post_rust_fallbacks() {
     # Some tools may not be available in apt repos; install via cargo as fallback
     if command -v cargo >/dev/null 2>&1; then
@@ -270,7 +295,7 @@ main() {
         "install and configure Oh My Zsh shell framework|install_oh_my_zsh|false|always"
         "install Zsh plugins and themes (autosuggestions, syntax highlighting, powerlevel10k)|install_zsh_plugins|false|always"
         "set up dotfiles and modular shell utilities|setup_dotfiles|true|always"
-        "configure Python environment with pyenv|configure_pyenv|false|always"
+        "configure Python environment with pyenv|configure_python_env|false|always"
     )
     process_stages "${stages[@]}"
 

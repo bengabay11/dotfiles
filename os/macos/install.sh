@@ -4,6 +4,12 @@
 
 set -uo pipefail
 
+# Source shared utilities
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DOTFILES_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+source "$DOTFILES_ROOT/dotfiles/shell-utils.sh"
+source "$DOTFILES_ROOT/utils.sh"
+
 # Global array to track failed installations
 declare -a FAILED_INSTALLATIONS=()
 
@@ -262,10 +268,10 @@ main() {
         "install and configure Oh My Zsh shell framework|install_oh_my_zsh|false|always"
         "install Zsh plugins and themes (autosuggestions, syntax highlighting, powerlevel10k)|install_zsh_plugins|false|always"
         "set up dotfiles and modular shell utilities|setup_dotfiles|true|always"
-        "configure Python environment with pyenv|configure_pyenv|false|always"
+        "configure Python environment with pyenv|install_latest_python|false|always"
     )
     process_stages "$stages"
-    
+
     show_failure_summary
     log_success "macOS dotfiles installation completed successfully!"
     echo ""

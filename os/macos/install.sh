@@ -245,7 +245,7 @@ install_applications() {
 }
 
 main() {
-    log_header macOS Dotfiles Installation Script
+    log_header "macOS Dotfiles Installation Script"
     log_info_interactive_mode_status()
     
     echo ""

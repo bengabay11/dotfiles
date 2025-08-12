@@ -225,21 +225,28 @@ install_helm() {
 }
 
 install_pyenv() {
-    if command -v pyenv >/dev/null 2>&1; then
-        log_found "pyenv is already installed ($(pyenv version --short 2>/dev/null || echo version unknown))"
-        return 0
+     if ! command -v pyenv >/dev/null 2>&1; then
+        log_install "pyenv"
+        curl -fsSL https://pyenv.run | bash
+        # Initialize for current shell session
+        export PYENV_ROOT="$HOME/.pyenv"
+        export PATH="$PYENV_ROOT/bin:$PATH"
+
+        if command -v pyenv >/dev/null 2>&1; then
+            log_success "pyenv installed"
+        else
+            log_error "pyenv installation may have failed"
+            FAILED_INSTALLATIONS+=("pyenv")
+        fi
+    else
+        log_found "pyenv already installed ($(tsc --version 2>/dev/null || echo version unknown))"
     fi
-    log_install "pyenv"
-    if ! curl -fsSL https://pyenv.run | bash; then
-        log_error "Failed to install pyenv"
-        FAILED_INSTALLATIONS+=("pyenv")
-        return 1
-    fi
-    log_success "pyenv installed successfully"
 }
 
 configure_python_env() {
+    log_info "Installing pyenv"
     install_pyenv
+    log_info "Installing Latest python version via pyenv"
     install_latest_python
 }
 

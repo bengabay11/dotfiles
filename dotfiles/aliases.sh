@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 # Cross shell compatible aliases
 # This file can be sources by bash, zsh, and other POSIX-compliant shell

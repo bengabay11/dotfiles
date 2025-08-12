@@ -158,24 +158,6 @@ install_cli_tools() {
         fi
     done
 
-    # Ensure 'fd' command exists if package name is fd-find
-    if ! command -v fd >/dev/null 2>&1 && command -v fdfind >/dev/null 2>&1; then
-        log_info "Creating symlink for fd -> fdfind"
-        sudo ln -sf "$(command -v fdfind)" /usr/local/bin/fd || true
-    fi
-
-
-    # Ensure 'ipython' command exists when only 'ipython3' is present
-    if ! command -v ipython >/dev/null 2>&1 && command -v ipython3 >/dev/null 2>&1; then
-        log_info "Creating symlink for ipython -> ipython3"
-        sudo ln -sf "$(command -v ipython3)" /usr/local/bin/ipython || true
-    fi
-
-    # Node often ships as nodejs; ensure `node` command exists
-    if ! command -v node >/dev/null 2>&1 && command -v nodejs >/dev/null 2>&1; then
-        log_info "Creating symlink for node -> nodejs"
-        sudo ln -sf "$(command -v nodejs)" /usr/local/bin/node || true
-    fi
 
     # Typescript (tsc) and yarn via npm
     if ! command -v tsc >/dev/null 2>&1; then
@@ -379,11 +361,8 @@ setup_dotfiles() {
             log_warning "Backing up existing $dotfile to $dotfile.backup"
             mv -f "$HOME/$dotfile" "$HOME/$dotfile.backup" || true
         fi
+        ln -sf "$DOTFILES_ROOT/dotfiles/$dotfile" "$HOME/$dotfile"
     done
-    ln -sf "$DOTFILES_ROOT/dotfiles/.vimrc" "$HOME/.vimrc"
-    ln -sf "$DOTFILES_ROOT/dotfiles/.tmux.conf" "$HOME/.tmux.conf"
-    ln -sf "$DOTFILES_ROOT/dotfiles/.zshrc" "$HOME/.zshrc"
-    ln -sf "$DOTFILES_ROOT/dotfiles/.gitconfig" "$HOME/.gitconfig"
 
     if [[ -f "$DOTFILES_ROOT/dotfiles/shell-utils.sh" ]]; then
         cp "$DOTFILES_ROOT/dotfiles/shell-utils.sh" "$HOME/.config/shell-utils/shell-utils.sh"

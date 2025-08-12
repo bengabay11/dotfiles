@@ -246,7 +246,7 @@ install_applications() {
 
 main() {
     log_header "macOS Dotfiles Installation Script"
-    log_info_interactive_mode_status()
+    log_info_interactive_mode_status
     
     echo ""
     log_step "Installation process includes the following stages:"

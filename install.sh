@@ -21,7 +21,7 @@ while [[ $# -gt 0 ]]; do
             echo "  -h, --help   Show this help message"
             echo ""
             echo "This script installs dotfiles and development tools for your system."
-            echo "Currently supports: macOS"
+            echo "Currently supports: macOS, Linux (Ubuntu/Debian-based, including WSL)"
             exit 0
             ;;
         *)
@@ -69,9 +69,8 @@ check_os_support() {
             return 0
             ;;
         linux)
-            log_error "Linux support is not yet implemented"
-            log_info "To add Linux support, create scripts in the 'os/linux/' directory"
-            return 1
+            log_info "Detected Linux - supported"
+            return 0
             ;;
         windows)
             log_error "Windows support is not yet implemented"

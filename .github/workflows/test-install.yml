@@ -33,3 +33,23 @@ jobs:
 
       - name: Validate installation
         run: ./os/macos/test_install.sh
+
+  test-linux-install:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Make scripts executable
+        run: |
+          chmod +x install.sh
+          chmod +x os/linux/install.sh
+          chmod +x os/linux/test_install.sh
+
+      - name: Run installation (non-interactive)
+        env:
+          NONINTERACTIVE: 1
+        run: ./os/linux/install.sh -y
+
+      - name: Validate installation
+        run: ./os/linux/test_install.sh

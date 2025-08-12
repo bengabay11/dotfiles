@@ -1,17 +1,18 @@
 # Dotfiles
 
-A comprehensive dotfiles setup for macOS with support for development tools and applications. Built with extensibility in mind to easily add support for other operating systems.
+A comprehensive dotfiles setup for macOS and Linux (Ubuntu/Debian-based; includes WSL). Built with extensibility in mind.
 
 ## Features
 
 ### 🛠️ Command Line Tools
 
 - **Git** - Version control with optimized configuration
-- **Python 3.11** (via pyenv) - Python version management
+- **Python 3** (via pyenv) - Python version management
 - **Rust** - Systems programming language with Cargo
 - **Node.js & npm** - JavaScript runtime and package manager
 - **Yarn** - Fast package manager
 - **TypeScript** - Typed JavaScript
+- **OpenJDK (Java)** - Java runtime and tools
 - **Vim** - Text editor with comprehensive configuration
 - **Tmux** - Terminal multiplexer with modern setup
 - **Zsh + Oh My Zsh + Powerlevel10k** - Advanced shell with beautiful theme
@@ -26,6 +27,9 @@ A comprehensive dotfiles setup for macOS with support for development tools and 
 - **htop** - Interactive process viewer
 - **ipython** - Enhanced interactive Python shell
 - **ripgrep** - Fast text search tool (rg command)
+- **fzf** - Command-line fuzzy finder
+- **delta** - Syntax-highlighting pager for git diffs
+- **watch** - Periodically run a command and display output
 - **helm** - Kubernetes package manager
 - **speedtest-cli** - Command-line internet speed test tool
 
@@ -72,9 +76,9 @@ The dotfiles include a modular utilities system located at `~/.config/shell-util
 
 ### Prerequisites
 
-- macOS (other OS support planned)
+- macOS or Linux (Ubuntu/Debian-based; includes WSL)
 - Internet connection
-- Administrative privileges
+- Administrative privileges (sudo)
 
 ### Quick Install
 
@@ -98,14 +102,25 @@ cd ~/.dotfiles
 
 ### What the installer does
 
-1. **OS Detection** - Automatically detects your operating system
-2. **Homebrew Setup** - Installs Homebrew if not present
-3. **Tool Installation** - Installs all command-line tools via Homebrew
-4. **App Installation** - Installs applications via Homebrew Cask
-5. **Oh My Zsh** - Installs and configures Oh My Zsh
-6. **Dotfiles Setup** - Creates symlinks to configuration files and sets up modular utilities
-7. **Python Setup** - Configures pyenv with latest Python version
-8. **System Preferences** - Optionally configures macOS system settings
+Common steps (macOS and Linux):
+
+- **OS Detection** - Automatically detects your operating system
+- **CLI Tools** - Installs development tools (git, python3, node, npm, yarn, typescript, openjdk, vim, tmux, zsh, bat, eza, ripgrep, fzf, delta, watch, ruff, pre-commit, btop, nmap, htop, ipython, speedtest-cli)
+- **Rust** - Installs Rust (rustup) and Cargo
+- **Helm** - Installs the Helm CLI
+- **Oh My Zsh** - Installs and configures Oh My Zsh
+- **Zsh plugins** - Installs autosuggestions, syntax-highlighting, and Powerlevel10k theme
+- **Dotfiles Setup** - Symlinks configuration files and installs modular shell utilities
+- **Python Setup** - Installs latest Python 3 via pyenv and sets it globally
+
+macOS only:
+
+- **Homebrew** - Installs/updates Homebrew
+- **Applications** - Installs GUI apps via Homebrew Cask (VS Code, Cursor, browsers, etc.)
+
+Linux only:
+
+- **apt basics** - Updates apt and installs base packages for Ubuntu/Debian
 
 ## Usage
 
@@ -113,7 +128,7 @@ cd ~/.dotfiles
 
 1. Restart your terminal or run `source ~/.zshrc`
 
-2. **Handle macOS Security Warnings (Important!)**
+2. **Handle macOS Security Warnings (macOS only; Important!)**
 
    When you first open newly installed applications, macOS may show security warnings because they weren't downloaded from the App Store. This is normal and expected.
 
@@ -124,11 +139,16 @@ cd ~/.dotfiles
 
    This only needs to be done once per application.
 
-3. Update your Git configuration:
+3. Set your personal Git identity in a private file:
 
    ```bash
-   git config --global user.name "Your Name"
-   git config --global user.email "your.email@example.com"
+   # Create ~/.gitconfig.local with your personal details (not tracked in this repo)
+   cat > ~/.gitconfig.local <<'EOF'
+   [user]
+     name = Your Name
+     email = your.email@example.com
+     username = your-username
+   EOF
    ```
 
 ### Key Features
@@ -162,35 +182,23 @@ cd ~/.dotfiles
 - Useful functions for productivity and development workflows
 - Command history optimization and plugin support
 
-### System Preferences
+### macOS System Preferences (optional)
 
-The installer can optionally configure macOS system preferences to optimize your development environment:
-
-```bash
-# During installation, you'll be prompted:
-# "Do you want to configure macOS system preferences? (y/N):"
-
-# Or run separately:
-./os/macos/system_settings.sh
-```
-
-**What gets configured:**
+You may want to adjust these settings manually after installation:
 
 - **Finder**: Show hidden files, file extensions, path bar, and status bar
 - **Menu Bar**: Show battery percentage
-- **Security**: Administrative password prompts for configuration changes
-- **Development**: Disable file extension change warnings for better development workflow
-
-The system configuration script is minimal but can be extended to include additional macOS settings as needed.
+- **Security**: Require admin password for configuration changes
+- **Development**: Disable file extension change warnings
 
 ## Customization
 
 ### Adding New Tools
 
-1. Edit `os/macos/install.sh`
-2. Add the tool name to the appropriate array:
-   - `tools` array for command-line tools
-   - `apps` array for GUI applications
+Edit the OS-specific installer(s):
+
+- On macOS: update `os/macos/install.sh` (add to the `tools` list or `apps` list)
+- On Linux: update `os/linux/install.sh` (add to `apt_pkgs` or the relevant install section)
 
 ### Modifying Dotfiles
 
@@ -213,7 +221,7 @@ ln -sf ~/.dotfiles/dotfiles/.vimrc ~/.vimrc
 To add support for other operating systems:
 
 1. Create a new directory: `os/[osname]/`
-2. Add an `install.sh` script following the macOS example
+2. Add an `install.sh` script following existing examples
 3. The main installer will automatically detect and use it
 
 Example structure:
@@ -221,19 +229,23 @@ Example structure:
 ```text
 os/
 ├── macos/
-│   └── install.sh
-├── linux/          # Future support
-│   └── install.sh
-└── windows/         # Future support
-    └── install.sh
+│   ├── install.sh
+│   └── test_install.sh
+└── linux/
+    ├── install.sh
+    └── test_install.sh
 ```
 
 ## Testing Your Installation
 
-After running the installer, you can verify that everything was installed correctly using the comprehensive test script:
+After running the installer, verify with the comprehensive test script for your OS:
 
 ```bash
+# macOS
 ./os/macos/test_install.sh
+
+# Linux (Ubuntu/Debian-based, including WSL)
+./os/linux/test_install.sh
 ```
 
 **What the test script checks:**
@@ -257,11 +269,14 @@ dotfiles/
 ├── install.sh              # Main installation script
 ├── LICENSE                 # MIT License
 ├── README.md               # This documentation
+├── utils.sh                # Shared installer helpers (cross-platform)
 ├── os/
-│   └── macos/
-│       ├── install.sh      # macOS-specific installer
-│       ├── system_settings.sh # macOS system preferences
-│       └── test_install.sh # Comprehensive test script
+│   ├── macos/
+│   │   ├── install.sh      # macOS installer
+│   │   └── test_install.sh # macOS verification script
+│   └── linux/
+│       ├── install.sh      # Linux (apt-based) installer
+│       └── test_install.sh # Linux verification script
 └── dotfiles/
     ├── .vimrc              # Vim configuration
     ├── .tmux.conf          # Tmux configuration

@@ -230,6 +230,12 @@ is_cli_tool_installed() {
         "fd-find")
             cmd_name="fd"
             ;;
+        "openjdk")
+            cmd_name="java"
+            ;;
+        "default-jdk")
+            cmd_name="java"
+            ;;
     esac
     
     # First check if command is available in system PATH
@@ -294,6 +300,12 @@ get_cli_tool_source() {
             ;;
         "fd-find")
             cmd_name="fd"
+            ;;
+        "openjdk")
+            cmd_name="java"
+            ;;
+        "default-jdk")
+            cmd_name="java"
             ;;
     esac
     
@@ -436,6 +448,13 @@ get_cli_tool_version() {
             ;;
         "speedtest-cli")
             speedtest-cli --version 2>/dev/null || echo "version unknown"
+            ;;
+        "java")
+            # Prefer modern --version, fallback to -version (stderr)
+            java --version 2>/dev/null | head -1 || java -version 2>&1 | head -1 || echo "version unknown"
+            ;;
+        "watch")
+            watch --version 2>/dev/null | head -1 || echo "version unknown"
             ;;
         *)
             # Try common version flags in order of preference

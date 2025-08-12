@@ -92,6 +92,8 @@ install_cli_tools() {
         "node"
         "npm"
         "typescript"
+        "openjdk"
+        "watch"
         "bat"
         "eza"
         "zsh"
@@ -123,6 +125,9 @@ install_cli_tools() {
             "git-delta")
                 cmd_name="delta"
                 ;;
+            "openjdk")
+                cmd_name="java"
+                ;;
         esac
         
         if is_cli_tool_installed "$tool" "$cmd_name"; then
@@ -146,6 +151,12 @@ install_cli_tools() {
                 FAILED_INSTALLATIONS+=("$tool (CLI tool)")
             else
                 log_success "$tool installed successfully"
+                # Special handling for openjdk on macOS to make java available on PATH
+                if [[ "$tool" == "openjdk" ]]; then
+                    if command -v brew >/dev/null 2>&1; then
+                        brew link --force --overwrite openjdk >/dev/null 2>&1 || true
+                    fi
+                fi
             fi
         fi
     done

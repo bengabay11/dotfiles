@@ -95,6 +95,8 @@ main() {
     run_test "speedtest-cli installation" "test_command_exists speedtest-cli"
     run_test "fzf installation" "test_command_exists fzf"
     run_test "delta installation" "test_command_exists delta"
+    run_test "Java (openjdk) installation" "test_command_exists java"
+    run_test "watch installation" "test_command_exists watch"
     
     # Test CLI commands provided by GUI applications
     run_test "docker CLI command" "test_command_exists docker"
@@ -177,7 +179,8 @@ main() {
     
     # Test .gitconfig content
     if [[ -f "$HOME/.gitconfig" ]]; then
-        run_test ".gitconfig contains user section" "grep -q '\\[user\\]' '$HOME/.gitconfig'"
+        # We expect personal details to be stored in ~/.gitconfig.local and included here
+        run_test ".gitconfig includes local override file" "grep -q '^[[:space:]]*path = ~/.gitconfig.local' '$HOME/.gitconfig'"
         run_test ".gitconfig contains delta pager configuration" "grep -q 'pager = delta' '$HOME/.gitconfig'"
     fi
     
@@ -307,6 +310,8 @@ main() {
         "delta --version"
         "docker --version"
         "tshark --version | head -1"
+        "java --version | head -1 || java -version 2>&1 | head -1"
+        "watch --version | head -1"
     )
     
     for tool_cmd in "${tools_with_version[@]}"; do

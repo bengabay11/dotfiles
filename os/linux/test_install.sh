@@ -95,7 +95,8 @@ main() {
         run_test "Shell utilities are installed" "test -f '$HOME/.config/shell-utils/shell-utils.sh'"
     fi
     if [[ -f "$HOME/.gitconfig" ]]; then
-        run_test ".gitconfig contains user section" "grep -q '\\[user\\]' '$HOME/.gitconfig'"
+        # We expect personal details to be stored in ~/.gitconfig.local and included here
+        run_test ".gitconfig includes local override file" "grep -q '^[[:space:]]*path = ~/.gitconfig.local' '$HOME/.gitconfig'"
         run_test ".gitconfig contains delta pager configuration" "grep -q 'pager = delta' '$HOME/.gitconfig'"
     fi
     if [[ -f "$HOME/.vimrc" ]]; then

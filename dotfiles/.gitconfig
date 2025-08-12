@@ -1,7 +1,11 @@
-[user]
-	name = Ben Gabay
-	email = ben.gabay38@gmail.com
-	username = bengabay11
+[include]
+    path = ~/.gitconfig.local
+
+# Define your personal identity in ~/.gitconfig.local (not tracked by git):
+# [user]
+#     name = Your Name
+#     email = your.email@example.com
+#     username = your-username
 [credential "https://github.com"]
 	helper = !/usr/bin/gh auth git-credential
 [core]

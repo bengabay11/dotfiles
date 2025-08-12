@@ -87,6 +87,7 @@ install_cli_tools() {
         fzf
         speedtest-cli
         git-delta
+        default-jdk
     )
 
     # Some packages might not exist on older distros; attempt install and continue on failure
@@ -128,6 +129,9 @@ install_cli_tools() {
                     else
                         cmd_name="ipython3"
                     fi
+                    ;;
+                default-jdk)
+                    cmd_name="java"
                     ;;
                 *)
                     cmd_name="$pkg"

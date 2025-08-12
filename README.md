@@ -12,6 +12,7 @@ A comprehensive dotfiles setup for macOS and Linux (Ubuntu/Debian-based; include
 - **Node.js & npm** - JavaScript runtime and package manager
 - **Yarn** - Fast package manager
 - **TypeScript** - Typed JavaScript
+- **OpenJDK (Java)** - Java runtime and tools
 - **Vim** - Text editor with comprehensive configuration
 - **Tmux** - Terminal multiplexer with modern setup
 - **Zsh + Oh My Zsh + Powerlevel10k** - Advanced shell with beautiful theme
@@ -28,6 +29,7 @@ A comprehensive dotfiles setup for macOS and Linux (Ubuntu/Debian-based; include
 - **ripgrep** - Fast text search tool (rg command)
 - **fzf** - Command-line fuzzy finder
 - **delta** - Syntax-highlighting pager for git diffs
+- **watch** - Periodically run a command and display output
 - **helm** - Kubernetes package manager
 - **speedtest-cli** - Command-line internet speed test tool
 
@@ -103,7 +105,7 @@ cd ~/.dotfiles
 Common steps (macOS and Linux):
 
 - **OS Detection** - Automatically detects your operating system
-- **CLI Tools** - Installs development tools (git, python3, node, npm, yarn, typescript, vim, tmux, zsh, bat, eza, ripgrep, fzf, delta, ruff, pre-commit, btop, nmap, htop, ipython, speedtest-cli)
+- **CLI Tools** - Installs development tools (git, python3, node, npm, yarn, typescript, openjdk, vim, tmux, zsh, bat, eza, ripgrep, fzf, delta, watch, ruff, pre-commit, btop, nmap, htop, ipython, speedtest-cli)
 - **Rust** - Installs Rust (rustup) and Cargo
 - **Helm** - Installs the Helm CLI
 - **Oh My Zsh** - Installs and configures Oh My Zsh
@@ -137,11 +139,16 @@ Linux only:
 
    This only needs to be done once per application.
 
-3. Update your Git configuration:
+3. Set your personal Git identity in a private file:
 
    ```bash
-   git config --global user.name "Your Name"
-   git config --global user.email "your.email@example.com"
+   # Create ~/.gitconfig.local with your personal details (not tracked in this repo)
+   cat > ~/.gitconfig.local <<'EOF'
+   [user]
+     name = Your Name
+     email = your.email@example.com
+     username = your-username
+   EOF
    ```
 
 ### Key Features

@@ -119,6 +119,20 @@ main() {
     else
         "$os_script"
     fi    
+
+    # Cross-platform next steps (moved from macOS script)
+    echo ""
+    log_info "Next steps:"
+    log_info "• Restart your terminal or run 'source ~/.zshrc' to apply changes"
+    if command -v code >/dev/null 2>&1; then
+        log_info "• Sign in to VS Code to sync settings and extensions"
+    fi
+    if command -v cursor >/dev/null 2>&1; then
+        log_info "• Sign in to Cursor to sync settings and extensions"
+    fi
+    if command -v obsidian >/dev/null 2>&1; then
+        log_info "• Sync Obsidian notes with your vault"
+    fi
 }
 
 # Run main function

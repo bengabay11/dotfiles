@@ -145,8 +145,20 @@ fi
 
 # FZF Configuration
 if command -v fzf >/dev/null 2>&1; then
-    # Set up fzf key bindings and fuzzy completion
-    source <(fzf --zsh)
+    # Prefer built-in initializer when available (typically on macOS/Homebrew)
+    if fzf --zsh >/dev/null 2>&1; then
+        source <(fzf --zsh)
+    else
+        # Linux/WSL fallback: source from common distro paths or user install
+        for f in \
+            /usr/share/doc/fzf/examples/key-bindings.zsh \
+            /usr/share/doc/fzf/examples/completion.zsh \
+            /usr/share/fzf/key-bindings.zsh \
+            /usr/share/fzf/completion.zsh \
+            "$HOME/.fzf.zsh"; do
+            [[ -f "$f" ]] && source "$f"
+        done
+    fi
 
     # FZF options
     export FZF_DEFAULT_OPTS="

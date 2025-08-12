@@ -258,7 +258,6 @@ install_cli_tools() {
         log_found "pre-commit is already installed ($(pre-commit --version 2>/dev/null || echo version unknown))"
     fi
 
-    # uv installer (same as macOS)
     if command -v uv >/dev/null 2>&1; then
         local version
         version=$(uv --version 2>/dev/null || echo "version unknown")

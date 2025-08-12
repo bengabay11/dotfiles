@@ -79,14 +79,12 @@ install_cli_tools() {
         vim tmux
         nodejs npm
         bat
-        eza
         zsh
         btop nmap htop
         ripgrep
         ipython3
         fzf
         speedtest-cli
-        git-delta
         default-jdk
     )
 
@@ -160,24 +158,12 @@ install_cli_tools() {
         fi
     done
 
-    # Ensure 'bat' command exists (Ubuntu may provide 'batcat')
-    if ! command -v bat >/dev/null 2>&1 && command -v batcat >/dev/null 2>&1; then
-        log_info "Creating symlink for bat -> batcat"
-        sudo ln -sf "$(command -v batcat)" /usr/local/bin/bat || true
-    fi
-
     # Ensure 'fd' command exists if package name is fd-find
     if ! command -v fd >/dev/null 2>&1 && command -v fdfind >/dev/null 2>&1; then
         log_info "Creating symlink for fd -> fdfind"
         sudo ln -sf "$(command -v fdfind)" /usr/local/bin/fd || true
     fi
 
-    # exa fallback alias if only 'exa' exists and 'eza' not available
-    if ! command -v eza >/dev/null 2>&1 && command -v exa >/dev/null 2>&1; then
-        log_info "Creating convenience wrapper for eza -> exa"
-        echo -e "#!/usr/bin/env bash\nexec exa \"$@\"" | sudo tee /usr/local/bin/eza >/dev/null
-        sudo chmod +x /usr/local/bin/eza || true
-    fi
 
     # Ensure 'ipython' command exists when only 'ipython3' is present
     if ! command -v ipython >/dev/null 2>&1 && command -v ipython3 >/dev/null 2>&1; then
@@ -303,8 +289,8 @@ install_helm() {
     log_success "helm installed successfully"
 }
 
-post_rust_fallbacks() {
-    # Some tools may not be available in apt repos; install via cargo as fallback
+install_rust_tools() {
+    # Install tools via cargo that are not available or outdated in apt repos
     if command -v cargo >/dev/null 2>&1; then
         if ! command -v eza >/dev/null 2>&1; then
             log_install "eza"
@@ -325,7 +311,7 @@ post_rust_fallbacks() {
             fi
         fi
     else
-        log_warning "Cargo not available; skipping cargo-based fallbacks"
+        log_warning "Cargo not available; skipping rust tools installation"
     fi
 }
 
@@ -490,7 +476,7 @@ main() {
     echo -e "   ${BLUE}1.${NC} ${WHITE}🔄 Update apt and base packages${NC}"
     echo -e "   ${BLUE}2.${NC} ${WHITE}🛠️  Install command-line tools (git, python, node, etc.)${NC}"
     echo -e "   ${BLUE}3.${NC} ${WHITE}🦀 Install Rust programming language${NC}"
-    echo -e "   ${BLUE}4.${NC} ${WHITE}🧰 Fallback install for tools via cargo (eza, git-delta)${NC}"
+    echo -e "   ${BLUE}4.${NC} ${WHITE}🧰 Install Rust tools (eza, git-delta)${NC}"
     echo -e "   ${BLUE}5.${NC} ${WHITE}⎈ Install helm CLI${NC}"
     echo -e "   ${BLUE}6.${NC} ${WHITE}🐚 Install and configure Oh My Zsh${NC}"
     echo -e "   ${BLUE}7.${NC} ${WHITE}🔌 Install Zsh plugins and themes${NC}"
@@ -502,7 +488,7 @@ main() {
         "update apt and base packages|apt_update_and_basics|true|always"
         "install command-line development tools|install_cli_tools|false|always"
         "install Rust programming language|install_rust|false|always"
-        "fallback install for tools via cargo (eza, git-delta)|post_rust_fallbacks|false|always"
+        "install Rust tools (eza, git-delta)|install_rust_tools|false|always"
         "install helm CLI|install_helm|false|always"
         "install and configure Oh My Zsh shell framework|install_oh_my_zsh|false|always"
         "install Zsh plugins and themes (autosuggestions, syntax highlighting, powerlevel10k)|install_zsh_plugins|false|always"

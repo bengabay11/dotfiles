@@ -1,4 +1,5 @@
 #!/user/bin/env/zsh
+
 # Test script for Linux dotfiles installation (no GUI checks)
 
 set -euo pipefail

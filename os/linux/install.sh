@@ -4,42 +4,6 @@
 
 set -uo pipefail
 
-# Parse command line arguments (inherit from parent script or parse directly)
-if [[ -z "${AUTO_YES:-}" ]]; then
-    AUTO_YES=false
-    while [[ $# -gt 0 ]]; do
-        case $1 in
-            -y|--yes)
-                AUTO_YES=true
-                shift
-                ;;
-            -h|--help)
-                echo "Usage: $0 [OPTIONS]"
-                echo ""
-                echo "Options:"
-                echo "  -y, --yes    Auto-confirm all prompts (non-interactive mode)"
-                echo "  -h, --help   Show this help message"
-                echo ""
-                echo "This script installs dotfiles and development tools for Linux (apt-based)."
-                exit 0
-                ;;
-            *)
-                # Silently ignore unknown options to allow flexibility
-                shift
-                ;;
-        esac
-    done
-fi
-
-# Export AUTO_YES for any child scripts
-export AUTO_YES
-
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-DOTFILES_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
-
-# Source shared utilities
-source "$DOTFILES_ROOT/dotfiles/shell-utils.sh"
-source "$DOTFILES_ROOT/utils.sh"
 
 # Global array to track failed installations
 declare -a FAILED_INSTALLATIONS=()
@@ -370,6 +334,13 @@ setup_dotfiles() {
     else
         log_warning "shell-utils.sh not found - skipping utilities setup"
     fi
+
+    if [[ -f "$DOTFILES_ROOT/dotfiles/aliases.sh" ]]; then
+        cp "$DOTFILES_ROOT/dotfiles/aliases.sh" "$HOME/.config/shell-utils/aliases.sh"
+        log_success "Cross-shell aliases installed to ~/.config/shell-utils/"
+    else
+        log_warning "aliases.sh not found - skipping aliases setup"
+    fi
 }
 
 configure_pyenv() {

@@ -1,4 +1,4 @@
-#!/user/bin/env/zsh
+#!/bin/bash
 
 # Test script for Linux dotfiles installation (no GUI checks)
 

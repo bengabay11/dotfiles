@@ -140,22 +140,6 @@ install_cli_tools() {
     fi
 }
 
-install_rust() {
-    if command -v rustc >/dev/null 2>&1; then
-        local version=$(rustc --version 2>/dev/null || echo "version unknown")
-        log_found "Rust is already installed ($version)"
-    else
-        log_install "Rust programming language"
-        if ! curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y; then
-            log_error "Failed to install Rust - continuing with installation"
-            FAILED_INSTALLATIONS+=("Rust (programming language)")
-        else
-            source "$HOME/.cargo/env"
-            log_success "Rust installed successfully"
-        fi
-    fi
-}
-
 # Install applications via Homebrew Cask
 install_applications() {
     log_info "Installing applications..."
@@ -254,180 +238,9 @@ install_applications() {
     fi
 }
 
-# Install Oh My Zsh
-install_oh_my_zsh() {
-    if [[ -d "$HOME/.oh-my-zsh" ]]; then
-        log_found "Oh My Zsh is already installed"
-    else
-        log_install "Oh My Zsh shell framework"
-        if ! RUNZSH=no CHSH=no sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended; then
-            log_error "Failed to install Oh My Zsh - continuing with installation"
-            FAILED_INSTALLATIONS+=("Oh My Zsh (shell framework)")
-        else
-            log_success "Oh My Zsh installed successfully"
-        fi
-    fi
-}
-
-# Install Oh My Zsh plugins and themes
-install_zsh_plugins() {
-    log_info "Installing Zsh plugins and themes..."
-    
-    # Ensure Oh My Zsh is installed first
-    if [[ ! -d "$HOME/.oh-my-zsh" ]]; then
-        log_error "Oh My Zsh must be installed before installing plugins"
-        return 1
-    fi
-    
-    # Set ZSH_CUSTOM if not already set
-    local zsh_custom="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
-    
-    # Create custom plugins and themes directories if they don't exist
-    mkdir -p "$zsh_custom/plugins"
-    mkdir -p "$zsh_custom/themes"
-    
-    # Define plugins to install
-    local plugins=(
-        "zsh-autosuggestions|https://github.com/zsh-users/zsh-autosuggestions.git|plugins"
-        "zsh-syntax-highlighting|https://github.com/zsh-users/zsh-syntax-highlighting.git|plugins"
-        "powerlevel10k|https://github.com/romkatv/powerlevel10k.git|themes"
-    )
-    
-    # Install each plugin/theme
-    for plugin_info in "${plugins[@]}"; do
-        # Parse plugin information (name|repo_url|type)
-        IFS='|' read -r name repo_url install_type <<< "$plugin_info"
-        
-        local install_path="$zsh_custom/$install_type/$name"
-        
-        if [[ -d "$install_path" ]]; then
-            log_found "$name is already installed"
-        else
-            log_install "$name"
-            
-            # Special handling for powerlevel10k (shallow clone for performance)
-            if [[ "$name" == "powerlevel10k" ]]; then
-                if ! git clone --depth=1 "$repo_url" "$install_path"; then
-                    log_error "Failed to install $name - continuing with remaining plugins"
-                    FAILED_INSTALLATIONS+=("$name (Zsh plugin/theme)")
-                    continue
-                fi
-            else
-                if ! git clone "$repo_url" "$install_path"; then
-                    log_error "Failed to install $name - continuing with remaining plugins"
-                    FAILED_INSTALLATIONS+=("$name (Zsh plugin/theme)")
-                    continue
-                fi
-            fi
-            
-            log_success "$name installed successfully"
-        fi
-    done
-    
-    log_success "All Zsh plugins and themes installed successfully"
-}
-
-setup_dotfiles() {
-    log_info "Setting up dotfiles..."
-    
-    # Create necessary directories
-    mkdir -p "$HOME/.config"
-    mkdir -p "$HOME/.config/shell-utils"
-    
-    # Backup existing dotfiles
-    local dotfiles=(".vimrc" ".tmux.conf" ".zshrc" ".gitconfig")
-    
-    for dotfile in "${dotfiles[@]}"; do
-        if [[ -f "$HOME/$dotfile" ]]; then
-            log_warning "Backing up existing $dotfile to $dotfile.backup"
-            mv "$HOME/$dotfile" "$HOME/$dotfile.backup"
-        fi
-    done
-    
-    # Symlink new dotfiles
-    log_info "Creating symlinks for dotfiles..."
-    ln -sf "$DOTFILES_ROOT/dotfiles/.vimrc" "$HOME/.vimrc"
-    ln -sf "$DOTFILES_ROOT/dotfiles/.tmux.conf" "$HOME/.tmux.conf"
-    ln -sf "$DOTFILES_ROOT/dotfiles/.zshrc" "$HOME/.zshrc"
-    ln -sf "$DOTFILES_ROOT/dotfiles/.gitconfig" "$HOME/.gitconfig"
-    
-    # Set up modular shell utilities system
-    log_info "Setting up modular shell utilities..."
-    
-    # Copy the shell-utils to the modular directory with .sh extension
-    if [[ -f "$DOTFILES_ROOT/dotfiles/shell-utils.sh" ]]; then
-        cp "$DOTFILES_ROOT/dotfiles/shell-utils.sh" "$HOME/.config/shell-utils/shell-utils.sh"
-        log_success "Shell utilities installed to ~/.config/shell-utils/"
-    else
-        log_warning "shell-utils.sh not found - skipping utilities setup"
-    fi
-    
-    log_info "You can now add more utility files to ~/.config/shell-utils/ and they will be automatically loaded"
-}
-
-configure_pyenv() {
-    log_info "Configuring pyenv..."
-    
-    # Install latest Python version
-    local latest_python
-    latest_python=$(pyenv install --list | grep -E '^\s*3\.[0-9]+\.[0-9]+$' | tail -1 | tr -d ' ')
-    
-    if [[ -n "$latest_python" ]]; then
-        log_info "Installing Python $latest_python..."
-        if ! pyenv install "$latest_python" --skip-existing; then
-            log_error "Failed to install Python $latest_python - continuing with installation"
-            FAILED_INSTALLATIONS+=("Python $latest_python (via pyenv)")
-        else
-            if ! pyenv global "$latest_python"; then
-                log_error "Failed to set global Python version - continuing with installation"
-                FAILED_INSTALLATIONS+=("Python $latest_python global setup (via pyenv)")
-            else
-                log_success "Python $latest_python installed and set as global version"
-            fi
-        fi
-    else
-        log_warning "Could not determine latest Python version"
-    fi
-}
-
-# Function to display summary of failed installations
-show_failure_summary() {
-    if [[ ${#FAILED_INSTALLATIONS[@]} -gt 0 ]]; then
-        echo ""
-        echo -e "${RED}╭─────────────────────────────────────────────────╮${NC}"
-        echo -e "${RED}│${NC} ${YELLOW}⚠️  Installation Failures Summary${NC}              ${RED}│${NC}"
-        echo -e "${RED}╰─────────────────────────────────────────────────╯${NC}"
-        echo ""
-        log_warning "The following items failed to install:"
-        echo ""
-        for failed_item in "${FAILED_INSTALLATIONS[@]}"; do
-            log_error "  • $failed_item"
-        done
-        echo ""
-        log_info "These failures do not affect the successfully installed tools."
-        log_info "You can try installing the failed items manually later."
-        echo ""
-    fi
-}
-
 main() {
-    # Beautiful welcome header
-    echo ""
-    echo -e "${CYAN}╭─────────────────────────────────────────────────╮${NC}"
-    echo -e "${CYAN}│${NC} ${WHITE}🚀 macOS Dotfiles Installation Script${NC}         ${CYAN}│${NC}"
-    echo -e "${CYAN}╰─────────────────────────────────────────────────╯${NC}"
-    echo ""
-    
-    if [[ -n "${CI:-}" ]] || [[ -n "${NONINTERACTIVE:-}" ]] || [[ "${AUTO_YES:-false}" == "true" ]]; then
-        if [[ "${AUTO_YES:-false}" == "true" ]]; then
-            log_info "Running in auto-yes mode - proceeding with all stages"
-        else
-            log_info "Running in automated mode - proceeding with all stages"
-        fi
-    else
-        log_info "Interactive mode - you'll be prompted for each stage"
-        log_info "Tip: Use -y or --yes flag to skip all prompts"
-    fi
+    log_header macOS Dotfiles Installation Script
+    log_info_interactive_mode_status()
     
     echo ""
     log_step "Installation process includes the following stages:"
@@ -441,7 +254,6 @@ main() {
     echo -e "   ${BLUE}8.${NC} ${WHITE}🐍 Configure Python environment with pyenv${NC}"
     echo ""
     
-    # Define installation stages
     local stages=(
         "install/update Homebrew package manager|install_homebrew|true|always"
         "install command-line development tools|install_cli_tools|false|always"
@@ -452,29 +264,9 @@ main() {
         "set up dotfiles and modular shell utilities|setup_dotfiles|true|always"
         "configure Python environment with pyenv|configure_pyenv|false|always"
     )
+    process_stages "$stages"
     
-    # Process each stage
-    for stage_info in "${stages[@]}"; do
-        # Parse stage information (description|function|default_yes|condition)
-        IFS='|' read -r description function_name default_yes condition <<< "$stage_info"
-        
-        
-        # Run stage if confirmed
-        if confirm_stage "$description" "$default_yes"; then
-            if ! "$function_name"; then
-                log_error "Stage '$description' failed - continuing with remaining stages"
-            fi
-        fi
-    done
-    
-    # Show summary of any failed installations
     show_failure_summary
-    
-    echo ""
-    echo -e "${CYAN}╭─────────────────────────────────────────────────╮${NC}"
-    echo -e "${CYAN}│${NC} ${GREEN}🎉 Installation Complete!${NC}                     ${CYAN}│${NC}"
-    echo -e "${CYAN}╰─────────────────────────────────────────────────╯${NC}"
-    echo ""
     log_success "macOS dotfiles installation completed successfully!"
     echo ""
     log_info "Optional system configuration:"

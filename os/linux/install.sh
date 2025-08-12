@@ -4,7 +4,6 @@
 
 set -uo pipefail
 
-
 # Global array to track failed installations
 declare -a FAILED_INSTALLATIONS=()
 
@@ -122,7 +121,6 @@ install_cli_tools() {
         fi
     done
 
-
     # Typescript (tsc) and yarn via npm
     if ! command -v tsc >/dev/null 2>&1; then
         log_install "typescript"
@@ -205,21 +203,6 @@ install_cli_tools() {
     fi
 }
 
-install_rust() {
-    if command -v rustc >/dev/null 2>&1; then
-        local version=$(rustc --version 2>/dev/null || echo "version unknown")
-        log_found "Rust is already installed ($version)"
-    else
-        log_install "Rust programming language"
-        if ! curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y; then
-            log_error "Failed to install Rust - continuing"
-            FAILED_INSTALLATIONS+=("Rust (programming language)")
-        else
-            source "$HOME/.cargo/env"
-            log_success "Rust installed successfully"
-        fi
-    fi
-}
 
 install_helm() {
     if command -v helm >/dev/null 2>&1; then
@@ -235,8 +218,8 @@ install_helm() {
     log_success "helm installed successfully"
 }
 
-install_rust_tools() {
-    # Install tools via cargo that are not available or outdated in apt repos
+post_rust_fallbacks() {
+    # Some tools may not be available in apt repos; install via cargo as fallback
     if command -v cargo >/dev/null 2>&1; then
         if ! command -v eza >/dev/null 2>&1; then
             log_install "eza"
@@ -257,176 +240,20 @@ install_rust_tools() {
             fi
         fi
     else
-        log_warning "Cargo not available; skipping rust tools installation"
+        log_warning "Cargo not available; skipping cargo-based fallbacks"
     fi
 }
 
-# No GUI apps on Linux; we explicitly skip that stage
-
-install_oh_my_zsh() {
-    if [[ -d "$HOME/.oh-my-zsh" ]]; then
-        log_found "Oh My Zsh is already installed"
-    else
-        log_install "Oh My Zsh shell framework"
-        if ! RUNZSH=no CHSH=no sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended; then
-            log_error "Failed to install Oh My Zsh - continuing"
-            FAILED_INSTALLATIONS+=("Oh My Zsh (shell framework)")
-        else
-            log_success "Oh My Zsh installed successfully"
-        fi
-    fi
-}
-
-install_zsh_plugins() {
-    log_info "Installing Zsh plugins and themes..."
-    if [[ ! -d "$HOME/.oh-my-zsh" ]]; then
-        log_error "Oh My Zsh must be installed before installing plugins"
-        return 1
-    fi
-    local zsh_custom="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
-    mkdir -p "$zsh_custom/plugins" "$zsh_custom/themes"
-    local plugins=(
-        "zsh-autosuggestions|https://github.com/zsh-users/zsh-autosuggestions.git|plugins"
-        "zsh-syntax-highlighting|https://github.com/zsh-users/zsh-syntax-highlighting.git|plugins"
-        "powerlevel10k|https://github.com/romkatv/powerlevel10k.git|themes"
-    )
-    for plugin_info in "${plugins[@]}"; do
-        IFS='|' read -r name repo_url install_type <<< "$plugin_info"
-        local install_path="$zsh_custom/$install_type/$name"
-        if [[ -d "$install_path" ]]; then
-            log_found "$name is already installed"
-        else
-            log_install "$name"
-            if [[ "$name" == "powerlevel10k" ]]; then
-                if ! git clone --depth=1 "$repo_url" "$install_path"; then
-                    log_error "Failed to install $name"
-                    FAILED_INSTALLATIONS+=("$name (Zsh plugin/theme)")
-                    continue
-                fi
-            else
-                if ! git clone "$repo_url" "$install_path"; then
-                    log_error "Failed to install $name"
-                    FAILED_INSTALLATIONS+=("$name (Zsh plugin/theme)")
-                    continue
-                fi
-            fi
-            log_success "$name installed successfully"
-        fi
-    done
-}
-
-setup_dotfiles() {
-    log_info "Setting up dotfiles..."
-    mkdir -p "$HOME/.config" "$HOME/.config/shell-utils"
-
-    local dotfiles=(".vimrc" ".tmux.conf" ".zshrc" ".gitconfig")
-    for dotfile in "${dotfiles[@]}"; do
-        if [[ -f "$HOME/$dotfile" || -L "$HOME/$dotfile" ]]; then
-            log_warning "Backing up existing $dotfile to $dotfile.backup"
-            mv -f "$HOME/$dotfile" "$HOME/$dotfile.backup" || true
-        fi
-        ln -sf "$DOTFILES_ROOT/dotfiles/$dotfile" "$HOME/$dotfile"
-    done
-
-    if [[ -f "$DOTFILES_ROOT/dotfiles/shell-utils.sh" ]]; then
-        cp "$DOTFILES_ROOT/dotfiles/shell-utils.sh" "$HOME/.config/shell-utils/shell-utils.sh"
-        log_success "Shell utilities installed to ~/.config/shell-utils/"
-    else
-        log_warning "shell-utils.sh not found - skipping utilities setup"
-    fi
-
-    if [[ -f "$DOTFILES_ROOT/dotfiles/aliases.sh" ]]; then
-        cp "$DOTFILES_ROOT/dotfiles/aliases.sh" "$HOME/.config/shell-utils/aliases.sh"
-        log_success "Cross-shell aliases installed to ~/.config/shell-utils/"
-    else
-        log_warning "aliases.sh not found - skipping aliases setup"
-    fi
-}
-
-configure_pyenv() {
-    log_info "Configuring pyenv..."
-    if ! command -v pyenv >/dev/null 2>&1; then
-        log_install "pyenv (via git)"
-        # Install dependencies
-        sudo DEBIAN_FRONTEND=noninteractive apt-get install -y make build-essential libssl-dev zlib1g-dev \
-            libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncursesw5-dev xz-utils tk-dev \
-            libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev || true
-        # Install pyenv
-        git clone https://github.com/pyenv/pyenv.git "$HOME/.pyenv" || true
-        # Initialize for current shell session
-        export PYENV_ROOT="$HOME/.pyenv"
-        export PATH="$PYENV_ROOT/bin:$PATH"
-        if command -v pyenv >/dev/null 2>&1; then
-            log_success "pyenv installed"
-        else
-            log_error "pyenv installation may have failed"
-            FAILED_INSTALLATIONS+=("pyenv")
-        fi
-    else
-        log_found "pyenv already installed"
-    fi
-
-    if command -v pyenv >/dev/null 2>&1; then
-        local latest_python
-        latest_python=$(pyenv install --list | grep -E '^\s*3\.[0-9]+\.[0-9]+$' | tail -1 | tr -d ' ')
-        if [[ -n "$latest_python" ]]; then
-            log_info "Installing Python $latest_python..."
-            if ! pyenv install "$latest_python" --skip-existing; then
-                log_error "Failed to install Python $latest_python via pyenv"
-                FAILED_INSTALLATIONS+=("Python $latest_python (pyenv)")
-            else
-                if ! pyenv global "$latest_python"; then
-                    log_error "Failed to set global Python version - continuing with installation"
-                    FAILED_INSTALLATIONS+=("Python $latest_python global setup (via pyenv)")
-                else
-                    log_success "Python $latest_python installed and set as global version"
-                fi
-            fi
-        fi
-    fi
-}
-
-show_failure_summary() {
-    if [[ ${#FAILED_INSTALLATIONS[@]} -gt 0 ]]; then
-        echo ""
-        echo -e "${RED}╭─────────────────────────────────────────────────╮${NC}"
-        echo -e "${RED}│${NC} ${YELLOW}⚠️  Installation Failures Summary${NC}              ${RED}│${NC}"
-        echo -e "${RED}╰─────────────────────────────────────────────────╯${NC}"
-        echo ""
-        log_warning "The following items failed to install:"
-        echo ""
-        for failed_item in "${FAILED_INSTALLATIONS[@]}"; do
-            log_error "  • $failed_item"
-        done
-        echo ""
-        log_info "These failures do not affect the successfully installed tools."
-        log_info "You can try installing the failed items manually later."
-        echo ""
-    fi
-}
 
 main() {
-    # Beautiful welcome header (match macOS style)
     log_header "🚀 Linux Dotfiles Installation Script"
-
-    # Mode info (interactive vs automated)
-    if [[ -n "${CI:-}" ]] || [[ -n "${NONINTERACTIVE:-}" ]] || [[ "${AUTO_YES:-false}" == "true" ]]; then
-        if [[ "${AUTO_YES:-false}" == "true" ]]; then
-            log_info "Running in auto-yes mode - proceeding with all stages"
-        else
-            log_info "Running in automated mode - proceeding with all stages"
-        fi
-    else
-        log_info "Interactive mode - you'll be prompted for each stage"
-        log_info "Tip: Use -y or --yes flag to skip all prompts"
-    fi
-
+    log_info_interactive_mode_status
     echo ""
     log_step "Installation process includes the following stages:"
     echo -e "   ${BLUE}1.${NC} ${WHITE}🔄 Update apt and base packages${NC}"
     echo -e "   ${BLUE}2.${NC} ${WHITE}🛠️  Install command-line tools (git, python, node, etc.)${NC}"
     echo -e "   ${BLUE}3.${NC} ${WHITE}🦀 Install Rust programming language${NC}"
-    echo -e "   ${BLUE}4.${NC} ${WHITE}🧰 Install Rust tools (eza, git-delta)${NC}"
+    echo -e "   ${BLUE}4.${NC} ${WHITE}🧰 Fallback install for tools via cargo (eza, git-delta)${NC}"
     echo -e "   ${BLUE}5.${NC} ${WHITE}⎈ Install helm CLI${NC}"
     echo -e "   ${BLUE}6.${NC} ${WHITE}🐚 Install and configure Oh My Zsh${NC}"
     echo -e "   ${BLUE}7.${NC} ${WHITE}🔌 Install Zsh plugins and themes${NC}"
@@ -438,34 +265,19 @@ main() {
         "update apt and base packages|apt_update_and_basics|true|always"
         "install command-line development tools|install_cli_tools|false|always"
         "install Rust programming language|install_rust|false|always"
-        "install Rust tools (eza, git-delta)|install_rust_tools|false|always"
+        "fallback install for tools via cargo (eza, git-delta)|post_rust_fallbacks|false|always"
         "install helm CLI|install_helm|false|always"
         "install and configure Oh My Zsh shell framework|install_oh_my_zsh|false|always"
         "install Zsh plugins and themes (autosuggestions, syntax highlighting, powerlevel10k)|install_zsh_plugins|false|always"
         "set up dotfiles and modular shell utilities|setup_dotfiles|true|always"
         "configure Python environment with pyenv|configure_pyenv|false|always"
     )
-
-    for stage_info in "${stages[@]}"; do
-        IFS='|' read -r description function_name default_yes condition <<< "$stage_info"
-        if confirm_stage "$description" "$default_yes"; then
-            if ! "$function_name"; then
-                log_error "Stage '$description' failed - continuing"
-            fi
-        fi
-    done
+    process_stages "${stages[@]}"
 
     show_failure_summary
-    echo ""
-    echo -e "${CYAN}╭─────────────────────────────────────────────────╮${NC}"
-    echo -e "${CYAN}│${NC} ${GREEN}🎉 Installation Complete!${NC}                     ${CYAN}│${NC}"
-    echo -e "${CYAN}╰─────────────────────────────────────────────────╯${NC}"
-    echo ""
-    log_success "Linux dotfiles installation completed successfully!"
+    log_success "linux dotfiles installation completed successfully!"
 }
 
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
     main "$@"
 fi
-
-

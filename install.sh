@@ -40,6 +40,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # Source shared utilities
 source "$SCRIPT_DIR/dotfiles/shell-utils.sh"
+source "$SCRIPT_DIR/utils.sh"
 
 
 
@@ -120,7 +121,9 @@ main() {
         "$os_script"
     fi    
 
-    # Cross-platform next steps (moved from macOS script)
+    installation_success_message
+
+    # Cross-platform next steps
     echo ""
     log_info "Next steps:"
     log_info "• Restart your terminal or run 'source ~/.zshrc' to apply changes"

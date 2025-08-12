@@ -124,17 +124,6 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-# Aliases
-alias cat=bat
-alias ls="eza --icons --hyperlink --sort=type"
-if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-    alias open='xdg-open'
-fi
-alias sso="aws sso login"
-alias locate=mdfind
-alias quit="exit"
-alias speedtest="speedtest-cli"
-
 # Path
 export PATH="$PATH:/opt/mssql-tools18/bin"
 

@@ -244,14 +244,15 @@ install_pyenv() {
 }
 
 configure_python_env() {
-    log_info "Installing pyenv"
     install_pyenv
-    log_info "Installing Latest python version via pyenv"
+    log_install "Installing linux libraries for Python"
+    sudo DEBIAN_FRONTEND=noninteractive apt-get install -y make build-essential libssl-dev zlib1g-dev \
+            libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncursesw5-dev xz-utils tk-dev \
+            libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev || true
     install_latest_python
 }
 
-post_rust_fallbacks() {
-    # Some tools may not be available in apt repos; install via cargo as fallback
+install_cli_tools_with_cargo() {
     if command -v cargo >/dev/null 2>&1; then
         if ! command -v eza >/dev/null 2>&1; then
             log_install "eza"
@@ -272,7 +273,7 @@ post_rust_fallbacks() {
             fi
         fi
     else
-        log_warning "Cargo not available; skipping cargo-based fallbacks"
+        log_warning "Cargo not available; skipping cargo-based installations"
     fi
 }
 
@@ -285,7 +286,7 @@ main() {
     echo -e "   ${BLUE}1.${NC} ${WHITE}🔄 Update apt and base packages${NC}"
     echo -e "   ${BLUE}2.${NC} ${WHITE}🛠️  Install command-line tools (git, python, node, etc.)${NC}"
     echo -e "   ${BLUE}3.${NC} ${WHITE}🦀 Install Rust programming language${NC}"
-    echo -e "   ${BLUE}4.${NC} ${WHITE}🧰 Fallback install for tools via cargo (eza, git-delta)${NC}"
+    echo -e "   ${BLUE}4.${NC} ${WHITE}🧰 Install tools via cargo (eza, git-delta)${NC}"
     echo -e "   ${BLUE}5.${NC} ${WHITE}⎈ Install helm CLI${NC}"
     echo -e "   ${BLUE}6.${NC} ${WHITE}🐚 Install and configure Oh My Zsh${NC}"
     echo -e "   ${BLUE}7.${NC} ${WHITE}🔌 Install Zsh plugins and themes${NC}"
@@ -297,7 +298,7 @@ main() {
         "update apt and base packages|apt_update_and_basics|true|always"
         "install command-line development tools|install_cli_tools|false|always"
         "install Rust programming language|install_rust|false|always"
-        "fallback install for tools via cargo (eza, git-delta)|post_rust_fallbacks|false|always"
+        "install tools via cargo (eza, git-delta)|install_cli_tools_with_cargo|false|always"
         "install helm CLI|install_helm|false|always"
         "install and configure Oh My Zsh shell framework|install_oh_my_zsh|false|always"
         "install Zsh plugins and themes (autosuggestions, syntax highlighting, powerlevel10k)|install_zsh_plugins|false|always"

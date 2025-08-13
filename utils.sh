@@ -641,14 +641,11 @@ install_zsh_plugins() {
 }
 
 install_latest_python() {
-    log_info "Configuring pyenv..."
-    
-    # Install latest Python version
     local latest_python
     latest_python=$(pyenv install --list | grep -E '^\s*3\.[0-9]+\.[0-9]+$' | tail -1 | tr -d ' ')
     
     if [[ -n "$latest_python" ]]; then
-        log_info "Installing Python $latest_python..."
+        log_install "Python $latest_python (via pyenv)"
         if ! pyenv install "$latest_python" --skip-existing; then
             log_error "Failed to install Python $latest_python - continuing with installation"
             FAILED_INSTALLATIONS+=("Python $latest_python (via pyenv)")

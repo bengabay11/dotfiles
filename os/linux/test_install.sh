@@ -6,7 +6,7 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/../../dotfiles/shell-utils.sh"
-source "$SCRIPT_DIR/../../dotfiles/.aliases.sh"
+source "$SCRIPT_DIR/../../dotfiles/aliases.sh"
 
 # Ensure typical user tool paths are available in this test session
 export PATH="$HOME/.cargo/bin:$HOME/.pyenv/bin:$PATH"

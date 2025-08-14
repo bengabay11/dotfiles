@@ -466,6 +466,24 @@ get_cli_tool_version() {
     esac
 }
 
+try_install_tool () {
+    local tool_name="$1"
+    local tool_command_name="$2"
+    local tool_install_command="$3"
+    local tool_version_command="$4"
+    if ! command -v $tool_command_name >/dev/null 2>&1; then
+        log_install $tool_name
+        if ! $tool_install_command; then
+            log_error "Failed to install $tool_name"
+            FAILED_INSTALLATIONS+=("$tool_name")
+        else
+            log_success "$tool_name installed successfully"
+        fi
+    else
+        log_found "$tool_name is already installed ($($tool_version_command 2>/dev/null || echo version unknown))"
+    fi
+}
+
 installation_success_message() {
     echo ""
     echo -e "${CYAN}╭─────────────────────────────────────────────────╮${NC}"

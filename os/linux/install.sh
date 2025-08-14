@@ -38,190 +38,77 @@ apt_update_and_basics() {
         git unzip xz-utils pkg-config
 }
 
-install_cli_tools() {
-    log_info "Installing command-line tools..."
-
-    # Core CLI via apt
-    local apt_pkgs=(
-        git
-        python3 python3-pip python3-venv
-        vim tmux
-        nodejs npm
-        bat
-        zsh
-        btop nmap htop
-        ripgrep
-        ipython3
-        fzf
-        speedtest-cli
-        default-jdk
-    )
-
-    # Some packages might not exist on older distros; attempt install and continue on failure
-    for pkg in "${apt_pkgs[@]}"; do
-        if dpkg -s "$pkg" >/dev/null 2>&1; then
-            # Determine the corresponding command name for version output
-            cmd_name="$pkg"
-            case "$pkg" in
-                nodejs)
-                    # Prefer node if available, otherwise fall back to nodejs
-                    if command -v node >/dev/null 2>&1; then
-                        cmd_name="node"
-                    else
-                        cmd_name="nodejs"
-                    fi
-                    ;;
-                git-delta)
-                    cmd_name="delta"
-                    ;;
-                ripgrep)
-                    cmd_name="rg"
-                    ;;
-                bat)
-                    if command -v bat >/dev/null 2>&1; then
-                        cmd_name="bat"
-                    elif command -v batcat >/dev/null 2>&1; then
-                        cmd_name="batcat"
-                    else
-                        cmd_name="bat"
-                    fi
-                    ;;
-                python3)
-                    cmd_name="python3"
-                    ;;
-                ipython3)
-                    # Prefer ipython if a shim/symlink exists; else use ipython3
-                    if command -v ipython >/dev/null 2>&1; then
-                        cmd_name="ipython"
-                    else
-                        cmd_name="ipython3"
-                    fi
-                    ;;
-                default-jdk)
-                    cmd_name="java"
-                    ;;
-                *)
-                    cmd_name="$pkg"
-                    ;;
-            esac
-
-            if command -v "$cmd_name" >/dev/null 2>&1; then
-                # Use shared version helper for consistent formatting
-                local version
-                version=$(get_cli_tool_version "$cmd_name")
-                log_found "$pkg is already installed ($version)"
-            else
-                # Command is not available (e.g., bat provides batcat); show apt package version instead
-                local pkg_ver
-                pkg_ver=$(dpkg-query -W -f='${Version}' "$pkg" 2>/dev/null || echo "version unknown")
-                log_found "$pkg is already installed (apt package $pkg_ver)"
-            fi
-        else
-            log_install "$pkg"
-            if ! sudo DEBIAN_FRONTEND=noninteractive apt-get install -y "$pkg"; then
-                log_error "Failed to install $pkg - continuing"
-                FAILED_INSTALLATIONS+=("$pkg (apt)")
-            else
-                log_success "$pkg installed successfully"
-            fi
-        fi
-    done
-
-    # Typescript (tsc) and yarn via npm
-    if ! command -v tsc >/dev/null 2>&1; then
-        log_install "typescript"
-        if ! sudo npm install -g typescript; then
-            log_error "Failed to install typescript"
-            FAILED_INSTALLATIONS+=("typescript (npm)")
-        else
-            log_success "typescript installed successfully"
-        fi
+install_tools_with_package_manager() {
+    local package_manager_name=$1
+    local package_manager_command=$2
+    local package_manager_install_command=$3
+    local -n tools_ref="$4"
+    if ! command -v "$package_manager_command" >/dev/null 2>&1; then
+        log_warning "$package_manager_name not available; skipping $package_manager_command-based installations"
+        for entry in "${tools[@]}"; do
+            IFS=":" read -r display_name command version_command package_name <<< "$entry"
+            FAILED_INSTALLATIONS+=("$display_name")
+        done
     else
-        log_found "typescript is already installed ($(tsc --version 2>/dev/null || echo version unknown))"
-    fi
-
-    if ! command -v yarn >/dev/null 2>&1; then
-        log_install "yarn"
-        if ! sudo npm install -g yarn; then
-            log_error "Failed to install yarn"
-            FAILED_INSTALLATIONS+=("yarn (npm)")
-        else
-            log_success "yarn installed successfully"
-        fi
-    else
-        log_found "yarn is already installed ($(yarn --version 2>/dev/null || echo version unknown))"
-    fi
-
-    # ruff and pre-commit via apt or pipx fallback
-    if ! command -v pipx >/dev/null 2>&1; then
-        sudo DEBIAN_FRONTEND=noninteractive apt-get install -y pipx || true
-    fi
-    if ! command -v pipx >/dev/null 2>&1; then
-        # Fallback: install pipx via pip
-        python3 -m pip install --user pipx || true
-        python3 -m pipx ensurepath || true
-    fi
-
-    if ! command -v ruff >/dev/null 2>&1; then
-        if sudo DEBIAN_FRONTEND=noninteractive apt-get install -y ruff; then
-            log_success "ruff installed successfully"
-        else
-            log_install "ruff"
-            if ! pipx install ruff; then
-                log_error "Failed to install ruff"
-                FAILED_INSTALLATIONS+=("ruff")
-            else
-                log_success "ruff installed successfully"
-            fi
-        fi
-    else
-        log_found "ruff is already installed ($(ruff --version 2>/dev/null || echo version unknown))"
-    fi
-
-    if ! command -v pre-commit >/dev/null 2>&1; then
-        if sudo DEBIAN_FRONTEND=noninteractive apt-get install -y pre-commit; then
-            log_success "pre-commit installed successfully"
-        else
-            log_install "pre-commit"
-            if ! pipx install pre-commit; then
-                log_error "Failed to install pre-commit"
-                FAILED_INSTALLATIONS+=("pre-commit")
-            else
-                log_success "pre-commit installed successfully"
-            fi
-        fi
-    else
-        log_found "pre-commit is already installed ($(pre-commit --version 2>/dev/null || echo version unknown))"
-    fi
-
-    if command -v uv >/dev/null 2>&1; then
-        local version
-        version=$(uv --version 2>/dev/null || echo "version unknown")
-        log_found "uv is already installed ($version)"
-    else
-        log_install "uv (Python package installer)"
-        if ! curl -LsSf https://astral.sh/uv/install.sh | sh; then
-            log_error "Failed to install uv"
-            FAILED_INSTALLATIONS+=("uv (Python package installer)")
-        else
-            log_success "uv installed successfully"
-        fi
+        for entry in "${tools_ref[@]}"; do
+            IFS=":" read -r display_name command version_command package_name <<< "$entry"
+            try_install_tool "$display_name" "$command" "$package_manager_install_command $package_name" "$version_command"
+        done
     fi
 }
 
+install_cli_tools_with_apt() {
+    local tools=(
+        "Git:git:git --version:git"
+        "Python 3:python3:python3 --version:python3"
+        "pip3:pip3:pip3 --version:pip"
+        "vim:vim:echo unknown version:vim" # vim version output is too long. can be solved with head command, but the script will need some changes.
+        "tmux:tmux:tmux -V:tmux"
+        "Node.js:node:node --version:nodejs"
+        "npm:npm:npm --version:npm"
+        "bat:bat:bat --version:bat"
+        "Zsh:zsh:zsh --version:zsh"
+        "Ruff:ruff:ruff --version:ruff"
+        "pre-commit:pre-commit:pre-commit --version:pre-commit"
+        "btop:btop:btop --version:btop"
+        "htop:htop:htop --version:htop"
+        "nmap:nmap:nmap --version:nmap"
+        "ripgrep:rg:rg --version:ripgrep"
+        "IPython:ipython:ipython --version:ipython"
+        "fzf:fzf:fzf --version:fzf"
+        "Speedtest CLI:speedtest-cli:speedtest-cli --version:speedtest-cli"
+        "Java JDK:javac:javac -version:default-jdk"
+    )
+    install_tools_with_package_manager "apt" "apt" \
+    "sudo DEBIAN_FRONTEND=noninteractive apt-get install -y" tools
 
-install_helm() {
-    if command -v helm >/dev/null 2>&1; then
-        log_found "helm is already installed ($(helm version --short 2>/dev/null || echo version unknown))"
-        return 0
-    fi
-    log_install "helm"
-    if ! curl -fsSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash; then
-        log_error "Failed to install helm"
-        FAILED_INSTALLATIONS+=("helm")
-        return 1
-    fi
-    log_success "helm installed successfully"
+}
+
+install_cli_tools_with_cargo() {
+    local tools=(
+        "eza:eza:eza --version:eza"
+        "git-delta:delta:delta --version:git-delta"
+    )
+    install_tools_with_package_manager "cargo" "cargo" "cargo install" tools
+}
+
+install_tools_with_npm() {
+    local tools=(
+        "Typescript:tsc:tsc --version:typescript"
+        "yarn:yarn:yarn --version:yarn"
+    )
+    install_tools_with_package_manager "npm" "npm" "sudo npm install -g" tools
+}
+
+install_cli_tools() {
+    log_info "Installing command-line tools..."
+
+    install_cli_tools_with_apt
+    install_cli_tools_with_cargo
+    install_tools_with_npm
+
+    try_install_tool "uv" "uv" "curl -LsSf https://astral.sh/uv/install.sh | sh" "uv --version"
+    try_install_tool "helm" "helm" "curl -fsSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash" "helm version --short"
 }
 
 install_pyenv() {
@@ -233,13 +120,13 @@ install_pyenv() {
         export PATH="$PYENV_ROOT/bin:$PATH"
 
         if command -v pyenv >/dev/null 2>&1; then
-            log_success "pyenv installed"
+            log_install "pyenv"
         else
             log_error "pyenv installation may have failed"
             FAILED_INSTALLATIONS+=("pyenv")
         fi
     else
-        log_found "pyenv already installed ($(tsc --version 2>/dev/null || echo version unknown))"
+        log_found "pyenv already installed ($(pyenv --version 2>/dev/null || echo version unknown))"
     fi
 }
 
@@ -250,31 +137,6 @@ configure_python_env() {
             libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncursesw5-dev xz-utils tk-dev \
             libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev || true
     install_latest_python
-}
-
-install_cli_tools_with_cargo() {
-    if command -v cargo >/dev/null 2>&1; then
-        if ! command -v eza >/dev/null 2>&1; then
-            log_install "eza"
-            if ! cargo install eza; then
-                log_error "Failed to install eza via cargo"
-                FAILED_INSTALLATIONS+=("eza (cargo)")
-            else
-                log_success "eza installed successfully"
-            fi
-        fi
-        if ! command -v delta >/dev/null 2>&1; then
-            log_install "git-delta"
-            if ! cargo install git-delta; then
-                log_error "Failed to install git-delta via cargo"
-                FAILED_INSTALLATIONS+=("git-delta (cargo)")
-            else
-                log_success "git-delta installed successfully"
-            fi
-        fi
-    else
-        log_warning "Cargo not available; skipping cargo-based installations"
-    fi
 }
 
 
@@ -299,7 +161,6 @@ main() {
         "install command-line development tools|install_cli_tools|false|always"
         "install Rust programming language|install_rust|false|always"
         "install tools via cargo (eza, git-delta)|install_cli_tools_with_cargo|false|always"
-        "install helm CLI|install_helm|false|always"
         "install and configure Oh My Zsh shell framework|install_oh_my_zsh|false|always"
         "install Zsh plugins and themes (autosuggestions, syntax highlighting, powerlevel10k)|install_zsh_plugins|false|always"
         "set up dotfiles and modular shell utilities|setup_dotfiles|true|always"

@@ -270,7 +270,7 @@ main() {
         "set up dotfiles and modular shell utilities|setup_dotfiles|true|always"
         "configure Python environment with pyenv|install_latest_python|false|always"
     )
-    process_stages stages
+    process_stages
 
     show_failure_summary
     log_success "macOS dotfiles installation completed successfully!"

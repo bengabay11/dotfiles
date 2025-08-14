@@ -512,8 +512,8 @@ show_failure_summary() {
 }
 
 process_stages() {
-    local -n stages_ref="$1"
-    for stage_info in "${stages_ref[@]}"; do
+    # Stages has to be set before calling this function
+    for stage_info in "${stages[@]}"; do
         IFS='|' read -r description function_name default_yes condition <<< "$stage_info"
         if confirm_stage "$description" "$default_yes"; then
             if ! "$function_name"; then

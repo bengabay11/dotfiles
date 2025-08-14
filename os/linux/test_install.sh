@@ -39,10 +39,9 @@ main() {
     echo ""
 
     log_info "=== Testing Essential CLI Tools ==="
-    for cmd in git python3 vim tmux node npm yarn zsh rg fzf delta eza; do
+    for cmd in git python3 vim tmux node npm yarn zsh rg fzf delta bat eza; do
         run_test "$cmd installation" "test_command_exists $cmd"
     done
-    run_test "bat installation" "test_command_exists bat || test_command_exists batcat || true"
     run_test "btop installation" "test_command_exists btop || true"
     run_test "nmap installation" "test_command_exists nmap || true"
     run_test "htop installation" "test_command_exists htop || true"
@@ -159,7 +158,6 @@ main() {
         "speedtest-cli --version"
         "fzf --version"
         "delta --version"
-        "bat --version || batcat --version"
     )
     for t in "${tools[@]}"; do
         name=$(echo "$t" | cut -d' ' -f1)

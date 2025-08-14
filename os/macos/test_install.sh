@@ -3,7 +3,7 @@
 # Comprehensive test script for macOS dotfiles installation
 # This script verifies that the installation completed successfully
 
-set -euo pipefail
+set -uo pipefail
 
 # Get the directory where this script is located
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

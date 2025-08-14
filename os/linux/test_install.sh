@@ -4,6 +4,7 @@
 
 set -euo pipefail
 
+shopt -s expand_aliases  # Allow aliases (from aliases.sh) to work in this non-interactive script
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/../../dotfiles/shell-utils.sh"
 source "$SCRIPT_DIR/../../dotfiles/aliases.sh"

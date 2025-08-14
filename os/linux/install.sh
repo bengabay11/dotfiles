@@ -196,7 +196,7 @@ main() {
         "set up dotfiles and modular shell utilities|setup_dotfiles|true|always"
         "configure Python environment with pyenv|configure_python_env|false|always"
     )
-    process_stages "${stages[@]}"
+    process_stages stages
 
     show_failure_summary
     log_success "linux dotfiles installation completed successfully!"

@@ -512,8 +512,8 @@ show_failure_summary() {
 }
 
 process_stages() {
-    local -n stages="$1"
-    for stage_info in "${stages[@]}"; do
+    local -n stages_ref="$1"
+    for stage_info in "${stages_ref[@]}"; do
         IFS='|' read -r description function_name default_yes condition <<< "$stage_info"
         if confirm_stage "$description" "$default_yes"; then
             if ! "$function_name"; then
@@ -663,7 +663,7 @@ install_latest_python() {
     latest_python=$(pyenv install --list | grep -E '^\s*3\.[0-9]+\.[0-9]+$' | tail -1 | tr -d ' ')
     
     if [[ -n "$latest_python" ]]; then
-        try_install_tool "Latest Python" "pyenv versions --bare | grep -Fx $latest_python" \
+        try_install_tool "Latest Python $latest_python" "pyenv versions --bare | grep -Fx $latest_python" \
         "pyenvs install "$latest_python" --skip-existing" "echo $latest_python"
         # log_install "Python $latest_python (via pyenv)"
         # if ! pyenv install "$latest_python" --skip-existing; then

@@ -658,19 +658,36 @@ install_zsh_plugins() {
     log_success "All Zsh plugins and themes installed successfully"
 }
 
+try_install_python () {
+    local python_version=$1
+    local tool_name="Python $python_version"
+    if ! command -v  pyenv versions --bare | grep -Fx "$python_version" >/dev/null 2>&1; then
+        log_install $tool_name
+        if ! pyenv install $python_version --skip-existing; then
+            log_error "Failed to install $tool_name"
+            FAILED_INSTALLATIONS+=("$tool_name")
+            return 1
+        else
+            log_success "$tool_name installed successfully"
+        fi
+    else
+        log_found "$tool_name is already installed ($($python_version 2>/dev/null || echo version unknown))"
+    fi
+}
+
 install_latest_python() {
     local latest_python
     latest_python=$(pyenv install --list | grep -E '^\s*3\.[0-9]+\.[0-9]+$' | tail -1 | tr -d ' ')
     
     if [[ -n "$latest_python" ]]; then
-        try_install_tool "Latest Python $latest_python" "pyenv versions --bare | grep -Fx $latest_python" \
-        "pyenvs install "$latest_python" --skip-existing" "echo $latest_python"
-
-        log_info "Setting global python version to $latest_python_version"
-        if ! pyenv global "$latest_python"; then
-            log_error "Failed to set global Python version - continuing with installation"
-        else
-            log_success "Python $latest_python set as the global version"
+        check_python_version_cmd='[[ "$(pyenv versions --bare)" == $latest_python_version ]]'
+        if try_install_python $latest_python; then
+            log_info "Setting global python version to $latest_python"
+            if ! pyenv global "$latest_python"; then
+                log_error "Failed to set global Python version - continuing with installation"
+            else
+                log_success "Python $latest_python set as the global version"
+            fi
         fi
     else
         log_warning "Could not determine latest Python version"

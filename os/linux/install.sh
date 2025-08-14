@@ -2,7 +2,7 @@
 
 # Linux-specific installation script (Ubuntu/Debian-based distros preferred)
 
-set -uo pipefail
+set -euo pipefail
 
 # Source shared utilities
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -74,7 +74,7 @@ install_cli_tools_with_apt() {
         "htop:htop:htop --version:htop"
         "nmap:nmap:nmap --version:nmap"
         "ripgrep:rg:rg --version:ripgrep"
-        "IPython:ipython:ipython --version:ipython"
+        "IPython3:ipython3:ipython3 --version:ipython3"
         "fzf:fzf:fzf --version:fzf"
         "Speedtest CLI:speedtest-cli:speedtest-cli --version:speedtest-cli"
         "Java JDK:javac:javac -version:default-jdk"
@@ -100,6 +100,36 @@ install_tools_with_npm() {
     install_tools_with_package_manager "npm" "npm" "sudo npm install -g" tools
 }
 
+# Dedicated function for trying install uv (Can't use try_install_tool because the install command has pipe inside)
+try_install_uv () {
+    if ! command -v uv >/dev/null 2>&1; then
+        log_install uv
+        if ! curl -LsSf https://astral.sh/uv/install.sh | sh; then
+            log_error "Failed to install uv"
+            FAILED_INSTALLATIONS+=("uv")
+        else
+            log_success "uv installed successfully"
+        fi
+    else
+        log_found "uv is already installed ($(uv --version 2>/dev/null || echo version unknown))"
+    fi
+}
+
+# Dedicated function for trying install helm (Can't use try_install_tool because the install command has pipe inside)
+try_install_helm () {
+    if ! command -v helm >/dev/null 2>&1; then
+        log_install helm
+        if ! curl -fsSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash; then
+            log_error "Failed to install helm"
+            FAILED_INSTALLATIONS+=("helm")
+        else
+            log_success "helm installed successfully"
+        fi
+    else
+        log_found "helm is already installed ($(helm version --short 2>/dev/null || echo version unknown))"
+    fi
+}
+
 install_cli_tools() {
     log_info "Installing command-line tools..."
 
@@ -107,8 +137,8 @@ install_cli_tools() {
     install_cli_tools_with_cargo
     install_tools_with_npm
 
-    try_install_tool "uv" "uv" "curl -LsSf https://astral.sh/uv/install.sh | sh" "uv --version"
-    try_install_tool "helm" "helm" "curl -fsSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash" "helm version --short"
+    try_install_uv
+    try_install_helm
 }
 
 install_pyenv() {
@@ -132,7 +162,7 @@ install_pyenv() {
 
 configure_python_env() {
     install_pyenv
-    log_install "Installing linux libraries for Python"
+    log_install "linux libraries for Python"
     sudo DEBIAN_FRONTEND=noninteractive apt-get install -y make build-essential libssl-dev zlib1g-dev \
             libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncursesw5-dev xz-utils tk-dev \
             libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev || true

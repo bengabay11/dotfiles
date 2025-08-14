@@ -663,18 +663,20 @@ install_latest_python() {
     latest_python=$(pyenv install --list | grep -E '^\s*3\.[0-9]+\.[0-9]+$' | tail -1 | tr -d ' ')
     
     if [[ -n "$latest_python" ]]; then
-        log_install "Python $latest_python (via pyenv)"
-        if ! pyenv install "$latest_python" --skip-existing; then
-            log_error "Failed to install Python $latest_python - continuing with installation"
-            FAILED_INSTALLATIONS+=("Python $latest_python (via pyenv)")
-        else
-            if ! pyenv global "$latest_python"; then
-                log_error "Failed to set global Python version - continuing with installation"
-                FAILED_INSTALLATIONS+=("Python $latest_python global setup (via pyenv)")
-            else
-                log_success "Python $latest_python installed and set as global version"
-            fi
-        fi
+        try_install_tool "Latest Python" "pyenv versions --bare | grep -Fx $latest_python" \
+        "pyenvs install "$latest_python" --skip-existing" "echo $latest_python"
+        # log_install "Python $latest_python (via pyenv)"
+        # if ! pyenv install "$latest_python" --skip-existing; then
+        #     log_error "Failed to install Python $latest_python - continuing with installation"
+        #     FAILED_INSTALLATIONS+=("Python $latest_python (via pyenv)")
+        # else
+        #     if ! pyenv global "$latest_python"; then
+        #         log_error "Failed to set global Python version - continuing with installation"
+        #         FAILED_INSTALLATIONS+=("Python $latest_python global setup (via pyenv)")
+        #     else
+        #         log_success "Python $latest_python installed and set as global version"
+        #     fi
+        # fi
     else
         log_warning "Could not determine latest Python version"
     fi

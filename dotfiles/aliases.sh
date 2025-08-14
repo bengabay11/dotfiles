@@ -9,6 +9,7 @@ alias ls="eza --icons --hyperlink --sort=type"
 alias locate=mdfind
 alias quit="exit"
 alias speedtest="speedtest-cli"
+alias ipython=ipython3
 
 # AWS
 alias sso="aws sso login"

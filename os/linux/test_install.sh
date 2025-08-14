@@ -40,7 +40,7 @@ main() {
     echo ""
 
     log_info "=== Testing Essential CLI Tools ==="
-    for cmd in git python3 vim tmux node npm yarn zsh rg fzf delta bat eza; do
+    for cmd in git python3 vim tmux node npm yarn zsh rg fzf delta batcat eza; do
         run_test "$cmd installation" "test_command_exists $cmd"
     done
     run_test "btop installation" "test_command_exists btop || true"

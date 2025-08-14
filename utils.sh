@@ -665,18 +665,13 @@ install_latest_python() {
     if [[ -n "$latest_python" ]]; then
         try_install_tool "Latest Python $latest_python" "pyenv versions --bare | grep -Fx $latest_python" \
         "pyenvs install "$latest_python" --skip-existing" "echo $latest_python"
-        # log_install "Python $latest_python (via pyenv)"
-        # if ! pyenv install "$latest_python" --skip-existing; then
-        #     log_error "Failed to install Python $latest_python - continuing with installation"
-        #     FAILED_INSTALLATIONS+=("Python $latest_python (via pyenv)")
-        # else
-        #     if ! pyenv global "$latest_python"; then
-        #         log_error "Failed to set global Python version - continuing with installation"
-        #         FAILED_INSTALLATIONS+=("Python $latest_python global setup (via pyenv)")
-        #     else
-        #         log_success "Python $latest_python installed and set as global version"
-        #     fi
-        # fi
+
+        log_info "Setting global python version to $latest_python_version"
+        if ! pyenv global "$latest_python"; then
+            log_error "Failed to set global Python version - continuing with installation"
+        else
+            log_success "Python $latest_python set as the global version"
+        fi
     else
         log_warning "Could not determine latest Python version"
     fi

@@ -2,7 +2,7 @@
 
 # macOS-specific installation script
 
-set -uo pipefail
+set -euo pipefail
 
 # Source shared utilities
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

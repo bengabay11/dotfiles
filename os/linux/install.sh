@@ -61,7 +61,7 @@ install_cli_tools_with_apt() {
         "TShark:tshark:tshark --version:tshark"
     )
     install_tools_with_package_manager "apt" "apt" \
-    "sudo DEBIAN_FRONTEND=noninteractive apt-get install -y"
+    "sudo DEBIAN_FRONTEND=noninteractive apt-get install -y" tools
 
 }
 
@@ -70,7 +70,7 @@ install_cli_tools_with_cargo() {
         "eza:eza:eza --version:eza"
         "git-delta:delta:delta --version:git-delta"
     )
-    install_tools_with_package_manager "cargo" "cargo" "cargo install"
+    install_tools_with_package_manager "cargo" "cargo" "cargo install" tools
 }
 
 install_tools_with_npm() {
@@ -78,7 +78,7 @@ install_tools_with_npm() {
         "Typescript:tsc:tsc --version:typescript"
         "yarn:yarn:yarn --version:yarn"
     )
-    install_tools_with_package_manager "npm" "npm" "sudo npm install -g"
+    install_tools_with_package_manager "npm" "npm" "sudo npm install -g" tools
 }
 
 try_install_ruff () {

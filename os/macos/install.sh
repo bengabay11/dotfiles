@@ -78,7 +78,7 @@ install_cli_tools() {
         "fzf:fzf:fzf --version:fzf"
         "delta:delta:delta --version:git-delta"
     )
-    install_tools_with_package_manager "Homebrew" "brew" "brew install"
+    install_tools_with_package_manager "Homebrew" "brew" "brew install" tools
     
     try_install_uv
 }

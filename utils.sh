@@ -484,23 +484,56 @@ try_install_tool () {
     fi
 }
 
+# Detect bash with nameref support (>= 4.3)
+_supports_nameref() {
+  [[ -n ${BASH_VERSINFO+x} ]] || return 1
+  local major=${BASH_VERSINFO[0]} minor=${BASH_VERSINFO[1]}
+  (( major > 4 )) || { (( major == 4 && minor >= 3 )) ; }
+}
+
+# Core impl: iterate entries passed as regular args
+_install_tools_with_pm_impl() {
+  local package_manager_name="$1"
+  local package_manager_command="$2"
+  local package_manager_install_command="$3"
+  shift 3  # now "$@" = entries
+
+  if ! command -v "$package_manager_command" >/dev/null 2>&1; then
+    log_warning "$package_manager_name not available; skipping ${package_manager_command}-based installations"
+    for entry in "$@"; do
+      IFS=":" read -r display_name command version_command package_name <<< "$entry"
+      FAILED_INSTALLATIONS+=("$display_name")
+    done
+    return 0
+  fi
+
+  for entry in "$@"; do
+    IFS=":" read -r display_name command version_command package_name <<< "$entry"
+    # build and run install via your existing try_install_tool
+    try_install_tool "$display_name" "$command" \
+      "$package_manager_install_command $package_name" \
+      "$version_command"
+  done
+}
+
 install_tools_with_package_manager() {
-    # tools has to be set before calling this function
-    local package_manager_name=$1
-    local package_manager_command=$2
-    local package_manager_install_command=$3
-    if ! command -v "$package_manager_command" >/dev/null 2>&1; then
-        log_warning "$package_manager_name not available; skipping $package_manager_command-based installations"
-        for entry in "${tools[@]}"; do
-            IFS=":" read -r display_name command version_command package_name <<< "$entry"
-            FAILED_INSTALLATIONS+=("$display_name")
-        done
-    else
-        for entry in "${tools[@]}"; do
-            IFS=":" read -r display_name command version_command package_name <<< "$entry"
-            try_install_tool "$display_name" "$command" "$package_manager_install_command $package_name" "$version_command"
-        done
-    fi
+  local package_manager_name="$1"
+  local package_manager_command="$2"
+  local package_manager_install_command="$3"
+  local arrname="$4"
+
+  if _supports_nameref; then
+    # Linux/new bash: use nameref to expand array items safely
+    local -n _tools_ref="$arrname"
+    _install_tools_with_pm_impl \
+      "$package_manager_name" "$package_manager_command" "$package_manager_install_command" \
+      "${_tools_ref[@]}"
+  else
+    # macOS/old bash: expand the array by name via eval
+    eval "_install_tools_with_pm_impl \
+      \"\$package_manager_name\" \"\$package_manager_command\" \"\$package_manager_install_command\" \
+      \"\${$arrname[@]}\""
+  fi
 }
 
 installation_success_message() {

@@ -11,9 +11,8 @@ shopt -s expand_aliases  # Allow aliases (from aliases.sh) to work in this non-i
 source "$SCRIPT_DIR/dotfiles/shell-utils.sh"
 source "$SCRIPT_DIR/dotfiles/aliases.sh"
 
-# Add pyenv to PATH
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
+# Ensure typical user tool paths are available in this test session
+export PATH="$HOME/.cargo/bin:$HOME/.pyenv/bin:$PATH"
 
 # Test results tracking
 TESTS_PASSED=0

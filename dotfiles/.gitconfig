@@ -23,3 +23,5 @@
 	lg = log --graph --abbrev-commit --decorate \
       --format=format:'%C(bold yellow)%h%C(reset) %C(bold blue)%an%C(reset) %C(green)%ar%C(reset)%C(auto)%d%C(reset) %C(white)%s%C(reset)'
 
+[pull]
+	rebase = false

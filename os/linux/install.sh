@@ -60,7 +60,6 @@ install_cli_tools_with_apt() {
         "Java JDK:javac:javac -version:default-jdk"
         "TShark:tshark:tshark --version:tshark"
         "gitk:gitk:gitk --version:gitk"
-        "act:act:act --version:act"
     )
     install_tools_with_package_manager "apt" "apt" \
     "sudo DEBIAN_FRONTEND=noninteractive apt-get install -y" tools
@@ -100,16 +99,32 @@ try_install_ruff () {
 
 # Dedicated function for trying install helm (Can't use try_install_tool because the install command has pipe inside)
 try_install_helm () {
+    local tool_name="helm"
     if ! command -v helm >/dev/null 2>&1; then
-        log_install helm
+        log_install $tool_name
         if ! curl -fsSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash; then
-            log_error "Failed to install helm"
-            FAILED_INSTALLATIONS+=("helm")
+            log_error "Failed to install $tool_name"
+            FAILED_INSTALLATIONS+=("$tool_name")
         else
-            log_success "helm installed successfully"
+            log_success "$tool_name installed successfully"
         fi
     else
-        log_found "helm is already installed ($(helm version --short 2>/dev/null || echo version unknown))"
+        log_found "$tool_name is already installed ($(helm version --short 2>/dev/null || echo version unknown))"
+    fi
+}
+
+try_install_act () {
+    local tool_name="act"
+    if ! command -v act >/dev/null 2>&1; then
+        log_install $tool_name
+        if ! curl -s https://raw.githubusercontent.com/nektos/act/master/install.sh | sudo bash; then
+            log_error "Failed to install $tool_name"
+            FAILED_INSTALLATIONS+=("$tool_name")
+        else
+            log_success "$tool_name installed successfully"
+        fi
+    else
+        log_found "$tool_name is already installed ($(act --version 2>/dev/null || echo version unknown))"
     fi
 }
 
@@ -123,6 +138,7 @@ install_cli_tools() {
     try_install_uv
     try_install_ruff
     try_install_helm
+    try_install_act
 }
 
 install_pyenv() {

@@ -8,7 +8,7 @@ set -uo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 shopt -s expand_aliases  # Allow aliases (from aliases.sh) to work in this non-interactive script
-source "$SCRIPT_DIR/dotfiles/shell-utils.sh"
+source "$SCRIPT_DIR/dotfiles/functions.sh"
 source "$SCRIPT_DIR/dotfiles/aliases.sh"
 
 # Ensure typical user tool paths are available in this test session
@@ -163,7 +163,7 @@ test_dotfiles() {
     echo ""
 
     run_test "Modular shell utilities system is configured" "grep -q '.config/shell-utils' '$HOME/.zshrc'"
-    run_test "Shell utilities are installed" "test -f '$HOME/.config/shell-utils/shell-utils.sh'"
+    run_test "Shell utilities are installed" "test -f '$HOME/.config/shell-utils/functions.sh'"
     echo ""
 }
 

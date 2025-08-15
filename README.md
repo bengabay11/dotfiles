@@ -63,7 +63,7 @@ A comprehensive dotfiles setup for macOS and Linux (Ubuntu/Debian-based; include
 
 The dotfiles include a modular utilities system located at `~/.config/shell-utils/`:
 
-- **`shell-utils.sh`** - Essential functions like `extract()`, `mkcd()`, and beautiful logging functions
+- **`functions.sh`** - Essential functions like `extract()`, `mkcd()`, and beautiful logging functions
 - **Extensible** - Add your own `.sh` files to the directory and they'll be automatically loaded
 
 **Key utilities include:**
@@ -208,7 +208,7 @@ All dotfiles are located in the `dotfiles/` directory:
 - `dotfiles/.tmux.conf` - Tmux configuration
 - `dotfiles/.zshrc` - Zsh configuration
 - `dotfiles/.gitconfig` - Git configuration
-- `dotfiles/shell-utils.sh` - Shared utility functions and logging
+- `dotfiles/functions.sh` - Shared utility functions and logging
 
 After modifying, re-run the installer or create symlinks manually:
 
@@ -282,7 +282,7 @@ dotfiles/
     ├── .tmux.conf          # Tmux configuration
     ├── .zshrc              # Zsh configuration with Oh My Zsh
     ├── .gitconfig          # Git configuration
-    └── shell-utils.sh      # Shared utility functions and logging
+    └── functions.sh      # Shared utility functions and logging
 ```
 
 ## Contributing

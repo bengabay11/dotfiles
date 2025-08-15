@@ -13,7 +13,6 @@ CYAN='\033[0;36m'
 WHITE='\033[1;37m'
 NC='\033[0m' # No Color
 
-# Beautiful logging functions with icons
 log_info() {
     echo -e "${BLUE}ℹ️  ${WHITE}$1${NC}"
 }
@@ -88,7 +87,7 @@ log_step() {
 }
 
 # Extract various archive formats
-function extract() {
+extract() {
     if [ -f $1 ]; then
         case $1 in
             *.tar.bz2)   tar xjf $1     ;;
@@ -110,7 +109,7 @@ function extract() {
 }
 
 # Create directory and navigate to it in one command
-function mkcd() {
+mkcd() {
     if [ $# -ne 1 ]; then
         echo "Usage: mkcd <directory>"
         return 1
@@ -120,7 +119,7 @@ function mkcd() {
 }
 
 # Function to search for code owners
-function owner() {
+owner() {
     grep -E "^\S*$1\S*\s.*$" --color=never ~/code/medigator/.github/CODEOWNERS
 }
 

@@ -40,7 +40,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 export SCRIPT_DIR
 
 # Source shared utilities
-source "$SCRIPT_DIR/dotfiles/shell-utils.sh"
+source "$SCRIPT_DIR/dotfiles/functions.sh"
 source "$SCRIPT_DIR/utils.sh"
 
 

@@ -7,7 +7,7 @@ set -euo pipefail
 # Source shared utilities
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DOTFILES_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
-source "$DOTFILES_ROOT/dotfiles/shell-utils.sh"
+source "$DOTFILES_ROOT/dotfiles/functions.sh"
 source "$DOTFILES_ROOT/utils.sh"
 
 # Global array to track failed installations
@@ -83,7 +83,6 @@ install_cli_tools() {
     try_install_uv
 }
 
-# Install applications via Homebrew Cask
 install_applications() {
     log_info "Installing applications..."
     

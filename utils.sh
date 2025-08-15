@@ -443,11 +443,11 @@ setup_dotfiles() {
     done
     
     log_info "Setting up modular shell utilities..."
-    if [[ -f "$DOTFILES_ROOT/dotfiles/shell-utils.sh" ]]; then
-        cp "$DOTFILES_ROOT/dotfiles/shell-utils.sh" "$HOME/.config/shell-utils/shell-utils.sh"
+    if [[ -f "$DOTFILES_ROOT/dotfiles/functions.sh" ]]; then
+        cp "$DOTFILES_ROOT/dotfiles/functions.sh" "$HOME/.config/shell-utils/functions.sh"
         log_success "Shell utilities installed to ~/.config/shell-utils/"
     else
-        log_warning "shell-utils.sh not found - skipping utilities setup"
+        log_warning "functions.sh not found - skipping utilities setup"
     fi
     if [[ -f "$DOTFILES_ROOT/dotfiles/aliases.sh" ]]; then
         cp "$DOTFILES_ROOT/dotfiles/aliases.sh" "$HOME/.config/shell-utils/aliases.sh"

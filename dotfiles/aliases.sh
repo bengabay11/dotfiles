@@ -17,4 +17,5 @@ alias sso="aws sso login"
 # Platform specific
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     alias open='xdg-open'
+    alias bat="batcat"
 fi

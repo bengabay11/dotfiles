@@ -236,8 +236,8 @@ main() {
 
     test_dotfiles
     
-    run_test "pyenv can list available versions" "command exists pyenv install --list >/dev/null 2>&1"
-    run_test "pyenv global Python is usable" "command exists pyenv exec python3 --version >/dev/null 2>&1"
+    run_test "pyenv can list available versions" "command_exists pyenv install --list >/dev/null 2>&1"
+    run_test "pyenv global Python is usable" "command_exists pyenv exec python3 --version >/dev/null 2>&1"
     run_test "pyenv shims directory" "test_directory_exists '$HOME/.pyenv/shims'"
     
     run_test "Cargo home directory" "test_directory_exists '$HOME/.cargo'"

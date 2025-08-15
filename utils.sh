@@ -491,7 +491,6 @@ _supports_nameref() {
   (( major > 4 )) || { (( major == 4 && minor >= 3 )) ; }
 }
 
-# Core impl: iterate entries passed as regular args
 _install_tools_with_pm_impl() {
   local package_manager_name="$1"
   local package_manager_command="$2"
@@ -509,10 +508,8 @@ _install_tools_with_pm_impl() {
 
   for entry in "$@"; do
     IFS=":" read -r display_name command version_command package_name <<< "$entry"
-    # build and run install via your existing try_install_tool
     try_install_tool "$display_name" "$command" \
-      "$package_manager_install_command $package_name" \
-      "$version_command"
+      "$package_manager_install_command $package_name" "$version_command"
   done
 }
 

@@ -61,6 +61,33 @@ test_symlink_target_exists() {
     [[ -f "$target" ]]
 }
 
+test_apps() {
+    log_info "=== Testing GUI Applications ==="
+    apps=(
+        "iTerm"
+        "Warp" 
+        "Raycast"
+        "Cursor"
+        "Visual Studio Code"
+        "Google Chrome"
+        "Brave Browser"
+        "Slack"
+        "Sublime Text"
+        "Obsidian"
+
+        "Docker"
+        "Wireshark"
+        "Postman"
+        "Typora"
+        "DBeaver"
+    )
+    
+    for app in "${apps[@]}"; do
+        run_test "$app application" "test_directory_exists '/Applications/$app.app' || test_directory_exists '$HOME/Applications/$app.app'"
+    done
+    echo ""
+}
+
 parse_args() {
     while [[ $# -gt 0 ]]; do
         case "$1" in
@@ -91,13 +118,12 @@ main() {
     
     parse_args "$@"
     
-    # Test 1: Essential command-line tools
+    # Test 1: command-line tools
     log_info "=== Testing Essential CLI Tools ==="
     if [[ "$TEST_HOMEBREW" == true ]]; then
        run_test "Homebrew installation" "test_command_exists brew"
     else
         log_info "=== Skipping Homebrew test (--no-homebrew) ==="
-        echo ""
     fi
     run_test "Git installation" "test_command_exists git"
     run_test "Python3 installation" "test_command_exists python3"
@@ -107,9 +133,6 @@ main() {
     run_test "npm installation" "test_command_exists npm"
     run_test "yarn installation" "test_command_exists yarn"
     run_test "Zsh installation" "test_command_exists zsh"
-    echo ""
-    
-    # Test 2: Development tools
     log_info "=== Testing Development Tools ==="
     run_test "Rust installation" "test_command_exists rustc"
     run_test "Cargo installation" "test_command_exists cargo"
@@ -131,50 +154,25 @@ main() {
     run_test "delta installation" "test_command_exists delta"
     run_test "Java (openjdk) installation" "test_command_exists java"
     run_test "watch installation" "test_command_exists watch"
-    
-    # Test CLI commands provided by GUI applications
     run_test "docker CLI command" "test_command_exists docker"
     run_test "tshark CLI command (Wireshark)" "test_command_exists tshark"
     echo ""
     
-    # Test 3: GUI Applications (macOS only)
+    # Test 2: GUI Applications (macOS only)
     if [[ "$TEST_APPS" == true ]]; then
-        log_info "=== Testing GUI Applications ==="
-        apps=(
-            "iTerm"
-            "Warp" 
-            "Raycast"
-            "Cursor"
-            "Visual Studio Code"
-            "Google Chrome"
-            "Brave Browser"
-            "Slack"
-            "Sublime Text"
-            "Obsidian"
-
-            "Docker"
-            "Wireshark"
-            "Postman"
-            "Typora"
-            "DBeaver"
-        )
-        
-        for app in "${apps[@]}"; do
-            run_test "$app application" "test_directory_exists '/Applications/$app.app' || test_directory_exists '$HOME/Applications/$app.app'"
-        done
-        echo ""
+        test_apps
     else
         log_info "=== Skipping GUI Applications tests (--no-apps) ==="
         echo ""
     fi
     
-    # Test 4: Oh My Zsh installation
+    # Test 3: Oh My Zsh installation
     log_info "=== Testing Oh My Zsh ==="
     run_test "Oh My Zsh directory" "test_directory_exists '$HOME/.oh-my-zsh'"
     run_test "Oh My Zsh main script" "test_file_exists '$HOME/.oh-my-zsh/oh-my-zsh.sh'"
     echo ""
     
-    # Test 5: Dotfiles symlinking
+    # Test 4: Dotfiles symlinking
     log_info "=== Testing Dotfiles Symlinking ==="
     dotfiles=(".vimrc" ".tmux.conf" ".zshrc" ".gitconfig")
     for dotfile in "${dotfiles[@]}"; do
@@ -183,7 +181,7 @@ main() {
     done
     echo ""
     
-    # Test 6: Python and Rust Environment  
+    # Test 5: Python and Rust Environment  
     log_info "=== Testing Python Environment ==="
     if command -v pyenv >/dev/null 2>&1; then
         if pyenv global >/dev/null 2>&1; then

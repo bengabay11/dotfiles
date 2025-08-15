@@ -102,6 +102,8 @@ test_cli_tools_exists() {
         "tshark CLI command (Wireshark):tshark"
         "pip installation:pip3"
         "Java installation:javac"
+        "gitk installation:gitk"
+        "act installation:act"
     )
 
     for entry in "${tools[@]}"; do
@@ -128,6 +130,7 @@ test_apps() {
         "Postman"
         "Typora"
         "DBeaver"
+        "GitKraken"
     )
     
     for app in "${apps[@]}"; do

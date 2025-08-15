@@ -496,7 +496,7 @@ install_tools_with_package_manager() {
             FAILED_INSTALLATIONS+=("$display_name")
         done
     else
-        for entry in "${tools_ref[@]}"; do
+        for entry in "${tools[@]}"; do
             IFS=":" read -r display_name command version_command package_name <<< "$entry"
             try_install_tool "$display_name" "$command" "$package_manager_install_command $package_name" "$version_command"
         done

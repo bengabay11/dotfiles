@@ -52,4 +52,4 @@ jobs:
         run: ./os/linux/install.sh -y
 
       - name: Validate installation
-        run: ./test_install.sh
+        run: ./test_install.sh --no-homebrew --no-apps

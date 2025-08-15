@@ -3,13 +3,13 @@
 # Comprehensive test script for macOS dotfiles installation
 # This script verifies that the installation completed successfully
 
-set -uo pipefail
+set -euo pipefail
 
 # Get the directory where this script is located
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # Source shared utilities for logging (go up two levels to reach dotfiles/)
-source "$SCRIPT_DIR/../../dotfiles/shell-utils.sh"
+source "$SCRIPT_DIR/dotfiles/shell-utils.sh"
 
 # Test results tracking
 TESTS_PASSED=0

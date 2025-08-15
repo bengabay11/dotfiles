@@ -1,15 +1,15 @@
 #!/bin/bash
 
-# Comprehensive test script for macOS dotfiles installation
+# Comprehensive test script for dotfiles installation
 # This script verifies that the installation completed successfully
 
 set -uo pipefail
 
-# Get the directory where this script is located
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-# Source shared utilities for logging (go up two levels to reach dotfiles/)
+shopt -s expand_aliases  # Allow aliases (from aliases.sh) to work in this non-interactive script
 source "$SCRIPT_DIR/dotfiles/shell-utils.sh"
+source "$SCRIPT_DIR/dotfiles/aliases.sh"
 
 # Test results tracking
 TESTS_PASSED=0
@@ -61,6 +61,46 @@ test_symlink_target_exists() {
     [[ -f "$target" ]]
 }
 
+test_cli_tools_exists() {
+        tools=(
+        "Git installation:git"
+        "Python3 installation:python3"
+        "Vim installation:vim"
+        "tmux installation:tmux"
+        "Node.js installation:node"
+        "npm installation:npm"
+        "yarn installation:yarn"
+        "Zsh installation:zsh"
+        "Rust installation:rustc"
+        "Cargo installation:cargo"
+        "pyenv installation:pyenv"
+        "uv installation:uv"
+        "TypeScript installation:tsc"
+        "bat installation:bat"
+        "eza installation:eza"
+        "ruff installation:ruff"
+        "pre-commit installation:pre-commit"
+        "btop installation:btop"
+        "nmap installation:nmap"
+        "htop installation:htop"
+        "IPython installation:ipython3"
+        "ripgrep installation:rg"
+        "helm installation:helm"
+        "speedtest-cli installation:speedtest-cli"
+        "fzf installation:fzf"
+        "delta installation:delta"
+        "Java (openjdk) installation:java"
+        "watch installation:watch"
+        "docker CLI command:docker"
+        "tshark CLI command (Wireshark):tshark"
+    )
+
+    for entry in "${tools[@]}"; do
+        IFS=":" read -r name cmd <<< "$entry"
+        run_test "$name" "test_command_exists $cmd"
+    done
+}
+
 test_apps() {
     log_info "=== Testing GUI Applications ==="
     apps=(
@@ -74,7 +114,6 @@ test_apps() {
         "Slack"
         "Sublime Text"
         "Obsidian"
-
         "Docker"
         "Wireshark"
         "Postman"
@@ -118,52 +157,24 @@ main() {
     
     parse_args "$@"
     
-    # Test 1: command-line tools
+    # Test 1: Homebrew
     log_info "=== Testing Essential CLI Tools ==="
     if [[ "$TEST_HOMEBREW" == true ]]; then
        run_test "Homebrew installation" "test_command_exists brew"
+       run_test "Homebrew can list installed packages" "brew list >/dev/null 2>&1"
+       run_test "Homebrew doctor passes" "brew doctor >/dev/null 2>&1"
     else
         log_info "=== Skipping Homebrew test (--no-homebrew) ==="
     fi
-    run_test "Git installation" "test_command_exists git"
-    run_test "Python3 installation" "test_command_exists python3"
-    run_test "Vim installation" "test_command_exists vim"
-    run_test "tmux installation" "test_command_exists tmux"
-    run_test "Node.js installation" "test_command_exists node"
-    run_test "npm installation" "test_command_exists npm"
-    run_test "yarn installation" "test_command_exists yarn"
-    run_test "Zsh installation" "test_command_exists zsh"
-    log_info "=== Testing Development Tools ==="
-    run_test "Rust installation" "test_command_exists rustc"
-    run_test "Cargo installation" "test_command_exists cargo"
-    run_test "pyenv installation" "test_command_exists pyenv"
-    run_test "uv installation" "test_command_exists uv"
-    run_test "TypeScript installation" "test_command_exists tsc"
-    run_test "bat installation" "test_command_exists bat"
-    run_test "eza installation" "test_command_exists eza"
-    run_test "ruff installation" "test_command_exists ruff"
-    run_test "pre-commit installation" "test_command_exists pre-commit"
-    run_test "btop installation" "test_command_exists btop"
-    run_test "nmap installation" "test_command_exists nmap"
-    run_test "htop installation" "test_command_exists htop"
-    run_test "ipython installation" "test_command_exists ipython"
-    run_test "ripgrep installation" "test_command_exists rg"
-    run_test "helm installation" "test_command_exists helm"
-    run_test "speedtest-cli installation" "test_command_exists speedtest-cli"
-    run_test "fzf installation" "test_command_exists fzf"
-    run_test "delta installation" "test_command_exists delta"
-    run_test "Java (openjdk) installation" "test_command_exists java"
-    run_test "watch installation" "test_command_exists watch"
-    run_test "docker CLI command" "test_command_exists docker"
-    run_test "tshark CLI command (Wireshark)" "test_command_exists tshark"
-    echo ""
+
+    # Test 2: command-line tools
+    test_cli_tools_exists
     
     # Test 2: GUI Applications (macOS only)
     if [[ "$TEST_APPS" == true ]]; then
         test_apps
     else
         log_info "=== Skipping GUI Applications tests (--no-apps) ==="
-        echo ""
     fi
     
     # Test 3: Oh My Zsh installation
@@ -183,27 +194,20 @@ main() {
     
     # Test 5: Python and Rust Environment  
     log_info "=== Testing Python Environment ==="
-    if command -v pyenv >/dev/null 2>&1; then
-        if pyenv global >/dev/null 2>&1; then
-            python_version=$(pyenv global)
-            log_pass "pyenv global Python version: $python_version"
-            ((TESTS_PASSED++))
-        else
-            log_warning "No global Python version set in pyenv (may be expected)"
-        fi
-        
-        # Test pyenv shims directory
-        run_test "pyenv shims directory" "test_directory_exists '$HOME/.pyenv/shims'"
+    if pyenv global >/dev/null 2>&1; then
+        python_version=$(pyenv global)
+        log_pass "pyenv global Python version: $python_version"
+        ((TESTS_PASSED++))
+    else
+        log_warning "No global Python version set in pyenv (may be expected)"
     fi
     
-    # Test Rust environment
-    log_info "=== Testing Rust Environment ==="
-    if command -v cargo >/dev/null 2>&1; then
-        run_test "Cargo home directory" "test_directory_exists '$HOME/.cargo'"
-        run_test "Cargo binary directory" "test_directory_exists '$HOME/.cargo/bin'"
-        run_test "Rust toolchain directory" "test_directory_exists '$HOME/.rustup'"
-    fi
-    echo ""
+    # Test pyenv shims directory
+    run_test "pyenv shims directory" "test_directory_exists '$HOME/.pyenv/shims'"
+    
+    run_test "Cargo home directory" "test_directory_exists '$HOME/.cargo'"
+    run_test "Cargo binary directory" "test_directory_exists '$HOME/.cargo/bin'"
+    run_test "Rust toolchain directory" "test_directory_exists '$HOME/.rustup'"
     
     # Test 7: Configuration validation
     log_info "=== Testing Configuration Files ==="
@@ -214,110 +218,44 @@ main() {
         run_test ".zshrc contains export statements" "grep -q 'export' '$HOME/.zshrc'"
     fi
     
-    # Test .gitconfig content
-    if [[ -f "$HOME/.gitconfig" ]]; then
-        # We expect personal details to be stored in ~/.gitconfig.local and included here
-        run_test ".gitconfig includes local override file" "grep -q '^[[:space:]]*path = ~/.gitconfig.local' '$HOME/.gitconfig'"
-        run_test ".gitconfig contains delta pager configuration" "grep -q 'pager = delta' '$HOME/.gitconfig'"
-    fi
+    # We expect personal details to be stored in ~/.gitconfig.local and included here
+    run_test ".gitconfig includes local override file" "grep -q '^[[:space:]]*path = ~/.gitconfig.local' '$HOME/.gitconfig'"
+    run_test ".gitconfig contains delta pager configuration" "grep -q 'pager = delta' '$HOME/.gitconfig'"
     
-    # Test .vimrc content
-    if [[ -f "$HOME/.vimrc" ]]; then
-        run_test ".vimrc contains basic configuration" "grep -q 'set' '$HOME/.vimrc'"
-    fi
+    run_test ".vimrc contains basic configuration" "grep -q 'set' '$HOME/.vimrc'"
     
-    # Test .tmux.conf content
-    if [[ -f "$HOME/.tmux.conf" ]]; then
-        run_test ".tmux.conf contains configuration" "grep -q 'set' '$HOME/.tmux.conf'"
-    fi
+    run_test ".tmux.conf contains configuration" "grep -q 'set' '$HOME/.tmux.conf'"
     
-    # Test shell utilities are available
-    if [[ -f "$HOME/.zshrc" ]]; then
-        run_test "Modular shell utilities system is configured" "grep -q '.config/shell-utils' '$HOME/.zshrc'"
-        run_test "Shell utilities are installed" "test -f '$HOME/.config/shell-utils/shell-utils.sh'"
-    fi
+    run_test "Modular shell utilities system is configured" "grep -q '.config/shell-utils' '$HOME/.zshrc'"
+    run_test "Shell utilities are installed" "test -f '$HOME/.config/shell-utils/shell-utils.sh'"
     echo ""
     
-    # Test 8: Environment verification
-    log_info "=== Testing Environment Setup ==="
+    run_test "uv can list Python versions" "uv python list >/dev/null 2>&1 || true"
     
-    # Check if Homebrew is in PATH
-    run_test "Homebrew is in PATH" "echo '$PATH' | grep -q '/opt/homebrew/bin\\|/usr/local/bin'"
+    run_test "Git can show version" "git --version >/dev/null 2>&1"
+    run_test "Git config is readable" "git config --list >/dev/null 2>&1"
     
-    # Check if Cargo is in PATH
-    run_test "Cargo is in PATH" "echo '$PATH' | grep -q '.cargo/bin'"
+    run_test "Python3 can run basic commands" "python3 -c 'print(\"test\")' >/dev/null 2>&1"
     
-    # Check if pyenv is in PATH (works for both Homebrew and direct installation)
-    run_test "pyenv is in PATH" "command -v pyenv >/dev/null 2>&1"
+    run_test "Node.js can execute JavaScript" "node -e 'console.log(\"test\")' >/dev/null 2>&1"
     
-    # Check Node.js and npm versions are compatible
-    if command -v node >/dev/null 2>&1 && command -v npm >/dev/null 2>&1; then
-        run_test "Node.js and npm are compatible" "npm --version >/dev/null 2>&1"
-    fi
+    run_test "Rust compiler responds to version check" "rustc --version >/dev/null 2>&1"
     
-    # Check if uv is properly installed
-    if command -v uv >/dev/null 2>&1; then
-        run_test "uv can list Python versions" "uv python list >/dev/null 2>&1 || true"
-    fi
-    echo ""
+    run_test "tmux can show version" "tmux -V >/dev/null 2>&1"
     
-    # Test 9: Tool versions and functionality
-    log_info "=== Testing Tool Functionality ==="
+    run_test "Vim can show version" "vim --version >/dev/null 2>&1"
     
-    # Test essential tools work properly
-    if command -v git >/dev/null 2>&1; then
-        run_test "Git can show version" "git --version >/dev/null 2>&1"
-        run_test "Git config is readable" "git config --list >/dev/null 2>&1"
-    fi
+    run_test "fzf can show version" "fzf --version >/dev/null 2>&1"
+    run_test "fzf can list files" "echo | fzf --filter='' >/dev/null 2>&1 || true"
     
-    if command -v python3 >/dev/null 2>&1; then
-        run_test "Python3 can run basic commands" "python3 -c 'print(\"test\")' >/dev/null 2>&1"
-    fi
-    
-    if command -v node >/dev/null 2>&1; then
-        run_test "Node.js can execute JavaScript" "node -e 'console.log(\"test\")' >/dev/null 2>&1"
-    fi
-    
-    if command -v rustc >/dev/null 2>&1; then
-        run_test "Rust compiler responds to version check" "rustc --version >/dev/null 2>&1"
-    fi
-    
-    if command -v tmux >/dev/null 2>&1; then
-        run_test "tmux can show version" "tmux -V >/dev/null 2>&1"
-    fi
-    
-    if command -v vim >/dev/null 2>&1; then
-        run_test "Vim can show version" "vim --version >/dev/null 2>&1"
-    fi
-    
-    if command -v fzf >/dev/null 2>&1; then
-        run_test "fzf can show version" "fzf --version >/dev/null 2>&1"
-        run_test "fzf can list files" "echo | fzf --filter='' >/dev/null 2>&1 || true"
-    fi
-    
-    if command -v delta >/dev/null 2>&1; then
-        run_test "delta can show version" "delta --version >/dev/null 2>&1"
-        run_test "delta can process diff" "echo -e 'line1\nline2' | delta --color=never >/dev/null 2>&1 || true"
-    fi
-    echo ""
+    run_test "delta can show version" "delta --version >/dev/null 2>&1"
+    run_test "delta can process diff" "echo -e 'line1\nline2' | delta --color=never >/dev/null 2>&1 || true"
     
     # Test 10: Integration tests
     log_info "=== Testing Integration ==="
     
-    # Test if pyenv can manage Python versions
-    if command -v pyenv >/dev/null 2>&1; then
-        run_test "pyenv can list available versions" "pyenv install --list >/dev/null 2>&1"
-        if pyenv global >/dev/null 2>&1; then
-            run_test "pyenv global Python is usable" "pyenv exec python3 --version >/dev/null 2>&1"
-        fi
-    fi
-    
-    # Test Homebrew package management
-    if command -v brew >/dev/null 2>&1; then
-        run_test "Homebrew can list installed packages" "brew list >/dev/null 2>&1"
-        run_test "Homebrew doctor passes" "brew doctor >/dev/null 2>&1 || true"  # Don't fail on warnings
-    fi
-    echo ""
+    run_test "pyenv can list available versions" "pyenv install --list >/dev/null 2>&1"
+    run_test "pyenv global Python is usable" "pyenv exec python3 --version >/dev/null 2>&1"
     
     # Test 11: Tool versions (informational)
     log_info "=== Tool Versions ==="
@@ -353,16 +291,14 @@ main() {
     
     for tool_cmd in "${tools_with_version[@]}"; do
         tool_name=$(echo "$tool_cmd" | cut -d' ' -f1)
-        if command -v "$tool_name" >/dev/null 2>&1; then
-            version_output=$(eval "$tool_cmd" 2>/dev/null || echo "Version check failed")
-            log_info "$tool_name: $version_output"
-        fi
+        version_output=$(eval "$tool_cmd" 2>/dev/null || echo "Version check failed")
+        log_info "$tool_name: $version_output"
     done
     echo ""
     
     # Test 12: File permissions
     log_info "=== Testing File Permissions ==="
-    scripts=("../../install.sh" "install.sh")
+    scripts=("install.sh")
     for script in "${scripts[@]}"; do
         script_path="$SCRIPT_DIR/$script"
         if [[ -f "$script_path" ]]; then

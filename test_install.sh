@@ -11,6 +11,10 @@ shopt -s expand_aliases  # Allow aliases (from aliases.sh) to work in this non-i
 source "$SCRIPT_DIR/dotfiles/shell-utils.sh"
 source "$SCRIPT_DIR/dotfiles/aliases.sh"
 
+# Add pyenv to PATH
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+
 # Test results tracking
 TESTS_PASSED=0
 TESTS_FAILED=0
@@ -232,8 +236,8 @@ main() {
 
     test_dotfiles
     
-    run_test "pyenv can list available versions" "pyenv install --list >/dev/null 2>&1"
-    run_test "pyenv global Python is usable" "pyenv exec python3 --version >/dev/null 2>&1"
+    run_test "pyenv can list available versions" "command exists pyenv install --list >/dev/null 2>&1"
+    run_test "pyenv global Python is usable" "command exists pyenv exec python3 --version >/dev/null 2>&1"
     run_test "pyenv shims directory" "test_directory_exists '$HOME/.pyenv/shims'"
     
     run_test "Cargo home directory" "test_directory_exists '$HOME/.cargo'"

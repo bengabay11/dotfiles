@@ -12,7 +12,7 @@ source "$SCRIPT_DIR/dotfiles/shell-utils.sh"
 source "$SCRIPT_DIR/dotfiles/aliases.sh"
 
 # Ensure typical user tool paths are available in this test session
-export PATH="$PATH:$HOME/.cargo/bin:$HOME/.pyenv/bin:/usr/local/bin:/usr/bin:$HOME/.local/bin"
+export PATH="$PATH:$HOME/.cargo/bin:$HOME/.pyenv/bin"
 
 # Test results tracking
 TESTS_PASSED=0

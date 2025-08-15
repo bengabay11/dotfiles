@@ -216,8 +216,8 @@ main() {
     log_info "=== Testing Essential CLI Tools ==="
     if [[ "$TEST_HOMEBREW" == true ]]; then
        run_test "Homebrew installation" "test_command_exists brew"
-       run_test "Homebrew can list installed packages" "test_command_exists 'brew list'"
-       run_test "Homebrew doctor passes" "test_command_exists 'brew doctor'"
+       run_test "Homebrew can list installed packages" "test_command_exists brew list"
+       run_test "Homebrew doctor passes" "test_command_exists brew doctor"
     else
         log_info "=== Skipping Homebrew test (--no-homebrew) ==="
     fi

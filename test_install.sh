@@ -83,7 +83,7 @@ test_cli_tools_exists() {
         "pyenv installation:pyenv"
         "uv installation:uv"
         "TypeScript installation:tsc"
-        "bat installation:batcat"
+        "bat installation:bat"
         "eza installation:eza"
         "ruff installation:ruff"
         "pre-commit installation:pre-commit"

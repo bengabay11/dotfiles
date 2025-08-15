@@ -93,6 +93,8 @@ test_cli_tools_exists() {
         "watch installation:watch"
         "docker CLI command:docker"
         "tshark CLI command (Wireshark):tshark"
+        "pip installation:pip3"
+        "Java installation:javac"
     )
 
     for entry in "${tools[@]}"; do
@@ -127,6 +129,37 @@ test_apps() {
     echo ""
 }
 
+test_dotfiles() {
+    log_info "=== Testing Dotfiles Symlinking ==="
+    dotfiles=(".vimrc" ".tmux.conf" ".zshrc" ".gitconfig")
+    for dotfile in "${dotfiles[@]}"; do
+        run_test "$dotfile symlink exists" "test_symlink_exists '$HOME/$dotfile'"
+        run_test "$dotfile target exists" "test_symlink_target_exists '$HOME/$dotfile'"
+    done
+    echo ""
+
+    run_test ".zshrc contains Oh My Zsh configuration" "grep -q 'oh-my-zsh' '$HOME/.zshrc'"
+    run_test ".zshrc contains export statements" "grep -q 'export' '$HOME/.zshrc'"
+    
+    # We expect personal details to be stored in ~/.gitconfig.local and included here
+    run_test ".gitconfig includes local override file" "grep -q '^[[:space:]]*path = ~/.gitconfig.local' '$HOME/.gitconfig'"
+    run_test ".gitconfig contains delta pager configuration" "grep -q 'pager = delta' '$HOME/.gitconfig'"
+
+    run_test ".vimrc contains basic configuration" "grep -q 'set' '$HOME/.vimrc'"
+    run_test ".tmux.conf contains configuration" "grep -q 'set' '$HOME/.tmux.conf'"
+    run_test "tmux can show version" "tmux -V >/dev/null 2>&1"
+    run_test "Vim can show version" "vim --version >/dev/null 2>&1"
+
+    log_info "=== Testing Oh My Zsh ==="
+    run_test "Oh My Zsh directory" "test_directory_exists '$HOME/.oh-my-zsh'"
+    run_test "Oh My Zsh main script" "test_file_exists '$HOME/.oh-my-zsh/oh-my-zsh.sh'"
+    echo ""
+
+    run_test "Modular shell utilities system is configured" "grep -q '.config/shell-utils' '$HOME/.zshrc'"
+    run_test "Shell utilities are installed" "test -f '$HOME/.config/shell-utils/shell-utils.sh'"
+    echo ""
+}
+
 parse_args() {
     while [[ $# -gt 0 ]]; do
         case "$1" in
@@ -151,165 +184,7 @@ parse_args() {
     done
 }
 
-main() {
-    log_info "Starting comprehensive macOS dotfiles installation tests..."
-    echo ""
-    
-    parse_args "$@"
-    
-    # Test 1: Homebrew
-    log_info "=== Testing Essential CLI Tools ==="
-    if [[ "$TEST_HOMEBREW" == true ]]; then
-       run_test "Homebrew installation" "test_command_exists brew"
-       run_test "Homebrew can list installed packages" "brew list >/dev/null 2>&1"
-       run_test "Homebrew doctor passes" "brew doctor >/dev/null 2>&1"
-    else
-        log_info "=== Skipping Homebrew test (--no-homebrew) ==="
-    fi
-
-    # Test 2: command-line tools
-    test_cli_tools_exists
-    
-    # Test 2: GUI Applications (macOS only)
-    if [[ "$TEST_APPS" == true ]]; then
-        test_apps
-    else
-        log_info "=== Skipping GUI Applications tests (--no-apps) ==="
-    fi
-    
-    # Test 3: Oh My Zsh installation
-    log_info "=== Testing Oh My Zsh ==="
-    run_test "Oh My Zsh directory" "test_directory_exists '$HOME/.oh-my-zsh'"
-    run_test "Oh My Zsh main script" "test_file_exists '$HOME/.oh-my-zsh/oh-my-zsh.sh'"
-    echo ""
-    
-    # Test 4: Dotfiles symlinking
-    log_info "=== Testing Dotfiles Symlinking ==="
-    dotfiles=(".vimrc" ".tmux.conf" ".zshrc" ".gitconfig")
-    for dotfile in "${dotfiles[@]}"; do
-        run_test "$dotfile symlink exists" "test_symlink_exists '$HOME/$dotfile'"
-        run_test "$dotfile target exists" "test_symlink_target_exists '$HOME/$dotfile'"
-    done
-    echo ""
-    
-    # Test 5: Python and Rust Environment  
-    log_info "=== Testing Python Environment ==="
-    if pyenv global >/dev/null 2>&1; then
-        python_version=$(pyenv global)
-        log_pass "pyenv global Python version: $python_version"
-        ((TESTS_PASSED++))
-    else
-        log_warning "No global Python version set in pyenv (may be expected)"
-    fi
-    
-    # Test pyenv shims directory
-    run_test "pyenv shims directory" "test_directory_exists '$HOME/.pyenv/shims'"
-    
-    run_test "Cargo home directory" "test_directory_exists '$HOME/.cargo'"
-    run_test "Cargo binary directory" "test_directory_exists '$HOME/.cargo/bin'"
-    run_test "Rust toolchain directory" "test_directory_exists '$HOME/.rustup'"
-    
-    # Test 7: Configuration validation
-    log_info "=== Testing Configuration Files ==="
-    
-    # Test .zshrc content
-    if [[ -f "$HOME/.zshrc" ]]; then
-        run_test ".zshrc contains Oh My Zsh configuration" "grep -q 'oh-my-zsh' '$HOME/.zshrc'"
-        run_test ".zshrc contains export statements" "grep -q 'export' '$HOME/.zshrc'"
-    fi
-    
-    # We expect personal details to be stored in ~/.gitconfig.local and included here
-    run_test ".gitconfig includes local override file" "grep -q '^[[:space:]]*path = ~/.gitconfig.local' '$HOME/.gitconfig'"
-    run_test ".gitconfig contains delta pager configuration" "grep -q 'pager = delta' '$HOME/.gitconfig'"
-    
-    run_test ".vimrc contains basic configuration" "grep -q 'set' '$HOME/.vimrc'"
-    
-    run_test ".tmux.conf contains configuration" "grep -q 'set' '$HOME/.tmux.conf'"
-    
-    run_test "Modular shell utilities system is configured" "grep -q '.config/shell-utils' '$HOME/.zshrc'"
-    run_test "Shell utilities are installed" "test -f '$HOME/.config/shell-utils/shell-utils.sh'"
-    echo ""
-    
-    run_test "uv can list Python versions" "uv python list >/dev/null 2>&1 || true"
-    
-    run_test "Git can show version" "git --version >/dev/null 2>&1"
-    run_test "Git config is readable" "git config --list >/dev/null 2>&1"
-    
-    run_test "Python3 can run basic commands" "python3 -c 'print(\"test\")' >/dev/null 2>&1"
-    
-    run_test "Node.js can execute JavaScript" "node -e 'console.log(\"test\")' >/dev/null 2>&1"
-    
-    run_test "Rust compiler responds to version check" "rustc --version >/dev/null 2>&1"
-    
-    run_test "tmux can show version" "tmux -V >/dev/null 2>&1"
-    
-    run_test "Vim can show version" "vim --version >/dev/null 2>&1"
-    
-    run_test "fzf can show version" "fzf --version >/dev/null 2>&1"
-    run_test "fzf can list files" "echo | fzf --filter='' >/dev/null 2>&1 || true"
-    
-    run_test "delta can show version" "delta --version >/dev/null 2>&1"
-    run_test "delta can process diff" "echo -e 'line1\nline2' | delta --color=never >/dev/null 2>&1 || true"
-    
-    # Test 10: Integration tests
-    log_info "=== Testing Integration ==="
-    
-    run_test "pyenv can list available versions" "pyenv install --list >/dev/null 2>&1"
-    run_test "pyenv global Python is usable" "pyenv exec python3 --version >/dev/null 2>&1"
-    
-    # Test 11: Tool versions (informational)
-    log_info "=== Tool Versions ==="
-    tools_with_version=(
-        "git --version"
-        "python3 --version"
-        "node --version"
-        "npm --version"
-        "yarn --version"
-        "rustc --version"
-        "cargo --version"
-        "pyenv --version"
-        "uv --version"
-        "tsc --version"
-        "brew --version | head -1"
-        "vim --version | head -1"
-        "tmux -V"
-        "zsh --version"
-        "btop --version"
-        "nmap --version | head -1"
-        "htop --version"
-        "ipython --version"
-        "rg --version"
-        "helm version --short"
-        "speedtest-cli --version"
-        "fzf --version"
-        "delta --version"
-        "docker --version"
-        "tshark --version | head -1"
-        "java --version | head -1 || java -version 2>&1 | head -1"
-        "watch --version | head -1"
-    )
-    
-    for tool_cmd in "${tools_with_version[@]}"; do
-        tool_name=$(echo "$tool_cmd" | cut -d' ' -f1)
-        version_output=$(eval "$tool_cmd" 2>/dev/null || echo "Version check failed")
-        log_info "$tool_name: $version_output"
-    done
-    echo ""
-    
-    # Test 12: File permissions
-    log_info "=== Testing File Permissions ==="
-    scripts=("install.sh")
-    for script in "${scripts[@]}"; do
-        script_path="$SCRIPT_DIR/$script"
-        if [[ -f "$script_path" ]]; then
-            run_test "$script is executable" "[[ -x '$script_path' ]]"
-        else
-            log_warning "$script not found at $script_path"
-        fi
-    done
-    echo ""
-    
-    # Final results
+show_tests_summary() {
     log_info "=== Test Results Summary ==="
     log_success "Tests passed: $TESTS_PASSED"
     if [[ $TESTS_FAILED -gt 0 ]]; then
@@ -328,5 +203,57 @@ main() {
     fi
 }
 
-# Run main function
+main() {
+    log_info "Starting comprehensive macOS dotfiles installation tests..."
+    echo ""
+    
+    parse_args "$@"
+    
+    log_info "=== Testing Essential CLI Tools ==="
+    if [[ "$TEST_HOMEBREW" == true ]]; then
+       run_test "Homebrew installation" "test_command_exists brew"
+       run_test "Homebrew can list installed packages" "brew list >/dev/null 2>&1"
+       run_test "Homebrew doctor passes" "brew doctor >/dev/null 2>&1"
+    else
+        log_info "=== Skipping Homebrew test (--no-homebrew) ==="
+    fi
+
+    test_cli_tools_exists
+    
+    if [[ "$TEST_APPS" == true ]]; then
+        test_apps
+    else
+        log_info "=== Skipping GUI Applications tests (--no-apps) ==="
+    fi
+
+    test_dotfiles
+    
+    run_test "pyenv can list available versions" "pyenv install --list >/dev/null 2>&1"
+    run_test "pyenv global Python is usable" "pyenv exec python3 --version >/dev/null 2>&1"
+    run_test "pyenv shims directory" "test_directory_exists '$HOME/.pyenv/shims'"
+    
+    run_test "Cargo home directory" "test_directory_exists '$HOME/.cargo'"
+    run_test "Cargo binary directory" "test_directory_exists '$HOME/.cargo/bin'"
+    run_test "Rust toolchain directory" "test_directory_exists '$HOME/.rustup'"
+    
+    run_test "uv can list Python versions" "uv python list >/dev/null 2>&1 || true"
+    
+    run_test "Git can show version" "git --version >/dev/null 2>&1"
+    run_test "Git config is readable" "git config --list >/dev/null 2>&1"
+    
+    run_test "Python3 can run basic commands" "python3 -c 'print(\"test\")' >/dev/null 2>&1"
+    
+    run_test "Node.js can execute JavaScript" "node -e 'console.log(\"test\")' >/dev/null 2>&1"
+    
+    run_test "Rust compiler responds to version check" "rustc --version >/dev/null 2>&1"
+    
+    run_test "fzf can show version" "fzf --version >/dev/null 2>&1"
+    run_test "fzf can list files" "echo | fzf --filter='' >/dev/null 2>&1 || true"
+    
+    run_test "delta can show version" "delta --version >/dev/null 2>&1"
+    run_test "delta can process diff" "echo -e 'line1\nline2' | delta --color=never >/dev/null 2>&1 || true"
+    
+    show_tests_summary
+}
+
 main "$@"

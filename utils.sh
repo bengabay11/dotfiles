@@ -206,78 +206,6 @@ get_app_display_name() {
     fi
 }
 
-# Function to check if a CLI tool is installed (cross-platform)
-# Usage: is_cli_tool_installed "tool-name" [command-name]
-# Returns 0 if installed, 1 if not installed
-is_cli_tool_installed() {
-    local package_name="$1"
-    local cmd_name="${2:-$1}"  # Use package_name as default if cmd_name not provided
-    
-    # Handle special cases where command name differs from package name
-    case "$package_name" in
-        "python@3.11"|"python3")
-            cmd_name="python3"
-            ;;
-        "typescript")
-            cmd_name="tsc"
-            ;;
-        "git-delta")
-            cmd_name="delta"
-            ;;
-        "ripgrep")
-            cmd_name="rg"
-            ;;
-        "fd-find")
-            cmd_name="fd"
-            ;;
-        "openjdk")
-            cmd_name="java"
-            ;;
-        "default-jdk")
-            cmd_name="java"
-            ;;
-    esac
-    
-    # First check if command is available in system PATH
-    if command -v "$cmd_name" >/dev/null 2>&1; then
-        return 0
-    fi
-    
-    if is_macos; then
-        # Check if installed via Homebrew on macOS
-        if brew list "$package_name" >/dev/null 2>&1; then
-            return 0
-        fi
-    elif is_linux; then
-        # Check Linux package managers
-        local pkg_manager=$(get_package_manager)
-        case "$pkg_manager" in
-            "apt")
-                if dpkg -l | grep -q "^ii.*$package_name" 2>/dev/null; then
-                    return 0
-                fi
-                ;;
-            "yum"|"dnf")
-                if rpm -qa | grep -q "$package_name" 2>/dev/null; then
-                    return 0
-                fi
-                ;;
-            "pacman")
-                if pacman -Qi "$package_name" >/dev/null 2>&1; then
-                    return 0
-                fi
-                ;;
-            "zypper")
-                if zypper se -i "$package_name" | grep -q "^i" 2>/dev/null; then
-                    return 0
-                fi
-                ;;
-        esac
-    fi
-    
-    return 1
-}
-
 # Function to determine installation source for a CLI tool (cross-platform)
 # Usage: get_cli_tool_source "package-name" "command-name"
 get_cli_tool_source() {
@@ -363,109 +291,6 @@ get_cli_tool_source() {
     fi
 }
 
-# Function to get version info for a CLI tool (cross-platform)
-# Usage: get_cli_tool_version "command-name"
-get_cli_tool_version() {
-    local cmd_name="$1"
-    
-    case "$cmd_name" in
-        "git")
-            git --version 2>/dev/null || echo "version unknown"
-            ;;
-        "vim")
-            vim --version 2>/dev/null | head -1 || echo "version unknown"
-            ;;
-        "tmux")
-            tmux -V 2>/dev/null || echo "version unknown"
-            ;;
-        "zsh")
-            zsh --version 2>/dev/null || echo "version unknown"
-            ;;
-        "python3")
-            python3 --version 2>/dev/null || echo "version unknown"
-            ;;
-        "node")
-            node --version 2>/dev/null || echo "version unknown"
-            ;;
-        "npm")
-            npm --version 2>/dev/null || echo "version unknown"
-            ;;
-        "yarn")
-            yarn --version 2>/dev/null || echo "version unknown"
-            ;;
-        "tsc")
-            tsc --version 2>/dev/null || echo "version unknown"
-            ;;
-        "fzf")
-            fzf --version 2>/dev/null || echo "version unknown"
-            ;;
-        "delta")
-            delta --version 2>/dev/null || echo "version unknown"
-            ;;
-        "rg"|"ripgrep")
-            rg --version 2>/dev/null || echo "version unknown"
-            ;;
-        "bat"|"batcat")
-            { command -v bat >/dev/null 2>&1 && bat --version; } 2>/dev/null || \
-            { command -v batcat >/dev/null 2>&1 && batcat --version; } 2>/dev/null || \
-            echo "version unknown"
-            ;;
-        "rustc")
-            rustc --version 2>/dev/null || echo "version unknown"
-            ;;
-        "cargo")
-            cargo --version 2>/dev/null || echo "version unknown"
-            ;;
-        "pyenv")
-            pyenv --version 2>/dev/null || echo "version unknown"
-            ;;
-        "uv")
-            uv --version 2>/dev/null || echo "version unknown"
-            ;;
-        "helm")
-            helm version --short 2>/dev/null || helm version 2>/dev/null | head -1 || echo "version unknown"
-            ;;
-        "kubectl")
-            kubectl version --client --short 2>/dev/null || kubectl version --client 2>/dev/null || echo "version unknown"
-            ;;
-        "docker")
-            docker --version 2>/dev/null || echo "version unknown"
-            ;;
-        "terraform")
-            terraform version 2>/dev/null | head -1 || echo "version unknown"
-            ;;
-        "aws")
-            aws --version 2>/dev/null || echo "version unknown"
-            ;;
-        "btop")
-            btop --version 2>/dev/null || echo "version unknown"
-            ;;
-        "htop")
-            htop --version 2>/dev/null || echo "version unknown"
-            ;;
-        "nmap")
-            nmap --version 2>/dev/null | head -1 || echo "version unknown"
-            ;;
-        "speedtest-cli")
-            speedtest-cli --version 2>/dev/null || echo "version unknown"
-            ;;
-        "java")
-            # Prefer modern --version, fallback to -version (stderr)
-            java --version 2>/dev/null | head -1 || java -version 2>&1 | head -1 || echo "version unknown"
-            ;;
-        "watch")
-            watch --version 2>/dev/null | head -1 || echo "version unknown"
-            ;;
-        *)
-            # Try common version flags in order of preference
-            "$cmd_name" --version 2>/dev/null || \
-            "$cmd_name" -version 2>/dev/null || \
-            "$cmd_name" version 2>/dev/null || \
-            echo "version unknown"
-            ;;
-    esac
-}
-
 try_install_tool () {
     local tool_name="$1"
     local tool_command_name="$2"
@@ -482,6 +307,55 @@ try_install_tool () {
     else
         log_found "$tool_name is already installed ($($tool_version_command 2>/dev/null || echo version unknown))"
     fi
+}
+
+# Detect bash with nameref support (>= 4.3)
+_supports_nameref() {
+  [[ -n ${BASH_VERSINFO+x} ]] || return 1
+  local major=${BASH_VERSINFO[0]} minor=${BASH_VERSINFO[1]}
+  (( major > 4 )) || { (( major == 4 && minor >= 3 )) ; }
+}
+
+_install_tools_with_pm_impl() {
+  local package_manager_name="$1"
+  local package_manager_command="$2"
+  local package_manager_install_command="$3"
+  shift 3  # now "$@" = entries
+
+  if ! command -v "$package_manager_command" >/dev/null 2>&1; then
+    log_warning "$package_manager_name not available; skipping ${package_manager_command}-based installations"
+    for entry in "$@"; do
+      IFS=":" read -r display_name command version_command package_name <<< "$entry"
+      FAILED_INSTALLATIONS+=("$display_name")
+    done
+    return 0
+  fi
+
+  for entry in "$@"; do
+    IFS=":" read -r display_name command version_command package_name <<< "$entry"
+    try_install_tool "$display_name" "$command" \
+      "$package_manager_install_command $package_name" "$version_command"
+  done
+}
+
+install_tools_with_package_manager() {
+  local package_manager_name="$1"
+  local package_manager_command="$2"
+  local package_manager_install_command="$3"
+  local arrname="$4"
+
+  if _supports_nameref; then
+    # Linux/new bash: use nameref to expand array items safely
+    local -n _tools_ref="$arrname"
+    _install_tools_with_pm_impl \
+      "$package_manager_name" "$package_manager_command" "$package_manager_install_command" \
+      "${_tools_ref[@]}"
+  else
+    # macOS/old bash: expand the array by name via eval
+    eval "_install_tools_with_pm_impl \
+      \"\$package_manager_name\" \"\$package_manager_command\" \"\$package_manager_install_command\" \
+      \"\${$arrname[@]}\""
+  fi
 }
 
 installation_success_message() {
@@ -656,6 +530,23 @@ install_zsh_plugins() {
     done
     
     log_success "All Zsh plugins and themes installed successfully"
+}
+
+# Dedicated function for trying install uv (Can't use try_install_tool because the install command has pipe inside)
+try_install_uv () {
+    if ! command -v uv >/dev/null 2>&1; then
+        log_install uv
+        curl -LsSf https://astral.sh/ruff/install.sh | sh
+
+        if ! curl -LsSf https://astral.sh/uv/install.sh | sh; then
+            log_error "Failed to install uv"
+            FAILED_INSTALLATIONS+=("uv")
+        else
+            log_success "uv installed successfully"
+        fi
+    else
+        log_found "uv is already installed ($(uv --version 2>/dev/null || echo version unknown))"
+    fi
 }
 
 try_install_python () {

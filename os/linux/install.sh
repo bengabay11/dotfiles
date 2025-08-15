@@ -38,25 +38,6 @@ apt_update_and_basics() {
         git unzip xz-utils pkg-config
 }
 
-install_tools_with_package_manager() {
-    local package_manager_name=$1
-    local package_manager_command=$2
-    local package_manager_install_command=$3
-    local -n tools_ref="$4"
-    if ! command -v "$package_manager_command" >/dev/null 2>&1; then
-        log_warning "$package_manager_name not available; skipping $package_manager_command-based installations"
-        for entry in "${tools[@]}"; do
-            IFS=":" read -r display_name command version_command package_name <<< "$entry"
-            FAILED_INSTALLATIONS+=("$display_name")
-        done
-    else
-        for entry in "${tools_ref[@]}"; do
-            IFS=":" read -r display_name command version_command package_name <<< "$entry"
-            try_install_tool "$display_name" "$command" "$package_manager_install_command $package_name" "$version_command"
-        done
-    fi
-}
-
 install_cli_tools_with_apt() {
     local tools=(
         "Git:git:git --version:git"
@@ -68,7 +49,6 @@ install_cli_tools_with_apt() {
         "npm:npm:npm --version:npm"
         "bat:bat:bat --version:bat"
         "Zsh:zsh:zsh --version:zsh"
-        "Ruff:ruff:ruff --version:ruff"
         "pre-commit:pre-commit:pre-commit --version:pre-commit"
         "btop:btop:btop --version:btop"
         "htop:htop:htop --version:htop"
@@ -101,18 +81,18 @@ install_tools_with_npm() {
     install_tools_with_package_manager "npm" "npm" "sudo npm install -g" tools
 }
 
-# Dedicated function for trying install uv (Can't use try_install_tool because the install command has pipe inside)
-try_install_uv () {
-    if ! command -v uv >/dev/null 2>&1; then
-        log_install uv
-        if ! curl -LsSf https://astral.sh/uv/install.sh | sh; then
-            log_error "Failed to install uv"
-            FAILED_INSTALLATIONS+=("uv")
+try_install_ruff () {
+    local tool_name="ruff"
+    if ! command -v ruff >/dev/null 2>&1; then
+        log_install $tool_name
+        if ! curl -LsSf https://astral.sh/ruff/install.sh | sh; then
+            log_error "Failed to install $tool_name"
+            FAILED_INSTALLATIONS+=("$tool_name")
         else
-            log_success "uv installed successfully"
+            log_success "$tool_name installed successfully"
         fi
     else
-        log_found "uv is already installed ($(uv --version 2>/dev/null || echo version unknown))"
+        log_found "$tool_name is already installed ($(ruff --version 2>/dev/null || echo version unknown))"
     fi
 }
 
@@ -139,6 +119,7 @@ install_cli_tools() {
     install_tools_with_npm
 
     try_install_uv
+    try_install_ruff
     try_install_helm
 }
 

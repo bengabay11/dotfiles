@@ -67,11 +67,18 @@ log_setting() {
     echo -e "${GREEN}⚙️  ${WHITE}$1${NC}"
 }
 
-# Header functions for beautiful section dividers
 log_header() {
     echo ""
     echo -e "${CYAN}╭─────────────────────────────────────────────────╮${NC}"
     echo -e "${CYAN}│${NC} ${WHITE}$1${NC} ${CYAN}│${NC}"
+    echo -e "${CYAN}╰─────────────────────────────────────────────────╯${NC}"
+    echo ""
+}
+
+log_complete() {
+    echo ""
+    echo -e "${CYAN}╭─────────────────────────────────────────────────╮${NC}"
+    echo -e "${CYAN}│${NC} ${GREEN}🎉 Installation Complete!${NC}                     ${CYAN}│${NC}"
     echo -e "${CYAN}╰─────────────────────────────────────────────────╯${NC}"
     echo ""
 }

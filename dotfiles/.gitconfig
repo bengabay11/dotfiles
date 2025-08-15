@@ -5,8 +5,6 @@
 #     name = Your Name
 #     email = your.email@example.com
 #     username = your-username
-[credential "https://github.com"]
-	helper = !/usr/bin/gh auth git-credential
 [core]
 	editor = vim
 	pager = delta
@@ -22,3 +20,6 @@
 	line-numbers = true
 [alias]
 	whoami = config user.email
+	lg = log --graph --abbrev-commit --decorate \
+      --format=format:'%C(bold yellow)%h%C(reset) %C(bold blue)%an%C(reset) %C(green)%ar%C(reset)%C(auto)%d%C(reset) %C(white)%s%C(reset)'
+

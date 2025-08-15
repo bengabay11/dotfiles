@@ -484,6 +484,25 @@ try_install_tool () {
     fi
 }
 
+install_tools_with_package_manager() {
+    local package_manager_name=$1
+    local package_manager_command=$2
+    local package_manager_install_command=$3
+    local -n tools_ref="$4"
+    if ! command -v "$package_manager_command" >/dev/null 2>&1; then
+        log_warning "$package_manager_name not available; skipping $package_manager_command-based installations"
+        for entry in "${tools[@]}"; do
+            IFS=":" read -r display_name command version_command package_name <<< "$entry"
+            FAILED_INSTALLATIONS+=("$display_name")
+        done
+    else
+        for entry in "${tools_ref[@]}"; do
+            IFS=":" read -r display_name command version_command package_name <<< "$entry"
+            try_install_tool "$display_name" "$command" "$package_manager_install_command $package_name" "$version_command"
+        done
+    fi
+}
+
 installation_success_message() {
     echo ""
     echo -e "${CYAN}╭─────────────────────────────────────────────────╮${NC}"
@@ -656,6 +675,21 @@ install_zsh_plugins() {
     done
     
     log_success "All Zsh plugins and themes installed successfully"
+}
+
+# Dedicated function for trying install uv (Can't use try_install_tool because the install command has pipe inside)
+try_install_uv () {
+    if ! command -v uv >/dev/null 2>&1; then
+        log_install uv
+        if ! curl -LsSf https://astral.sh/uv/install.sh | sh; then
+            log_error "Failed to install uv"
+            FAILED_INSTALLATIONS+=("uv")
+        else
+            log_success "uv installed successfully"
+        fi
+    else
+        log_found "uv is already installed ($(uv --version 2>/dev/null || echo version unknown))"
+    fi
 }
 
 try_install_python () {

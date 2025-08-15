@@ -52,98 +52,35 @@ install_cli_tools() {
     log_info "Installing command-line tools..."
     
     local tools=(
-        "git"
-        "python@3.11"
-        "pyenv"
-        "vim"
-        "tmux"
-        "yarn"
-        "node"
-        "npm"
-        "typescript"
-        "openjdk"
-        "watch"
-        "bat"
-        "eza"
-        "zsh"
-        "ruff"
-        "pre-commit"
-        "btop"
-        "nmap"
-        "htop"
-        "ipython"
-        "ripgrep"
-        "helm"
-        "speedtest-cli"
-        "fzf"
-        "git-delta"
+        "Git:git:git --version:git"
+        "Python 3.11:python3:python3 --version:python@3.11"
+        "pyenv:pyenv:pyenv --version:pyenv"
+        "Vim:vim:vim --version:vim"
+        "tmux:tmux:tmux -V:tmux"
+        "Yarn:yarn:yarn --version:yarn"
+        "Node.js:node:node --version:node"
+        "npm:npm:npm --version:npm"
+        "TypeScript:tsc:tsc --version:typescript"
+        "Java (OpenJDK):java:java --version:openjdk"
+        "watch:watch:watch --version:watch"
+        "bat:bat:bat --version:bat"
+        "eza:eza:eza --version:eza"
+        "Zsh:zsh:zsh --version:zsh"
+        "ruff:ruff:ruff --version:ruff"
+        "pre-commit:pre-commit:pre-commit --version:pre-commit"
+        "btop:btop:btop --version:btop"
+        "nmap:nmap:nmap --version:nmap"
+        "htop:htop:htop --version:htop"
+        "IPython:ipython:ipython --version:ipython"
+        "ripgrep:rg:rg --version:ripgrep"
+        "Helm:helm:helm version --short:helm"
+        "speedtest-cli:speedtest-cli:speedtest-cli --version:speedtest-cli"
+        "fzf:fzf:fzf --version:fzf"
+        "delta:delta:delta --version:git-delta"
     )
+    install_tools_with_package_manager "Homebrew" "brew" "brew install" tools
     
-    # Check and install each tool using utility functions
-    for tool in "${tools[@]}"; do
-        local cmd_name="$tool"
-        
-        # Handle special cases where command name differs from brew package name
-        case "$tool" in
-            "python@3.11")
-                cmd_name="python3"
-                ;;
-            "typescript")
-                cmd_name="tsc"
-                ;;
-            "git-delta")
-                cmd_name="delta"
-                ;;
-            "openjdk")
-                cmd_name="java"
-                ;;
-        esac
-        
-        if is_cli_tool_installed "$tool" "$cmd_name"; then
-            local source
-            source=$(get_cli_tool_source "$tool" "$cmd_name")
-            local version
-            version=$(get_cli_tool_version "$cmd_name")
-            
-            case "$source" in
-                "system")
-                    log_found "$tool is already available on system ($version)"
-                    ;;
-                "homebrew")
-                    log_found "$tool is already installed via Homebrew ($version)"
-                    ;;
-            esac
-        else
-            log_install "$tool"
-            if ! brew install "$tool"; then
-                log_error "Failed to install $tool - continuing with remaining tools"
-                FAILED_INSTALLATIONS+=("$tool (CLI tool)")
-            else
-                log_success "$tool installed successfully"
-                # Special handling for openjdk on macOS to make java available on PATH
-                if [[ "$tool" == "openjdk" ]]; then
-                    if command -v brew >/dev/null 2>&1; then
-                        brew link --force --overwrite openjdk >/dev/null 2>&1 || true
-                    fi
-                fi
-            fi
-        fi
-    done
-    
-    # Install uv (Python package installer) - special case with custom installer
-    if command -v uv >/dev/null 2>&1; then
-        local version
-        version=$(uv --version 2>/dev/null || echo "version unknown")
-        log_found "uv is already installed ($version)"
-    else
-        log_install "uv (Python package installer)"
-        if ! curl -LsSf https://astral.sh/uv/install.sh | sh; then
-            log_error "Failed to install uv - continuing with installation"
-            FAILED_INSTALLATIONS+=("uv (Python package installer)")
-        else
-            log_success "uv installed successfully"
-        fi
-    fi
+    try_install_uv
 }
 
 # Install applications via Homebrew Cask

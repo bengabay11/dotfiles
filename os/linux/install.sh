@@ -49,7 +49,6 @@ install_cli_tools_with_apt() {
         "npm:npm:npm --version:npm"
         "bat:bat:bat --version:bat"
         "Zsh:zsh:zsh --version:zsh"
-        "Ruff:ruff:ruff --version:ruff"
         "pre-commit:pre-commit:pre-commit --version:pre-commit"
         "btop:btop:btop --version:btop"
         "htop:htop:htop --version:htop"
@@ -82,6 +81,21 @@ install_tools_with_npm() {
     install_tools_with_package_manager "npm" "npm" "sudo npm install -g" tools
 }
 
+try_install_ruff () {
+    local tool_name="ruff"
+    if ! command -v ruff >/dev/null 2>&1; then
+        log_install $tool_name
+        if ! curl -LsSf https://astral.sh/ruff/install.sh | sh; then
+            log_error "Failed to install $tool_name"
+            FAILED_INSTALLATIONS+=("$tool_name")
+        else
+            log_success "$tool_name installed successfully"
+        fi
+    else
+        log_found "$tool_name is already installed ($(ruff --version 2>/dev/null || echo version unknown))"
+    fi
+}
+
 # Dedicated function for trying install helm (Can't use try_install_tool because the install command has pipe inside)
 try_install_helm () {
     if ! command -v helm >/dev/null 2>&1; then
@@ -105,6 +119,7 @@ install_cli_tools() {
     install_tools_with_npm
 
     try_install_uv
+    try_install_ruff
     try_install_helm
 }
 

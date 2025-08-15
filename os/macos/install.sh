@@ -116,7 +116,7 @@ install_applications() {
         "postman"
         "typora"
         "dbeaver-community"
-        "gitkraken"
+        "git-gui"
     )
     
     local newly_installed_apps=()

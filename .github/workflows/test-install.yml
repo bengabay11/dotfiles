@@ -22,7 +22,7 @@ jobs:
         run: |
           chmod +x install.sh
           chmod +x os/macos/install.sh
-          chmod +x os/macos/test_install.sh
+          chmod +x test_install.sh
 
       - name: Run installation
         env:
@@ -32,7 +32,7 @@ jobs:
         run: ./install.sh -y
 
       - name: Validate installation
-        run: ./os/macos/test_install.sh
+        run: ./test_install.sh
 
   test-linux-install:
     runs-on: ubuntu-latest
@@ -44,7 +44,7 @@ jobs:
         run: |
           chmod +x install.sh
           chmod +x os/linux/install.sh
-          chmod +x os/linux/test_install.sh
+          chmod +x test_install.sh
 
       - name: Run installation (non-interactive)
         env:
@@ -52,4 +52,4 @@ jobs:
         run: ./os/linux/install.sh -y
 
       - name: Validate installation
-        run: ./os/linux/test_install.sh
+        run: ./test_install.sh

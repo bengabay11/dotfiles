@@ -77,7 +77,7 @@ install_cli_tools() {
         "speedtest-cli:speedtest-cli:speedtest-cli --version:speedtest-cli"
         "fzf:fzf:fzf --version:fzf"
         "delta:delta:delta --version:git-delta"
-        "gitk:gitk:gitk --version:git-gui"
+        "git-gui:git-gui:git-gui --version:git-gui"
         "act:act:act --version:act"
     )
     install_tools_with_package_manager "Homebrew" "brew" "brew install" tools

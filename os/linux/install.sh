@@ -117,7 +117,7 @@ try_install_act () {
     local tool_name="act"
     if ! command -v act >/dev/null 2>&1; then
         log_install $tool_name
-        if ! curl -s https://raw.githubusercontent.com/nektos/act/master/install.sh | sudo bash; then
+        if ! curl -s https://raw.githubusercontent.com/nektos/act/master/install.sh | sudo bash -s -- -b /usr/local/bin; then
             log_error "Failed to install $tool_name"
             FAILED_INSTALLATIONS+=("$tool_name")
         else

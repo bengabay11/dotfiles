@@ -128,8 +128,19 @@ try_install_act () {
     fi
 }
 
+upgrade_git_if_old() {
+    local minimal_version="2.0.0"
+    if [ "$(git --version 2>/dev/null | awk '{print $3}')" \< "$minimal_version" ]; then
+        log_info "Git version is below $minimal_version — upgrading..."
+        log_install "Git"
+        sudo apt-get install -y git
+    fi
+}
+
 install_cli_tools() {
     log_info "Installing command-line tools..."
+
+    upgrade_git_if_old
 
     install_cli_tools_with_apt
     install_cli_tools_with_cargo

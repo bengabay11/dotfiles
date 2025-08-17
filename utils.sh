@@ -552,7 +552,7 @@ try_install_uv () {
 try_install_python () {
     local python_version=$1
     local tool_name="Python $python_version"
-    if ! command -v  pyenv versions --bare | grep -Fx "$python_version" >/dev/null 2>&1; then
+    if ! pyenv versions --bare | grep -Fx "$python_version" >/dev/null 2>&1; then
         log_install $tool_name
         if ! pyenv install $python_version --skip-existing; then
             log_error "Failed to install $tool_name"
@@ -562,7 +562,7 @@ try_install_python () {
             log_success "$tool_name installed successfully"
         fi
     else
-        log_found "$tool_name is already installed ($($python_version 2>/dev/null || echo version unknown))"
+        log_found "$tool_name is already installed ($(PYENV_VERSION=$python_version python --version 2>/dev/null || echo "Python $python_version"))"
     fi
 }
 

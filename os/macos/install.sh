@@ -77,6 +77,7 @@ install_cli_tools() {
         "speedtest-cli:speedtest-cli:speedtest-cli --version:speedtest-cli"
         "fzf:fzf:fzf --version:fzf"
         "delta:delta:delta --version:git-delta"
+        "act:act:act --version:act"
     )
     install_tools_with_package_manager "Homebrew" "brew" "brew install" tools
     
@@ -114,6 +115,7 @@ install_applications() {
         "postman"
         "typora"
         "dbeaver-community"
+        "gitkraken"
     )
     
     local newly_installed_apps=()

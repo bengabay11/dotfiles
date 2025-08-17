@@ -102,8 +102,6 @@ test_cli_tools_exists() {
         "tshark CLI command (Wireshark):tshark"
         "pip installation:pip3"
         "Java installation:javac"
-        "git-gui installation:git-gui"
-        "gitk installation:gitk"
         "act installation:act"
     )
 

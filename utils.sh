@@ -13,31 +13,8 @@ is_linux() {
     [[ "$OSTYPE" == "linux-gnu"* ]]
 }
 
-# Get package manager for current OS
-get_package_manager() {
-    if is_macos; then
-        echo "brew"
-    elif is_linux; then
-        if command -v apt >/dev/null 2>&1; then
-            echo "apt"
-        elif command -v yum >/dev/null 2>&1; then
-            echo "yum"
-        elif command -v pacman >/dev/null 2>&1; then
-            echo "pacman"
-        elif command -v zypper >/dev/null 2>&1; then
-            echo "zypper"
-        else
-            echo "unknown"
-        fi
-    else
-        echo "unknown"
-    fi
-}
-
-# Function to check if an application is installed (cross-platform)
+# Function to check if an application is installed (currently supported in macos only)
 # Usage: is_app_installed "AppName" [package_name]
-# For macOS: "Google Chrome" or "Visual Studio Code"
-# For Linux: package names like "firefox", "code", "chromium-browser"
 is_app_installed() {
     local app_name="$1"
     local package_name="$2"

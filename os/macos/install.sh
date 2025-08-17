@@ -87,50 +87,36 @@ install_cli_tools() {
 install_applications() {
     log_info "Installing applications..."
     
-    # Important security notice
-    echo ""
-    log_warning "📋 Important: macOS Security Notice"
-    log_info "After installation, when you first open these applications, macOS may show"
-    log_info "security warnings because they weren't downloaded from the App Store."
-    log_info ""
-    log_info "To resolve security warnings:"
-    log_info "1. Right-click the app in Applications folder → 'Open'"
-    log_info "2. Or go to System Settings → Privacy & Security → 'Allow Anyway'"
-    log_info "3. This only needs to be done once per application"
-    echo ""
-    
     local apps=(
-        "iterm2"
-        "warp"
-        "raycast"
-        "cursor"
-        "visual-studio-code"
-        "google-chrome"
-        "brave-browser"
-        "slack"
-        "sublime-text"
-        "obsidian"
-        "docker"
-        "wireshark-app"
-        "postman"
-        "typora"
-        "dbeaver-community"
-        "gitkraken"
+        "iTerm:iterm2"
+        "Warp:warp"
+        "Raycast:raycast"
+        "Cursor:cursor"
+        "Visual Studio Code:visual-studio-code"
+        "Google Chrome:google-chrome"
+        "Brave Browser:brave-browser"
+        "Slack:slack"
+        "Sublime Text:sublime-text"
+        "Obsidian:obsidian"
+        "Docker:docker"
+        "Wireshark:wireshark-app"
+        "Postman:postman"
+        "Typora:typora"
+        "DBeaver:dbeaver-community"
+        "GitKraken:gitkraken"
     )
     
     local newly_installed_apps=()
     
     for app in "${apps[@]}"; do
-        local display_name
-        display_name=$(get_app_display_name "$app")
-        
-        if is_app_installed "$display_name" "$app"; then
+        IFS=':' read -r display_name package_name <<< "$app"
+        if is_app_installed "$display_name" "$package_name"; then
             log_found "$display_name is already installed"
         else
             log_install "$display_name"
-            if ! brew install --cask "$app"; then
+            if ! brew install --cask "$package_name"; then
                 log_error "Failed to install $display_name - continuing with remaining applications"
-                FAILED_INSTALLATIONS+=("$display_name (application)")
+                FAILED_INSTALLATIONS+=("$display_name")
             else
                 log_success "$display_name installed successfully"
                 newly_installed_apps+=("$display_name")

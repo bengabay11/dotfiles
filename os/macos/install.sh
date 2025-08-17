@@ -88,7 +88,7 @@ install_applications() {
     log_info "Installing applications..."
     
     local apps=(
-        "ITerm 2:iterm2"
+        "iTerm:iterm2"
         "Warp: warp"
         "Raycast: raycast"
         "Cursor: cursor"
@@ -96,7 +96,7 @@ install_applications() {
         "Google Chrome:google-chrome"
         "Brave Browser:brave-browser"
         "Slack:slack"
-        "Sublime:sublime-text"
+        "Sublime Text:sublime-text"
         "Obsidian:obsidian"
         "Docker:docker"
         "Wireshark:wireshark-app"
@@ -109,8 +109,8 @@ install_applications() {
     local newly_installed_apps=()
     
     for app in "${apps[@]}"; do
-        IFS='|' read -r display_name package_name <<< "$app"
-        if is_app_installed "$display_name" "$app"; then
+        IFS=':' read -r display_name package_name <<< "$app"
+        if is_app_installed "$display_name" "$package_name"; then
             log_found "$display_name is already installed"
         else
             log_install "$display_name"

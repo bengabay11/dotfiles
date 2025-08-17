@@ -89,9 +89,9 @@ install_applications() {
     
     local apps=(
         "iTerm:iterm2"
-        "Warp: warp"
-        "Raycast: raycast"
-        "Cursor: cursor"
+        "Warp:warp"
+        "Raycast:raycast"
+        "Cursor:cursor"
         "Visual Studio Code:visual-studio-code"
         "Google Chrome:google-chrome"
         "Brave Browser:brave-browser"

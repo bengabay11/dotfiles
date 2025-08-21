@@ -6,20 +6,11 @@
 
 set -euo pipefail
 
+# Source shared utilities
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DOTFILES_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
-
-# Source shared utilities if available
-if [[ -f "$DOTFILES_ROOT/dotfiles/functions.sh" ]]; then
-    source "$DOTFILES_ROOT/dotfiles/functions.sh"
-else
-    # Define basic logging functions if utilities aren't available
-    log_info() { echo -e "\033[36mℹ\033[0m  $1"; }
-    log_warning() { echo -e "\033[33m⚠\033[0m  $1"; }
-    log_success() { echo -e "\033[32m✓\033[0m  $1"; }
-    log_error() { echo -e "\033[31m✗\033[0m  $1"; }
-    log_step() { echo -e "\033[34m▶\033[0m  $1"; }
-fi
+source "$DOTFILES_ROOT/dotfiles/functions.sh"
+source "$DOTFILES_ROOT/utils.sh"
 
 # Check if we're on macOS
 if [[ "$(uname -s)" != "Darwin" ]]; then
@@ -134,11 +125,7 @@ trust_specific_apps() {
 main() {
     local specific_apps=("$@")
     
-    echo ""
-    echo -e "\033[36m╭─────────────────────────────────────────────────╮\033[0m"
-    echo -e "\033[36m│\033[0m \033[37m🔐 macOS Application Trust Script\033[0m              \033[36m│\033[0m"
-    echo -e "\033[36m╰─────────────────────────────────────────────────╯\033[0m"
-    echo ""
+    log_header "\033[0m \033[37m🔐 macOS Application Trust Script"
     
     if [[ ${#specific_apps[@]} -gt 0 ]]; then
         log_info "Targeting specific applications: ${specific_apps[*]}"
@@ -226,7 +213,6 @@ main() {
     fi
 }
 
-# Function to show help
 show_help() {
     echo "macOS Application Trust Script"
     echo ""

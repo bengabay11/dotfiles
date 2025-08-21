@@ -49,7 +49,6 @@ install_cli_tools_with_apt() {
         "npm:npm:npm --version:npm"
         "bat:bat:bat --version:bat"
         "Zsh:zsh:zsh --version:zsh"
-        "pre-commit:pre-commit:pre-commit --version:pre-commit"
         "btop:btop:btop --version:btop"
         "htop:htop:htop --version:htop"
         "nmap:nmap:nmap --version:nmap"
@@ -127,6 +126,21 @@ try_install_act () {
     fi
 }
 
+try_install_pre_commit() {
+    local tool_name="pre-commit"
+    if ! command -v pre-commit >/dev/null 2>&1; then
+        log_install $tool_name
+        if ! pip install pre-commit; then
+            log_error "Failed to install $tool_name"
+            FAILED_INSTALLATIONS+=("$tool_name")
+        else
+            log_success "$tool_name installed successfully"
+        fi
+    else
+        log_found "$tool_name is already installed ($(pre-commit --version 2>/dev/null || echo version unknown))"
+    fi
+}
+
 install_cli_tools() {
     log_info "Installing command-line tools..."
 
@@ -138,6 +152,7 @@ install_cli_tools() {
     try_install_ruff
     try_install_helm
     try_install_act
+    try_install_pre_commit
 }
 
 install_pyenv() {

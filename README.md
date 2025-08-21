@@ -71,6 +71,7 @@ The dotfiles include a modular utilities system located at `~/.config/shell-util
 - `extract <file>` - Universal archive extractor (zip, tar, rar, etc.)
 - `mkcd <dir>` - Create directory and navigate to it
 - Beautiful logging functions with colors and icons for scripts
+- And more...
 
 ## Installation
 
@@ -105,9 +106,8 @@ cd ~/.dotfiles
 Common steps (macOS and Linux):
 
 - **OS Detection** - Automatically detects your operating system
-- **CLI Tools** - Installs development tools (git, python3, node, npm, yarn, typescript, openjdk, vim, tmux, zsh, bat, eza, ripgrep, fzf, delta, watch, ruff, pre-commit, btop, nmap, htop, ipython, speedtest-cli)
+- **CLI Tools** - Installs development tools
 - **Rust** - Installs Rust (rustup) and Cargo
-- **Helm** - Installs the Helm CLI
 - **Oh My Zsh** - Installs and configures Oh My Zsh
 - **Zsh plugins** - Installs autosuggestions, syntax-highlighting, and Powerlevel10k theme
 - **Dotfiles Setup** - Symlinks configuration files and installs modular shell utilities
@@ -182,15 +182,6 @@ Linux only:
 - Useful functions for productivity and development workflows
 - Command history optimization and plugin support
 
-### macOS System Preferences (optional)
-
-You may want to adjust these settings manually after installation:
-
-- **Finder**: Show hidden files, file extensions, path bar, and status bar
-- **Menu Bar**: Show battery percentage
-- **Security**: Require admin password for configuration changes
-- **Development**: Disable file extension change warnings
-
 ## Customization
 
 ### Adding New Tools
@@ -198,7 +189,7 @@ You may want to adjust these settings manually after installation:
 Edit the OS-specific installer(s):
 
 - On macOS: update `os/macos/install.sh` (add to the `tools` list or `apps` list)
-- On Linux: update `os/linux/install.sh` (add to `apt_pkgs` or the relevant install section)
+- On Linux: update `os/linux/install.sh` (check `install_cli_tools` function)
 
 ### Modifying Dotfiles
 
@@ -208,7 +199,8 @@ All dotfiles are located in the `dotfiles/` directory:
 - `dotfiles/.tmux.conf` - Tmux configuration
 - `dotfiles/.zshrc` - Zsh configuration
 - `dotfiles/.gitconfig` - Git configuration
-- `dotfiles/functions.sh` - Shared utility functions and logging
+- `dotfiles/functions.sh` - Shared utility functions
+- `dotfiles/aliases.sh` - Shared aliases
 
 After modifying, re-run the installer or create symlinks manually:
 
@@ -230,22 +222,16 @@ Example structure:
 os/
 ├── macos/
 │   ├── install.sh
-│   └── test_install.sh
 └── linux/
     ├── install.sh
-    └── test_install.sh
 ```
 
 ## Testing Your Installation
 
-After running the installer, verify with the comprehensive test script for your OS:
+After running the installer, verify with the comprehensive test script:
 
 ```bash
-# macOS
-./os/macos/test_install.sh
-
-# Linux (Ubuntu/Debian-based, including WSL)
-./os/linux/test_install.sh
+./test_install.sh
 ```
 
 **What the test script checks:**
@@ -261,29 +247,6 @@ After running the installer, verify with the comprehensive test script for your 
 - ✅ **File Permissions** - Ensures scripts are executable
 
 The test script provides detailed output showing which components passed or failed, making it easy to identify any issues with your installation.
-
-## File Structure
-
-```text
-dotfiles/
-├── install.sh              # Main installation script
-├── LICENSE                 # MIT License
-├── README.md               # This documentation
-├── utils.sh                # Shared installer helpers (cross-platform)
-├── os/
-│   ├── macos/
-│   │   ├── install.sh      # macOS installer
-│   │   └── test_install.sh # macOS verification script
-│   └── linux/
-│       ├── install.sh      # Linux (apt-based) installer
-│       └── test_install.sh # Linux verification script
-└── dotfiles/
-    ├── .vimrc              # Vim configuration
-    ├── .tmux.conf          # Tmux configuration
-    ├── .zshrc              # Zsh configuration with Oh My Zsh
-    ├── .gitconfig          # Git configuration
-    └── functions.sh      # Shared utility functions and logging
-```
 
 ## Contributing
 

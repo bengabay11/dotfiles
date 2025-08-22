@@ -127,6 +127,7 @@ test_apps() {
         "Docker"
         "Wireshark"
         "Postman"
+        "Paintbrush"
         "Typora"
         "DBeaver"
         "GitKraken"

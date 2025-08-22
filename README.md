@@ -49,6 +49,7 @@ A comprehensive dotfiles setup for macOS and Linux (Ubuntu/Debian-based; include
 - **Docker Desktop** - Container development platform
 - **Wireshark** - Network protocol analyzer
 - **Postman** - API development and testing tool
+- **Paintbrush** - Simple image editor
 - **Typora** - Markdown editor
 - **DBeaver Community** - Universal database management tool
 

@@ -101,6 +101,7 @@ install_applications() {
         "Docker:docker"
         "Wireshark:wireshark-app"
         "Postman:postman"
+        "Paintbrush:paintbrush"
         "Typora:typora"
         "DBeaver:dbeaver-community"
         "GitKraken:gitkraken"

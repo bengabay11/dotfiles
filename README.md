@@ -2,6 +2,9 @@
 
 A comprehensive dotfiles setup for macOS and Linux (Ubuntu/Debian-based; includes WSL). Built with extensibility in mind.
 
+![Alt text](assets/install_demo.jpeg "Optional title")
+
+
 ## Features
 
 ### 🛠️ Command Line Tools

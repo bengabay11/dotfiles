@@ -1,6 +1,6 @@
 # Dotfiles
 
-A comprehensive dotfiles setup for macOS and Linux (Ubuntu/Debian-based; includes WSL). Built with extensibility in mind.
+A comprehensive dotfiles setup for macOS and Linux (Ubuntu/Debian-based; includes WSL).
 
 ![Alt text](assets/install_demo.jpeg "Optional title")
 
@@ -194,18 +194,6 @@ After running the installer, verify with the comprehensive test script:
 ```bash
 ./test_install.sh
 ```
-
-**What the test script checks:**
-
-- ✅ **Essential CLI Tools** - Verifies git, python3, vim, tmux, node, npm, yarn, zsh
-- ✅ **Development Tools** - Checks rust, cargo, pyenv, uv, TypeScript, bat, eza, ruff, pre-commit, btop, nmap, htop, ipython, ripgrep, helm
-- ✅ **Oh My Zsh** - Validates Oh My Zsh installation and configuration
-- ✅ **Dotfiles Symlinking** - Ensures all dotfiles are properly symlinked
-- ✅ **Python Environment** - Verifies pyenv and Python version setup
-- ✅ **Configuration Files** - Validates content of .zshrc, .gitconfig, and other configs
-- ✅ **Environment Setup** - Checks PATH configuration for Homebrew and Cargo
-- ✅ **Tool Versions** - Displays version information for installed tools
-- ✅ **File Permissions** - Ensures scripts are executable
 
 The test script provides detailed output showing which components passed or failed, making it easy to identify any issues with your installation.
 

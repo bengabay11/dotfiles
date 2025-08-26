@@ -97,6 +97,7 @@ test_cli_tools_exists() {
         "fzf installation:fzf"
         "delta installation:delta"
         "Java (openjdk) installation:java"
+        "net-tools installation:ifconfig"
         "watch installation:watch"
         "docker CLI command:docker"
         "tshark CLI command (Wireshark):tshark"

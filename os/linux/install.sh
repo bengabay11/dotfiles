@@ -35,7 +35,7 @@ apt_update_and_basics() {
     # Common basics
     sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
         build-essential curl wget ca-certificates gnupg lsb-release software-properties-common \
-        git unzip xz-utils pkg-config
+        git unzip xz-utils pkg-config net-tools
 }
 
 install_cli_tools_with_apt() {

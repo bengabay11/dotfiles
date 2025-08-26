@@ -166,7 +166,7 @@ install_pyenv() {
         eval "$(pyenv init -)"
 
         if command -v pyenv >/dev/null 2>&1; then
-            log_install "pyenv"
+            log_success "pyenv"
         else
             log_error "pyenv installation may have failed"
             FAILED_INSTALLATIONS+=("pyenv")
@@ -206,7 +206,6 @@ main() {
         "update apt and base packages|apt_update_and_basics|true|always"
         "install command-line development tools|install_cli_tools|false|always"
         "install Rust programming language|install_rust|false|always"
-        "install tools via cargo (eza, git-delta)|install_cli_tools_with_cargo|false|always"
         "install and configure Oh My Zsh shell framework|install_oh_my_zsh|false|always"
         "install Zsh plugins and themes (autosuggestions, syntax highlighting, powerlevel10k)|install_zsh_plugins|false|always"
         "set up dotfiles and modular shell utilities|setup_dotfiles|true|always"

@@ -24,6 +24,7 @@ A comprehensive dotfiles setup for macOS and Linux (Ubuntu/Debian-based; include
 - **ruff** - Fast Python linter
 - **uv** - Ultra-fast Python package installer
 - **pre-commit** - Git hooks framework
+- **poetry** - Python dependency management
 - **pyenv** - Python version management
 - **btop** - Modern system monitor (alternative to htop)
 - **nmap** - Network discovery and security auditing utility

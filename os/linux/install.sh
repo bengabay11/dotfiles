@@ -141,6 +141,21 @@ try_install_pre_commit() {
     fi
 }
 
+try_install_poetry() {
+    local tool_name="poetry"
+    if ! command -v poetry >/dev/null 2>&1; then
+        log_install $tool_name
+        if ! curl -sSL https://install.python-poetry.org | python3 -; then
+            log_error "Failed to install $tool_name"
+            FAILED_INSTALLATIONS+=("$tool_name")
+        else
+            log_success "$tool_name installed successfully"
+        fi
+    else
+        log_found "$tool_name is already installed ($(poetry --version 2>/dev/null || echo version unknown))"
+    fi
+}
+
 install_cli_tools() {
     log_info "Installing command-line tools..."
 
@@ -153,6 +168,7 @@ install_cli_tools() {
     try_install_helm
     try_install_act
     try_install_pre_commit
+    try_install_poetry
 }
 
 install_pyenv() {

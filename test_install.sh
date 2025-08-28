@@ -87,6 +87,7 @@ test_cli_tools_exists() {
         "eza installation:eza"
         "ruff installation:ruff"
         "pre-commit installation:pre-commit"
+        "poetry installation:poetry"
         "btop installation:btop"
         "nmap installation:nmap"
         "htop installation:htop"

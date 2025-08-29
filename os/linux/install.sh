@@ -156,6 +156,24 @@ try_install_poetry() {
     fi
 }
 
+try_install_kubectl () {
+    local tool_name="kubectl"
+    if ! command -v kubectl >/dev/null 2>&1; then
+        log_install $tool_name
+        if curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" \
+            && sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl \
+            && kubectl version --client >/dev/null 2>&1; then
+            log_success "$tool_name installed successfully"
+        else
+            log_error "Failed to install $tool_name"
+            FAILED_INSTALLATIONS+=("$tool_name")
+        fi
+        rm -f kubectl
+    else
+        log_found "$tool_name is already installed ($(kubectl version --client 2>/dev/null || echo version unknown))"
+    fi
+}
+
 install_cli_tools() {
     log_info "Installing command-line tools..."
 
@@ -169,6 +187,7 @@ install_cli_tools() {
     try_install_act
     try_install_pre_commit
     try_install_poetry
+    try_install_kubectl
 }
 
 install_pyenv() {

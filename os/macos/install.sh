@@ -68,6 +68,7 @@ install_cli_tools() {
         "Zsh:zsh:zsh --version:zsh"
         "ruff:ruff:ruff --version:ruff"
         "pre-commit:pre-commit:pre-commit --version:pre-commit"
+        "Poetry:poetry:poetry --version:poetry"
         "btop:btop:btop --version:btop"
         "nmap:nmap:nmap --version:nmap"
         "htop:htop:htop --version:htop"

@@ -93,6 +93,7 @@ test_cli_tools_exists() {
         "htop installation:htop"
         "IPython installation:ipython3"
         "ripgrep installation:rg"
+        "zoxide installation:zoxide"
         "helm installation:helm"
         "speedtest-cli installation:speedtest-cli"
         "fzf installation:fzf"

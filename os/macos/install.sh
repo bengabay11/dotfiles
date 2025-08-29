@@ -77,6 +77,7 @@ install_cli_tools() {
         "Helm:helm:helm version --short:helm"
         "speedtest-cli:speedtest-cli:speedtest-cli --version:speedtest-cli"
         "fzf:fzf:fzf --version:fzf"
+        "zoxide:zoxide:zoxide --version:zoxide"
         "delta:delta:delta --version:git-delta"
         "act:act:act --version:act"
         "GitHub CLI:gh:gh --version:gh"

@@ -97,6 +97,14 @@ source $ZSH/oh-my-zsh.sh
 
 eval "$(zoxide init zsh)"
 
+# Fix zoxide recursive cd issue
+_z_cd() {
+	builtin cd "$@" || return "$?"
+	if [ "$_ZO_ECHO" = "1" ]; then
+		echo "$PWD"
+	fi
+}
+
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"

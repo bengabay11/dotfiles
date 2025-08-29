@@ -198,19 +198,23 @@ setup_dotfiles() {
     done
     
     log_info "Setting up modular shell utilities..."
-    if [[ -f "$DOTFILES_ROOT/dotfiles/functions.sh" ]]; then
-        cp "$DOTFILES_ROOT/dotfiles/functions.sh" "$HOME/.config/shell-utils/functions.sh"
-        log_success "Shell utilities installed to ~/.config/shell-utils/"
-    else
-        log_warning "functions.sh not found - skipping utilities setup"
-    fi
-    if [[ -f "$DOTFILES_ROOT/dotfiles/aliases.sh" ]]; then
-        cp "$DOTFILES_ROOT/dotfiles/aliases.sh" "$HOME/.config/shell-utils/aliases.sh"
-        log_success "Aliases installed to ~/.config/shell-utils/"
-    else
-        log_warning "aliases.sh not found - skipping aliases setup"
-    fi
-    
+    local utils=("functions.sh" "aliases.sh")
+    for util in "${utils[@]}"; do
+        local source_file="$DOTFILES_ROOT/dotfiles/$util"
+        local target_file="$HOME/.config/shell-utils/$util"
+
+        if [[ -f "$source_file" ]]; then
+            if [[ -e "$target_file" ]]; then
+                log_warning "Backing up existing $(basename "$target_file") to $(basename "$target_file").backup"
+                mv "$target_file" "$target_file.backup"
+            fi
+            ln -sf "$source_file" "$target_file"
+            log_success "$util symlinked to ~/.config/shell-utils/"
+        else
+            log_warning "$util not found - skipping"
+        fi
+    done
+
     log_info "You can now add more utility files to ~/.config/shell-utils/ and they will be automatically loaded"
 }
 

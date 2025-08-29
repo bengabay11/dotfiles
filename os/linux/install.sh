@@ -54,6 +54,7 @@ install_cli_tools_with_apt() {
         "nmap:nmap:nmap --version:nmap"
         "ripgrep:rg:rg --version:ripgrep"
         "IPython3:ipython3:ipython3 --version:ipython3"
+        "zoxide:zoxide:zoxide --version:zoxide"
         "fzf:fzf:fzf --version:fzf"
         "Speedtest CLI:speedtest-cli:speedtest-cli --version:speedtest-cli"
         "Java JDK:javac:javac -version:default-jdk"

@@ -185,13 +185,6 @@ if command -v fzf >/dev/null 2>&1; then
     export FZF_COMPLETION_TRIGGER='**'
 
     # Custom fzf functions
-    # fd - cd to selected directory
-    fd() {
-        local dir
-        dir=$(find ${1:-.} -path '*/\.*' -prune \
-                        -o -type d -print 2> /dev/null | fzf +m) &&
-        cd "$dir"
-    }
 
     # fe - edit file with fzf
     fe() {

@@ -58,6 +58,7 @@ install_cli_tools_with_apt() {
         "Speedtest CLI:speedtest-cli:speedtest-cli --version:speedtest-cli"
         "Java JDK:javac:javac -version:default-jdk"
         "TShark:tshark:tshark --version:tshark"
+        "GitHub CLI:gh:gh --version:gh"
     )
     install_tools_with_package_manager "apt" "apt" \
     "sudo DEBIAN_FRONTEND=noninteractive apt-get install -y" tools

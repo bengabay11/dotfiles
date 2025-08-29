@@ -10,6 +10,7 @@ alias locate=mdfind
 alias quit="exit"
 alias speedtest="speedtest-cli"
 alias ipython=ipython3
+alias cd=z
 
 # AWS
 alias sso="aws sso login"

@@ -106,6 +106,7 @@ test_cli_tools_exists() {
         "pip installation:pip3"
         "Java installation:javac"
         "act installation:act"
+        "GitHub CLI installation:gh"
     )
 
     for entry in "${tools[@]}"; do
@@ -259,13 +260,15 @@ main() {
     run_test "Node.js can execute JavaScript" "node -e 'console.log(\"test\")' >/dev/null 2>&1"
     
     run_test "Rust compiler responds to version check" "rustc --version >/dev/null 2>&1"
-    
+
     run_test "fzf can show version" "fzf --version >/dev/null 2>&1"
     run_test "fzf can list files" "echo | fzf --filter='' >/dev/null 2>&1 || true"
-    
+
     run_test "delta can show version" "delta --version >/dev/null 2>&1"
     run_test "delta can process diff" "echo -e 'line1\nline2' | delta --color=never >/dev/null 2>&1 || true"
-    
+
+    run_test "GitHub CLI responds to version check" "gh --version >/dev/null 2>&1"
+
     show_tests_summary
 }
 

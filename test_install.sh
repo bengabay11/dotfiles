@@ -170,7 +170,10 @@ test_dotfiles() {
     echo ""
 
     run_test "Modular shell utilities system is configured" "grep -q '.config/shell-utils' '$HOME/.zshrc'"
-    run_test "Shell utilities are installed" "test -f '$HOME/.config/shell-utils/functions.sh'"
+    run_test "functions.sh symlink exists" "test_symlink_exists '$HOME/.config/shell-utils/functions.sh'"
+    run_test "functions.sh target exists" "test_symlink_target_exists '$HOME/.config/shell-utils/functions.sh'"
+    run_test "aliases.sh symlink exists" "test_symlink_exists '$HOME/.config/shell-utils/aliases.sh'"
+    run_test "aliases.sh target exists" "test_symlink_target_exists '$HOME/.config/shell-utils/aliases.sh'"
     echo ""
 }
 

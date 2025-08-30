@@ -53,6 +53,7 @@ install_cli_tools_with_apt() {
         "htop:htop:htop --version:htop"
         "nmap:nmap:nmap --version:nmap"
         "ripgrep:rg:rg --version:ripgrep"
+        "fd (fd-find):fdfind:fdfind --version:fd-find"
         "IPython3:ipython3:ipython3 --version:ipython3"
         "zoxide:zoxide:zoxide --version:zoxide"
         "fzf:fzf:fzf --version:fzf"

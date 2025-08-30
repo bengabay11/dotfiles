@@ -65,6 +65,13 @@ install_cli_tools_with_apt() {
     install_tools_with_package_manager "apt" "apt" \
     "sudo DEBIAN_FRONTEND=noninteractive apt-get install -y" tools
 
+    # Ensure fd command is available when only fdfind exists
+    if command -v fdfind >/dev/null 2>&1 && ! command -v fd >/dev/null 2>&1; then
+        mkdir -p "$HOME/.local/bin"
+        ln -sf "$(command -v fdfind)" "$HOME/.local/bin/fd"
+        log_success "fd command symlinked to fdfind"
+    fi
+
 }
 
 install_cli_tools_with_cargo() {

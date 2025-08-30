@@ -74,6 +74,7 @@ install_cli_tools() {
         "htop:htop:htop --version:htop"
         "IPython:ipython:ipython --version:ipython"
         "ripgrep:rg:rg --version:ripgrep"
+        "fd:fd:fd --version:fd"
         "Helm:helm:helm version --short:helm"
         "speedtest-cli:speedtest-cli:speedtest-cli --version:speedtest-cli"
         "fzf:fzf:fzf --version:fzf"

@@ -18,4 +18,5 @@ alias sso="aws sso login"
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     alias open='xdg-open'
     alias bat="batcat"
+    alias fd="fdfind"
 fi

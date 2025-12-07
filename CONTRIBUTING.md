@@ -51,4 +51,3 @@ Feel free to submit issues and enhancement requests! This dotfiles setup is desi
 - **Modular** - Easy to add/remove components
 - **Cross-platform** - Built for easy OS support addition
 - **Configurable** - Simple to customize for personal preferences
-

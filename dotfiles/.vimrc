@@ -164,4 +164,3 @@ autocmd FileType gitcommit,markdown,text setlocal spell
 
 " Auto-reload vimrc when edited
 autocmd BufWritePost $MYVIMRC source $MYVIMRC
-

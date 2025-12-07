@@ -9,11 +9,11 @@ set -uo pipefail
 AUTO_YES=false
 while [[ $# -gt 0 ]]; do
     case $1 in
-        -y|--yes)
+        -y | --yes)
             AUTO_YES=true
             shift
             ;;
-        -h|--help)
+        -h | --help)
             echo "Usage: $0 [OPTIONS]"
             echo ""
             echo "Options:"
@@ -43,8 +43,6 @@ export SCRIPT_DIR
 source "$SCRIPT_DIR/dotfiles/functions.sh"
 source "$SCRIPT_DIR/utils.sh"
 
-
-
 # OS Detection
 detect_os() {
     case "$(uname -s)" in
@@ -54,7 +52,7 @@ detect_os() {
         Linux*)
             echo "linux"
             ;;
-        CYGWIN*|MINGW32*|MSYS*|MINGW*)
+        CYGWIN* | MINGW32* | MSYS* | MINGW*)
             echo "windows"
             ;;
         *)
@@ -90,37 +88,37 @@ check_os_support() {
 
 main() {
     log_info "Starting dotfiles installation..."
-    
+
     local os
     os=$(detect_os)
-    
+
     if ! check_os_support "$os"; then
         exit 1
     fi
-    
+
     local script_dir
     script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-    
+
     # Source OS-specific installation script
     local os_script="${script_dir}/os/${os}/install.sh"
-    
+
     if [[ ! -f "$os_script" ]]; then
         log_error "Installation script not found: $os_script"
         exit 1
     fi
-    
+
     # Ensure the OS-specific script is executable
     if [[ ! -x "$os_script" ]]; then
         log_info "Making $os installation script executable..."
         chmod +x "$os_script"
     fi
-    
+
     log_info "Running $os installation script..."
     if [[ "$AUTO_YES" == "true" ]]; then
         "$os_script" -y
     else
         "$os_script"
-    fi    
+    fi
 
     installation_success_message
 
@@ -128,13 +126,13 @@ main() {
     echo ""
     log_info "Next steps:"
     log_info "• Restart your terminal or run 'source ~/.zshrc' to apply changes"
-    if command -v code >/dev/null 2>&1; then
+    if command -v code > /dev/null 2>&1; then
         log_info "• Sign in to VS Code to sync settings and extensions"
     fi
-    if command -v cursor >/dev/null 2>&1; then
+    if command -v cursor > /dev/null 2>&1; then
         log_info "• Sign in to Cursor to sync settings and extensions"
     fi
-    if command -v obsidian >/dev/null 2>&1; then
+    if command -v obsidian > /dev/null 2>&1; then
         log_info "• Sync Obsidian notes with your vault"
     fi
 }

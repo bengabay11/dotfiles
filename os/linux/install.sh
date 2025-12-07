@@ -79,6 +79,7 @@ install_tools_with_npm() {
     local tools=(
         "Typescript:tsc:tsc --version:typescript"
         "yarn:yarn:yarn --version:yarn"
+        "Prettier:prettier:prettier --version:prettier"
     )
     install_tools_with_package_manager "npm" "npm" "npm install -g" tools
 }

@@ -77,6 +77,7 @@ test_cli_tools_exists() {
         "Node.js installation:node"
         "npm installation:npm"
         "yarn installation:yarn"
+        "Prettier installation:prettier"
         "kubectl installation:kubectl"
         "Zsh installation:zsh"
         "Rust installation:rustc"

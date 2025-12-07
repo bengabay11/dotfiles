@@ -76,6 +76,7 @@ install_cli_tools() {
         "ripgrep:rg:rg --version:ripgrep"
         "fd:fd:fd --version:fd"
         "Helm:helm:helm version --short:helm"
+        "kubectl:kubectl:kubectl version --client:kubernetes-cli"
         "speedtest-cli:speedtest-cli:speedtest-cli --version:speedtest-cli"
         "fzf:fzf:fzf --version:fzf"
         "zoxide:zoxide:zoxide --version:zoxide"
@@ -84,7 +85,7 @@ install_cli_tools() {
         "GitHub CLI:gh:gh --version:gh"
     )
     install_tools_with_package_manager "Homebrew" "brew" "brew install" tools
-    
+
     try_install_uv
 }
 

@@ -1,4 +1,4 @@
- #!/bin/bash
+#!/bin/bash
 
 # macOS-specific installation script
 
@@ -20,7 +20,7 @@ if [[ "$(uname -s)" != "Darwin" ]]; then
 fi
 
 install_homebrew() {
-    if command -v brew >/dev/null 2>&1; then
+    if command -v brew > /dev/null 2>&1; then
         local version=$(brew --version | head -1)
         log_found "Homebrew is already installed ($version)"
         # Skip update in CI or when explicitly disabled
@@ -38,7 +38,7 @@ install_homebrew() {
             log_error "Failed to install Homebrew - this will affect other installations"
             return 1
         fi
-        
+
         # Add Homebrew to PATH for Apple Silicon Macs
         if [[ -f "/opt/homebrew/bin/brew" ]]; then
             echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
@@ -50,7 +50,7 @@ install_homebrew() {
 
 install_cli_tools() {
     log_info "Installing command-line tools..."
-    
+
     local tools=(
         "Git:git:git --version:git"
         "Python 3.11:python3:python3 --version:python@3.11"
@@ -92,7 +92,7 @@ install_cli_tools() {
 
 install_applications() {
     log_info "Installing applications..."
-    
+
     local apps=(
         "iTerm:iterm2"
         "Warp:warp"
@@ -112,9 +112,9 @@ install_applications() {
         "DBeaver:dbeaver-community"
         "GitKraken:gitkraken"
     )
-    
+
     local newly_installed_apps=()
-    
+
     for app in "${apps[@]}"; do
         IFS=':' read -r display_name package_name <<< "$app"
         if is_app_installed "$display_name" "$package_name"; then
@@ -130,7 +130,7 @@ install_applications() {
             fi
         fi
     done
-    
+
     # Provide specific guidance for newly installed apps
     if [[ ${#newly_installed_apps[@]} -gt 0 ]]; then
         echo ""
@@ -152,7 +152,7 @@ install_applications() {
         log_info "Option 2 - Automated approach (convenience):"
         log_info "Run the trust_apps.sh script to automatically trust all apps"
         echo ""
-        
+
         # Offer to run trust script for newly installed apps
         if [[ -z "${CI:-}" ]] && [[ -z "${NONINTERACTIVE:-}" ]]; then
             if confirm_stage "automatically trust newly installed applications using xattr" "false"; then
@@ -178,7 +178,7 @@ install_applications() {
 main() {
     log_header "macOS Dotfiles Installation Script"
     log_info_interactive_mode_status
-    
+
     echo ""
     log_step "Installation process includes the following stages:"
     echo -e "   ${BLUE}1.${NC} ${WHITE}🍺 Install/update Homebrew package manager${NC}"
@@ -190,7 +190,7 @@ main() {
     echo -e "   ${BLUE}7.${NC} ${WHITE}📝 Set up dotfiles and modular shell utilities${NC}"
     echo -e "   ${BLUE}8.${NC} ${WHITE}🐍 Configure Python environment with pyenv${NC}"
     echo ""
-    
+
     local stages=(
         "install/update Homebrew package manager|install_homebrew|true|always"
         "install command-line development tools|install_cli_tools|false|always"

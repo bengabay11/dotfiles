@@ -18,40 +18,40 @@ is_linux() {
 is_app_installed() {
     local app_name="$1"
     local package_name="$2"
-    
+
     if is_macos; then
         # macOS application detection
         local app_path="/Applications/${app_name}.app"
         local user_app_path="$HOME/Applications/${app_name}.app"
-        
+
         # Check system Applications directory
         if [[ -d "$app_path" ]]; then
             return 0
         fi
-        
+
         # Check user Applications directory
         if [[ -d "$user_app_path" ]]; then
             return 0
         fi
-        
+
         # Check if installed via Homebrew Cask (fallback)
-        if [[ -n "$package_name" ]] && brew list --cask "$package_name" >/dev/null 2>&1; then
+        if [[ -n "$package_name" ]] && brew list --cask "$package_name" > /dev/null 2>&1; then
             return 0
         fi
     elif is_linux; then
         log_error "is_app_installed is not supported on Linux"
         return 1
     fi
-    
+
     return 1
 }
 
-try_install_tool () {
+try_install_tool() {
     local tool_name="$1"
     local tool_command_name="$2"
     local tool_install_command="$3"
     local tool_version_command="$4"
-    if ! command -v $tool_command_name >/dev/null 2>&1; then
+    if ! command -v $tool_command_name > /dev/null 2>&1; then
         log_install $tool_name
         if ! $tool_install_command; then
             log_error "Failed to install $tool_name"
@@ -60,57 +60,57 @@ try_install_tool () {
             log_success "$tool_name installed successfully"
         fi
     else
-        log_found "$tool_name is already installed ($($tool_version_command 2>/dev/null || echo version unknown))"
+        log_found "$tool_name is already installed ($($tool_version_command 2> /dev/null || echo version unknown))"
     fi
 }
 
 # Detect bash with nameref support (>= 4.3)
 _supports_nameref() {
-  [[ -n ${BASH_VERSINFO+x} ]] || return 1
-  local major=${BASH_VERSINFO[0]} minor=${BASH_VERSINFO[1]}
-  (( major > 4 )) || { (( major == 4 && minor >= 3 )) ; }
+    [[ -n ${BASH_VERSINFO+x} ]] || return 1
+    local major=${BASH_VERSINFO[0]} minor=${BASH_VERSINFO[1]}
+    ((major > 4)) || { ((major == 4 && minor >= 3)); }
 }
 
 _install_tools_with_pm_impl() {
-  local package_manager_name="$1"
-  local package_manager_command="$2"
-  local package_manager_install_command="$3"
-  shift 3  # now "$@" = entries
+    local package_manager_name="$1"
+    local package_manager_command="$2"
+    local package_manager_install_command="$3"
+    shift 3 # now "$@" = entries
 
-  if ! command -v "$package_manager_command" >/dev/null 2>&1; then
-    log_warning "$package_manager_name not available; skipping ${package_manager_command}-based installations"
+    if ! command -v "$package_manager_command" > /dev/null 2>&1; then
+        log_warning "$package_manager_name not available; skipping ${package_manager_command}-based installations"
+        for entry in "$@"; do
+            IFS=":" read -r display_name command version_command package_name <<< "$entry"
+            FAILED_INSTALLATIONS+=("$display_name")
+        done
+        return 0
+    fi
+
     for entry in "$@"; do
-      IFS=":" read -r display_name command version_command package_name <<< "$entry"
-      FAILED_INSTALLATIONS+=("$display_name")
+        IFS=":" read -r display_name command version_command package_name <<< "$entry"
+        try_install_tool "$display_name" "$command" \
+            "$package_manager_install_command $package_name" "$version_command"
     done
-    return 0
-  fi
-
-  for entry in "$@"; do
-    IFS=":" read -r display_name command version_command package_name <<< "$entry"
-    try_install_tool "$display_name" "$command" \
-      "$package_manager_install_command $package_name" "$version_command"
-  done
 }
 
 install_tools_with_package_manager() {
-  local package_manager_name="$1"
-  local package_manager_command="$2"
-  local package_manager_install_command="$3"
-  local arrname="$4"
+    local package_manager_name="$1"
+    local package_manager_command="$2"
+    local package_manager_install_command="$3"
+    local arrname="$4"
 
-  if _supports_nameref; then
-    # Linux/new bash: use nameref to expand array items safely
-    local -n _tools_ref="$arrname"
-    _install_tools_with_pm_impl \
-      "$package_manager_name" "$package_manager_command" "$package_manager_install_command" \
-      "${_tools_ref[@]}"
-  else
-    # macOS/old bash: expand the array by name via eval
-    eval "_install_tools_with_pm_impl \
+    if _supports_nameref; then
+        # Linux/new bash: use nameref to expand array items safely
+        local -n _tools_ref="$arrname"
+        _install_tools_with_pm_impl \
+            "$package_manager_name" "$package_manager_command" "$package_manager_install_command" \
+            "${_tools_ref[@]}"
+    else
+        # macOS/old bash: expand the array by name via eval
+        eval "_install_tools_with_pm_impl \
       \"\$package_manager_name\" \"\$package_manager_command\" \"\$package_manager_install_command\" \
       \"\${$arrname[@]}\""
-  fi
+    fi
 }
 
 installation_success_message() {
@@ -166,8 +166,8 @@ log_info_interactive_mode_status() {
 }
 
 install_rust() {
-    if command -v rustc >/dev/null 2>&1; then
-        local version=$(rustc --version 2>/dev/null || echo "version unknown")
+    if command -v rustc > /dev/null 2>&1; then
+        local version=$(rustc --version 2> /dev/null || echo "version unknown")
         log_found "Rust is already installed ($version)"
     else
         log_install "Rust programming language"
@@ -183,11 +183,11 @@ install_rust() {
 
 setup_dotfiles() {
     log_info "Setting up dotfiles..."
-    
+
     # Create necessary directories
     mkdir -p "$HOME/.config"
     mkdir -p "$HOME/.config/shell-utils"
-    
+
     local dotfiles=(".vimrc" ".tmux.conf" ".zshrc" ".gitconfig")
     for dotfile in "${dotfiles[@]}"; do
         if [[ -f "$HOME/$dotfile" ]]; then
@@ -196,7 +196,7 @@ setup_dotfiles() {
         fi
         ln -sf "$DOTFILES_ROOT/dotfiles/$dotfile" "$HOME/$dotfile"
     done
-    
+
     log_info "Setting up modular shell utilities..."
     local utils=("functions.sh" "aliases.sh")
     for util in "${utils[@]}"; do
@@ -236,39 +236,39 @@ install_oh_my_zsh() {
 # Install Oh My Zsh plugins and themes
 install_zsh_plugins() {
     log_info "Installing Zsh plugins and themes..."
-    
+
     # Ensure Oh My Zsh is installed first
     if [[ ! -d "$HOME/.oh-my-zsh" ]]; then
         log_error "Oh My Zsh must be installed before installing plugins"
         return 1
     fi
-    
+
     # Set ZSH_CUSTOM if not already set
     local zsh_custom="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
-    
+
     # Create custom plugins and themes directories if they don't exist
     mkdir -p "$zsh_custom/plugins"
     mkdir -p "$zsh_custom/themes"
-    
+
     # Define plugins to install
     local plugins=(
         "zsh-autosuggestions|https://github.com/zsh-users/zsh-autosuggestions.git|plugins"
         "zsh-syntax-highlighting|https://github.com/zsh-users/zsh-syntax-highlighting.git|plugins"
         "powerlevel10k|https://github.com/romkatv/powerlevel10k.git|themes"
     )
-    
+
     # Install each plugin/theme
     for plugin_info in "${plugins[@]}"; do
         # Parse plugin information (name|repo_url|type)
         IFS='|' read -r name repo_url install_type <<< "$plugin_info"
-        
+
         local install_path="$zsh_custom/$install_type/$name"
-        
+
         if [[ -d "$install_path" ]]; then
             log_found "$name is already installed"
         else
             log_install "$name"
-            
+
             # Special handling for powerlevel10k (shallow clone for performance)
             if [[ "$name" == "powerlevel10k" ]]; then
                 if ! git clone --depth=1 "$repo_url" "$install_path"; then
@@ -283,17 +283,17 @@ install_zsh_plugins() {
                     continue
                 fi
             fi
-            
+
             log_success "$name installed successfully"
         fi
     done
-    
+
     log_success "All Zsh plugins and themes installed successfully"
 }
 
 # Dedicated function for trying install uv (Can't use try_install_tool because the install command has pipe inside)
-try_install_uv () {
-    if ! command -v uv >/dev/null 2>&1; then
+try_install_uv() {
+    if ! command -v uv > /dev/null 2>&1; then
         log_install uv
         curl -LsSf https://astral.sh/ruff/install.sh | sh
 
@@ -304,14 +304,14 @@ try_install_uv () {
             log_success "uv installed successfully"
         fi
     else
-        log_found "uv is already installed ($(uv --version 2>/dev/null || echo version unknown))"
+        log_found "uv is already installed ($(uv --version 2> /dev/null || echo version unknown))"
     fi
 }
 
-try_install_python () {
+try_install_python() {
     local python_version=$1
     local tool_name="Python $python_version"
-    if ! pyenv versions --bare | grep -Fx "$python_version" >/dev/null 2>&1; then
+    if ! pyenv versions --bare | grep -Fx "$python_version" > /dev/null 2>&1; then
         log_install $tool_name
         if ! pyenv install $python_version --skip-existing; then
             log_error "Failed to install $tool_name"
@@ -321,14 +321,14 @@ try_install_python () {
             log_success "$tool_name installed successfully"
         fi
     else
-        log_found "$tool_name is already installed ($(PYENV_VERSION=$python_version python --version 2>/dev/null || echo "Python $python_version"))"
+        log_found "$tool_name is already installed ($(PYENV_VERSION=$python_version python --version 2> /dev/null || echo "Python $python_version"))"
     fi
 }
 
 install_latest_python() {
     local latest_python
     latest_python=$(pyenv install --list | grep -E '^\s*3\.[0-9]+\.[0-9]+$' | tail -1 | tr -d ' ')
-    
+
     if [[ -n "$latest_python" ]]; then
         check_python_version_cmd='[[ "$(pyenv versions --bare)" == $latest_python_version ]]'
         if try_install_python $latest_python; then

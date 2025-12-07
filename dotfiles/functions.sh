@@ -90,18 +90,18 @@ log_step() {
 extract() {
     if [ -f $1 ]; then
         case $1 in
-            *.tar.bz2)   tar xjf $1     ;;
-            *.tar.gz)    tar xzf $1     ;;
-            *.bz2)       bunzip2 $1     ;;
-            *.rar)       unrar e $1     ;;
-            *.gz)        gunzip $1      ;;
-            *.tar)       tar xf $1      ;;
-            *.tbz2)      tar xjf $1     ;;
-            *.tgz)       tar xzf $1     ;;
-            *.zip)       unzip $1       ;;
-            *.Z)         uncompress $1  ;;
-            *.7z)        7z x $1        ;;
-            *)     echo "'$1' cannot be extracted via extract()" ;;
+            *.tar.bz2) tar xjf $1 ;;
+            *.tar.gz) tar xzf $1 ;;
+            *.bz2) bunzip2 $1 ;;
+            *.rar) unrar e $1 ;;
+            *.gz) gunzip $1 ;;
+            *.tar) tar xf $1 ;;
+            *.tbz2) tar xjf $1 ;;
+            *.tgz) tar xzf $1 ;;
+            *.zip) unzip $1 ;;
+            *.Z) uncompress $1 ;;
+            *.7z) 7z x $1 ;;
+            *) echo "'$1' cannot be extracted via extract()" ;;
         esac
     else
         echo "'$1' is not a valid file"
@@ -114,7 +114,7 @@ mkcd() {
         echo "Usage: mkcd <directory>"
         return 1
     fi
-    
+
     mkdir -p "$1" && cd "$1"
 }
 
@@ -129,7 +129,7 @@ owner() {
 confirm_stage() {
     local stage_description="$1"
     local default_yes="${2:-false}"
-    
+
     # Skip prompts in CI, non-interactive mode, or when AUTO_YES is enabled
     if [[ -n "${CI:-}" ]] || [[ -n "${NONINTERACTIVE:-}" ]] || [[ "${AUTO_YES:-false}" == "true" ]]; then
         if [[ "${AUTO_YES:-false}" == "true" ]]; then
@@ -139,16 +139,16 @@ confirm_stage() {
         fi
         return 0
     fi
-    
+
     while true; do
         echo ""
         echo -e "${CYAN}❓ ${WHITE}Do you want to $stage_description?${NC}"
-        
+
         if [[ "$default_yes" == "true" ]]; then
             echo -ne "${YELLOW}   Press Enter or 'y' for Yes, or 'n' for No (Y/n): ${NC}"
-            read -k 1 REPLY 2>/dev/null || read -n 1 REPLY 2>/dev/null || read REPLY
+            read -k 1 REPLY 2> /dev/null || read -n 1 REPLY 2> /dev/null || read REPLY
             echo ""
-            
+
             if [[ -z "$REPLY" ]] || [[ $REPLY =~ ^[Yy]$ ]]; then
                 # Empty reply (Enter key) or y/Y means yes for default_yes=true
                 log_stage "Proceeding with $stage_description"
@@ -163,9 +163,9 @@ confirm_stage() {
             fi
         else
             echo -ne "${YELLOW}   Press 'y' for Yes, or 'n' for No (y/n): ${NC}"
-            read -k 1 REPLY 2>/dev/null || read -n 1 REPLY 2>/dev/null || read REPLY
+            read -k 1 REPLY 2> /dev/null || read -n 1 REPLY 2> /dev/null || read REPLY
             echo ""
-            
+
             if [[ $REPLY =~ ^[Yy]$ ]]; then
                 log_stage "Proceeding with $stage_description"
                 return 0
@@ -184,4 +184,3 @@ confirm_stage() {
         fi
     done
 }
-

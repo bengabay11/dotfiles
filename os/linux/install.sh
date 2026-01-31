@@ -192,6 +192,7 @@ install_cli_tools() {
     try_install_pre_commit
     try_install_poetry
     try_install_kubectl
+    try_install_claude_code
 }
 
 install_pyenv() {
@@ -230,7 +231,7 @@ main() {
     echo ""
     log_step "Installation process includes the following stages:"
     echo -e "   ${BLUE}1.${NC} ${WHITE}🔄 Update apt and base packages${NC}"
-    echo -e "   ${BLUE}2.${NC} ${WHITE}🛠️  Install command-line tools (git, python, node, etc.)${NC}"
+    echo -e "   ${BLUE}2.${NC} ${WHITE}🛠️  Install command-line tools (git, python, node, Claude Code, etc.)${NC}"
     echo -e "   ${BLUE}3.${NC} ${WHITE}🦀 Install Rust programming language${NC}"
     echo -e "   ${BLUE}4.${NC} ${WHITE}🧰 Install tools via cargo (eza, git-delta)${NC}"
     echo -e "   ${BLUE}5.${NC} ${WHITE}⎈ Install helm CLI${NC}"

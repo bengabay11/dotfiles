@@ -308,6 +308,24 @@ try_install_uv() {
     fi
 }
 
+try_install_claude_code() {
+    if ! command -v claude > /dev/null 2>&1; then
+        log_install "Claude Code"
+        if ! curl -fsSL https://claude.ai/install.sh | bash; then
+            log_error "Failed to install Claude Code"
+            FAILED_INSTALLATIONS+=("Claude Code")
+        else
+            log_success "Claude Code installed successfully"
+            # Initialize PATH for current shell session if binary exists
+            if [ -d "$HOME/.claude/bin" ]; then
+                export PATH="$HOME/.claude/bin:$PATH"
+            fi
+        fi
+    else
+        log_found "Claude Code is already installed ($(claude --version 2> /dev/null || echo version unknown))"
+    fi
+}
+
 try_install_python() {
     local python_version=$1
     local tool_name="Python $python_version"

@@ -88,6 +88,7 @@ install_cli_tools() {
     install_tools_with_package_manager "Homebrew" "brew" "brew install" tools
 
     try_install_uv
+    try_install_claude_code
 }
 
 install_applications() {
@@ -182,7 +183,7 @@ main() {
     echo ""
     log_step "Installation process includes the following stages:"
     echo -e "   ${BLUE}1.${NC} ${WHITE}🍺 Install/update Homebrew package manager${NC}"
-    echo -e "   ${BLUE}2.${NC} ${WHITE}🛠️  Install command-line tools (git, python, node, etc.)${NC}"
+    echo -e "   ${BLUE}2.${NC} ${WHITE}🛠️  Install command-line tools (git, python, node, Claude Code, etc.)${NC}"
     echo -e "   ${BLUE}3.${NC} ${WHITE}🦀 Install Rust programming language${NC}"
     echo -e "   ${BLUE}4.${NC} ${WHITE}💻 Install GUI applications (VS Code, Chrome, etc.)${NC}"
     echo -e "   ${BLUE}5.${NC} ${WHITE}🐚 Install and configure Oh My Zsh${NC}"

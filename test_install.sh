@@ -82,6 +82,7 @@ test_cli_tools_exists() {
         "Zsh installation:zsh"
         "Rust installation:rustc"
         "Cargo installation:cargo"
+        "Claude Code installation:claude"
         "pyenv installation:pyenv"
         "uv installation:uv"
         "TypeScript installation:tsc"

@@ -12,6 +12,7 @@ A comprehensive dotfiles setup for macOS and Linux (Ubuntu/Debian-based; include
 - **Git** - Version control with optimized configuration
 - **Python 3** (via pyenv) - Python version management
 - **Rust** - Systems programming language with Cargo
+- **Claude Code** - AI-powered coding assistant CLI
 - **Node.js & npm** - JavaScript runtime and package manager
 - **Yarn** - Fast package manager
 - **TypeScript** - Typed JavaScript

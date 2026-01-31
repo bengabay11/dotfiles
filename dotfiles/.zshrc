@@ -137,6 +137,11 @@ _z_cd() {
 # mssql setup
 export PATH="$PATH:/opt/mssql-tools18/bin"
 
+# Claude Code setup
+if [ -d "$HOME/.claude/bin" ] && [[ ":$PATH:" != *":$HOME/.claude/bin:"* ]]; then
+  export PATH="$HOME/.claude/bin:$PATH"
+fi
+
 # pyenv setup
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"

@@ -79,6 +79,8 @@ test_cli_tools_exists() {
         "yarn installation:yarn"
         "Prettier installation:prettier"
         "kubectl installation:kubectl"
+        "argo (Argo Workflows CLI) installation:argo"
+        "argocd (Argo CD CLI) installation:argocd"
         "Zsh installation:zsh"
         "Rust installation:rustc"
         "Cargo installation:cargo"
@@ -274,6 +276,9 @@ main() {
     run_test "delta can process diff" "echo -e 'line1\nline2' | delta --color=never >/dev/null 2>&1 || true"
 
     run_test "GitHub CLI responds to version check" "gh --version >/dev/null 2>&1"
+
+    run_test "Argo Workflows CLI responds to version check" "argo version >/dev/null 2>&1"
+    run_test "Argo CD CLI responds to version check" "argocd version --client >/dev/null 2>&1"
 
     show_tests_summary
 }

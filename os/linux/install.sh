@@ -178,6 +178,67 @@ try_install_kubectl() {
     fi
 }
 
+try_install_argo() {
+    local tool_name="argo (Argo Workflows CLI)"
+    if ! command -v argo > /dev/null 2>&1; then
+        log_install "$tool_name"
+        # Get latest version
+        local version=$(curl -s https://api.github.com/repos/argoproj/argo-workflows/releases/latest | grep -oP '"tag_name": "\K(.*)(?=")')
+        if [[ -z "$version" ]]; then
+            log_error "Failed to determine latest argo version"
+            FAILED_INSTALLATIONS+=("$tool_name")
+            return 1
+        fi
+
+        # Download and install
+        local download_url="https://github.com/argoproj/argo-workflows/releases/download/${version}/argo-linux-amd64.gz"
+        if curl -sLo argo-linux-amd64.gz "$download_url" \
+            && gunzip argo-linux-amd64.gz \
+            && chmod +x argo-linux-amd64 \
+            && sudo mv argo-linux-amd64 /usr/local/bin/argo \
+            && argo version > /dev/null 2>&1; then
+            log_success "$tool_name installed successfully"
+        else
+            log_error "Failed to install $tool_name"
+            FAILED_INSTALLATIONS+=("$tool_name")
+        fi
+        # Cleanup
+        rm -f argo-linux-amd64.gz argo-linux-amd64
+    else
+        log_found "$tool_name is already installed ($(argo version 2> /dev/null | head -1 || echo version unknown))"
+    fi
+}
+
+try_install_argocd() {
+    local tool_name="argocd (Argo CD CLI)"
+    if ! command -v argocd > /dev/null 2>&1; then
+        log_install "$tool_name"
+        # Get latest version
+        local version=$(curl -s https://api.github.com/repos/argoproj/argo-cd/releases/latest | grep -oP '"tag_name": "\K(.*)(?=")')
+        if [[ -z "$version" ]]; then
+            log_error "Failed to determine latest argocd version"
+            FAILED_INSTALLATIONS+=("$tool_name")
+            return 1
+        fi
+
+        # Download and install
+        local download_url="https://github.com/argoproj/argo-cd/releases/download/${version}/argocd-linux-amd64"
+        if curl -sLo argocd-linux-amd64 "$download_url" \
+            && chmod +x argocd-linux-amd64 \
+            && sudo mv argocd-linux-amd64 /usr/local/bin/argocd \
+            && argocd version --client > /dev/null 2>&1; then
+            log_success "$tool_name installed successfully"
+        else
+            log_error "Failed to install $tool_name"
+            FAILED_INSTALLATIONS+=("$tool_name")
+        fi
+        # Cleanup
+        rm -f argocd-linux-amd64
+    else
+        log_found "$tool_name is already installed ($(argocd version --client 2> /dev/null | head -1 || echo version unknown))"
+    fi
+}
+
 install_cli_tools() {
     log_info "Installing command-line tools..."
 
@@ -192,6 +253,8 @@ install_cli_tools() {
     try_install_pre_commit
     try_install_poetry
     try_install_kubectl
+    try_install_argo
+    try_install_argocd
 }
 
 install_pyenv() {

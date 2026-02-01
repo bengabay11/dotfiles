@@ -37,6 +37,8 @@ A comprehensive dotfiles setup for macOS and Linux (Ubuntu/Debian-based; include
 - **delta** - Syntax-highlighting pager for git diffs
 - **watch** - Periodically run a command and display output
 - **helm** - Kubernetes package manager
+- **argo** - Argo Workflows CLI for workflow management
+- **argocd** - Argo CD CLI for GitOps continuous delivery
 - **speedtest-cli** - Command-line internet speed test tool
 
 ### 📱 Applications (macOS)

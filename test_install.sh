@@ -12,7 +12,7 @@ source "$SCRIPT_DIR/dotfiles/functions.sh"
 source "$SCRIPT_DIR/dotfiles/aliases.sh"
 
 # Ensure typical user tool paths are available in this test session
-export PATH="$PATH:$HOME/.cargo/bin:$HOME/.pyenv/bin:/usr/bin:/usr/local/bin:$HOME/.local/bin:$HOME/bin"
+export PATH="$PATH:$HOME/.cargo/bin:$HOME/.pyenv/bin:/usr/bin:/usr/local/bin:$HOME/.local/bin:$HOME/bin:$HOME/.claude/bin"
 
 # Test results tracking
 TESTS_PASSED=0
@@ -110,6 +110,7 @@ test_cli_tools_exists() {
         "Java installation:javac"
         "act installation:act"
         "GitHub CLI installation:gh"
+        "Claude Code installation:claude"
     )
 
     for entry in "${tools[@]}"; do

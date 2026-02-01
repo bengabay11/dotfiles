@@ -308,6 +308,26 @@ try_install_uv() {
     fi
 }
 
+# Dedicated function for installing Claude Code (curl pipe pattern)
+try_install_claude_code() {
+    local tool_name="Claude Code"
+    if ! command -v claude > /dev/null 2>&1; then
+        log_install "$tool_name"
+        if ! curl -fsSL https://claude.ai/install.sh | bash; then
+            log_error "Failed to install $tool_name"
+            FAILED_INSTALLATIONS+=("$tool_name")
+        else
+            # Source the PATH update for current session
+            if [ -d "$HOME/.claude/bin" ]; then
+                export PATH="$HOME/.claude/bin:$PATH"
+            fi
+            log_success "$tool_name installed successfully"
+        fi
+    else
+        log_found "$tool_name is already installed ($(claude --version 2> /dev/null || echo version unknown))"
+    fi
+}
+
 try_install_python() {
     local python_version=$1
     local tool_name="Python $python_version"

@@ -15,6 +15,10 @@ fi
 if [ -d "$HOME/bin" ] && [[ ":$PATH:" != *":$HOME/bin:"* ]]; then
   export PATH="$HOME/bin:$PATH"
 fi
+# Claude Code CLI (installed to ~/.claude/bin)
+if [ -d "$HOME/.claude/bin" ] && [[ ":$PATH:" != *":$HOME/.claude/bin:"* ]]; then
+  export PATH="$HOME/.claude/bin:$PATH"
+fi
 
 # Path to your Oh My Zsh installation.
 export ZSH="$HOME/.oh-my-zsh"

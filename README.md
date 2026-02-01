@@ -38,6 +38,7 @@ A comprehensive dotfiles setup for macOS and Linux (Ubuntu/Debian-based; include
 - **watch** - Periodically run a command and display output
 - **helm** - Kubernetes package manager
 - **speedtest-cli** - Command-line internet speed test tool
+- **Claude Code** - AI-powered code editor in the terminal
 
 ### 📱 Applications (macOS)
 

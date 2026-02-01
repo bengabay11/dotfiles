@@ -27,6 +27,7 @@ A comprehensive dotfiles setup for macOS and Linux (Ubuntu/Debian-based; include
 - **poetry** - Python dependency management
 - **pyenv** - Python version management
 - **btop** - Modern system monitor (alternative to htop)
+- **Claude Code** - AI-powered CLI agent for development tasks
 - **nmap** - Network discovery and security auditing utility
 - **htop** - Interactive process viewer
 - **ipython** - Enhanced interactive Python shell

@@ -53,14 +53,18 @@ install_cli_tools_with_apt() {
         "htop:htop:htop --version:htop"
         "nmap:nmap:nmap --version:nmap"
         "ripgrep:rg:rg --version:ripgrep"
+        "jq:jq:jq --version:jq"
         "fd (fd-find):fdfind:fdfind --version:fd-find"
+        "ShellCheck:shellcheck:shellcheck --version:shellcheck"
         "IPython3:ipython3:ipython3 --version:ipython3"
         "zoxide:zoxide:zoxide --version:zoxide"
         "fzf:fzf:fzf --version:fzf"
+        "tldr:tldr:tldr --version:tldr"
         "Speedtest CLI:speedtest-cli:speedtest-cli --version:speedtest-cli"
         "Java JDK:javac:javac -version:default-jdk"
         "TShark:tshark:tshark --version:tshark"
         "GitHub CLI:gh:gh --version:gh"
+        "kubectx:kubectx:kubectx --help:kubectx"
     )
     install_tools_with_package_manager "apt" "apt" \
         "sudo DEBIAN_FRONTEND=noninteractive apt-get install -y" tools

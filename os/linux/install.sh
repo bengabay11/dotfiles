@@ -61,6 +61,7 @@ install_cli_tools_with_apt() {
         "Java JDK:javac:javac -version:default-jdk"
         "TShark:tshark:tshark --version:tshark"
         "GitHub CLI:gh:gh --version:gh"
+        "AWS CLI:aws:aws --version:awscli"
     )
     install_tools_with_package_manager "apt" "apt" \
         "sudo DEBIAN_FRONTEND=noninteractive apt-get install -y" tools

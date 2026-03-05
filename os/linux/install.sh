@@ -185,6 +185,25 @@ try_install_poetry() {
     fi
 }
 
+try_install_k9s() {
+    local tool_name="k9s"
+    if ! command -v k9s > /dev/null 2>&1; then
+        log_install $tool_name
+        if wget https://github.com/derailed/k9s/releases/latest/download/k9s_linux_amd64.deb \
+            && sudo apt install -y ./k9s_linux_amd64.deb \
+            && rm -f k9s_linux_amd64.deb \
+            && k9s version > /dev/null 2>&1; then
+            log_success "$tool_name installed successfully"
+        else
+            log_error "Failed to install $tool_name"
+            FAILED_INSTALLATIONS+=("$tool_name")
+            rm -f k9s_linux_amd64.deb
+        fi
+    else
+        log_found "$tool_name is already installed ($(k9s version 2> /dev/null | head -1 || echo version unknown))"
+    fi
+}
+
 try_install_kubectl() {
     local tool_name="kubectl"
     if ! command -v kubectl > /dev/null 2>&1; then
@@ -218,6 +237,7 @@ install_cli_tools() {
     try_install_pre_commit
     try_install_poetry
     try_install_kubectl
+    try_install_k9s
     try_install_claude_code
 }
 

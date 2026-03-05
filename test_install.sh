@@ -79,6 +79,7 @@ test_cli_tools_exists() {
         "yarn installation:yarn"
         "Prettier installation:prettier"
         "kubectl installation:kubectl"
+        "k9s installation:k9s"
         "kubectx installation:kubectx"
         "Zsh installation:zsh"
         "Rust installation:rustc"

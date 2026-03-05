@@ -80,6 +80,7 @@ install_cli_tools() {
         "tree:tree:tree --version:tree"
         "ShellCheck:shellcheck:shellcheck --version:shellcheck"
         "Helm:helm:helm version --short:helm"
+        "k9s:k9s:k9s version:derailed/k9s/k9s"
         "kubectl:kubectl:kubectl version --client:kubernetes-cli"
         "kubectx:kubectx:kubectx -h:kubectx"
         "speedtest-cli:speedtest-cli:speedtest-cli --version:speedtest-cli"

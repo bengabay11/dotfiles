@@ -77,6 +77,7 @@ install_cli_tools() {
         "ripgrep:rg:rg --version:ripgrep"
         "jq:jq:jq --version:jq"
         "fd:fd:fd --version:fd"
+        "tree:tree:tree --version:tree"
         "ShellCheck:shellcheck:shellcheck --version:shellcheck"
         "Helm:helm:helm version --short:helm"
         "kubectl:kubectl:kubectl version --client:kubernetes-cli"

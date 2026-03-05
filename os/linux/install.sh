@@ -55,6 +55,7 @@ install_cli_tools_with_apt() {
         "ripgrep:rg:rg --version:ripgrep"
         "jq:jq:jq --version:jq"
         "fd (fd-find):fdfind:fdfind --version:fd-find"
+        "tree:tree:tree --version:tree"
         "ShellCheck:shellcheck:shellcheck --version:shellcheck"
         "IPython3:ipython3:ipython3 --version:ipython3"
         "zoxide:zoxide:zoxide --version:zoxide"

@@ -98,6 +98,7 @@ test_cli_tools_exists() {
         "ripgrep installation:rg"
         "jq installation:jq"
         "fd installation:fd"
+        "tree installation:tree"
         "ShellCheck installation:shellcheck"
         "zoxide installation:zoxide"
         "helm installation:helm"

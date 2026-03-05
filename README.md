@@ -51,6 +51,8 @@ A comprehensive dotfiles setup for macOS and Linux (Ubuntu/Debian-based; include
 - **iTerm2** - Advanced terminal emulator
 - **Warp** - Modern terminal with AI features
 - **Raycast** - Productivity launcher
+- **AltTab** - Keyboard-based window switcher
+- **Rectangle** - Window management with snap layouts
 - **Cursor** - AI-powered code editor
 - **Visual Studio Code** - Popular code editor
 

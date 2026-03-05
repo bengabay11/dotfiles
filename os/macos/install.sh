@@ -106,6 +106,8 @@ install_applications() {
         "iTerm:iterm2"
         "Warp:warp"
         "Raycast:raycast"
+        "AltTab:alt-tab"
+        "Rectangle:rectangle"
         "Cursor:cursor"
         "Visual Studio Code:visual-studio-code"
         "Google Chrome:google-chrome"

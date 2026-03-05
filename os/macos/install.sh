@@ -78,6 +78,7 @@ install_cli_tools() {
         "fd:fd:fd --version:fd"
         "Helm:helm:helm version --short:helm"
         "kubectl:kubectl:kubectl version --client:kubernetes-cli"
+        "kubectx:kubectx:kubectx -h:kubectx"
         "speedtest-cli:speedtest-cli:speedtest-cli --version:speedtest-cli"
         "fzf:fzf:fzf --version:fzf"
         "zoxide:zoxide:zoxide --version:zoxide"

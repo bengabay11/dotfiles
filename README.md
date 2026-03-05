@@ -37,6 +37,7 @@ A comprehensive dotfiles setup for macOS and Linux (Ubuntu/Debian-based; include
 - **delta** - Syntax-highlighting pager for git diffs
 - **watch** - Periodically run a command and display output
 - **helm** - Kubernetes package manager
+- **kubectx** - Quickly switch between Kubernetes contexts and namespaces
 - **speedtest-cli** - Command-line internet speed test tool
 
 ### 📱 Applications (macOS)

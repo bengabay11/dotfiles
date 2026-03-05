@@ -53,15 +53,20 @@ install_cli_tools_with_apt() {
         "htop:htop:htop --version:htop"
         "nmap:nmap:nmap --version:nmap"
         "ripgrep:rg:rg --version:ripgrep"
+        "jq:jq:jq --version:jq"
         "fd (fd-find):fdfind:fdfind --version:fd-find"
+        "tree:tree:tree --version:tree"
+        "ShellCheck:shellcheck:shellcheck --version:shellcheck"
         "IPython3:ipython3:ipython3 --version:ipython3"
         "zoxide:zoxide:zoxide --version:zoxide"
         "fzf:fzf:fzf --version:fzf"
+        "tldr:tldr:tldr --version:tldr"
         "Speedtest CLI:speedtest-cli:speedtest-cli --version:speedtest-cli"
         "Java JDK:javac:javac -version:default-jdk"
         "TShark:tshark:tshark --version:tshark"
         "GitHub CLI:gh:gh --version:gh"
         "AWS CLI:aws:aws --version:awscli"
+        "kubectx:kubectx:kubectx --help:kubectx"
     )
     install_tools_with_package_manager "apt" "apt" \
         "sudo DEBIAN_FRONTEND=noninteractive apt-get install -y" tools
@@ -116,6 +121,26 @@ try_install_helm() {
     fi
 }
 
+try_install_glow() {
+    local tool_name="glow"
+    if command -v glow > /dev/null 2>&1; then
+        log_found "$tool_name is already installed ($(glow --version 2> /dev/null || echo version unknown))"
+        return 0
+    fi
+
+    log_install "$tool_name"
+    if sudo mkdir -p /etc/apt/keyrings &&
+        curl -fsSL https://repo.charm.sh/apt/gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/charm.gpg &&
+        echo "deb [signed-by=/etc/apt/keyrings/charm.gpg] https://repo.charm.sh/apt/ * *" | sudo tee /etc/apt/sources.list.d/charm.list > /dev/null &&
+        sudo apt-get update -y &&
+        sudo DEBIAN_FRONTEND=noninteractive apt-get install -y glow; then
+        log_success "$tool_name installed successfully"
+    else
+        log_error "Failed to install $tool_name"
+        FAILED_INSTALLATIONS+=("$tool_name")
+    fi
+}
+
 try_install_act() {
     local tool_name="act"
     if ! command -v act > /dev/null 2>&1; then
@@ -161,6 +186,25 @@ try_install_poetry() {
     fi
 }
 
+try_install_k9s() {
+    local tool_name="k9s"
+    if ! command -v k9s > /dev/null 2>&1; then
+        log_install $tool_name
+        if wget https://github.com/derailed/k9s/releases/latest/download/k9s_linux_amd64.deb \
+            && sudo apt install -y ./k9s_linux_amd64.deb \
+            && rm -f k9s_linux_amd64.deb \
+            && k9s version > /dev/null 2>&1; then
+            log_success "$tool_name installed successfully"
+        else
+            log_error "Failed to install $tool_name"
+            FAILED_INSTALLATIONS+=("$tool_name")
+            rm -f k9s_linux_amd64.deb
+        fi
+    else
+        log_found "$tool_name is already installed ($(k9s version 2> /dev/null | head -1 || echo version unknown))"
+    fi
+}
+
 try_install_kubectl() {
     local tool_name="kubectl"
     if ! command -v kubectl > /dev/null 2>&1; then
@@ -189,10 +233,12 @@ install_cli_tools() {
     try_install_uv
     try_install_ruff
     try_install_helm
+    try_install_glow
     try_install_act
     try_install_pre_commit
     try_install_poetry
     try_install_kubectl
+    try_install_k9s
     try_install_claude_code
 }
 

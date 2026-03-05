@@ -59,6 +59,7 @@ install_cli_tools_with_apt() {
         "IPython3:ipython3:ipython3 --version:ipython3"
         "zoxide:zoxide:zoxide --version:zoxide"
         "fzf:fzf:fzf --version:fzf"
+        "tldr:tldr:tldr --version:tldr"
         "Speedtest CLI:speedtest-cli:speedtest-cli --version:speedtest-cli"
         "Java JDK:javac:javac -version:default-jdk"
         "TShark:tshark:tshark --version:tshark"

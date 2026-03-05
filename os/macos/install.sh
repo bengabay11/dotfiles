@@ -82,6 +82,7 @@ install_cli_tools() {
         "kubectl:kubectl:kubectl version --client:kubernetes-cli"
         "speedtest-cli:speedtest-cli:speedtest-cli --version:speedtest-cli"
         "fzf:fzf:fzf --version:fzf"
+        "tldr:tldr:tldr --version:tldr"
         "zoxide:zoxide:zoxide --version:zoxide"
         "delta:delta:delta --version:git-delta"
         "act:act:act --version:act"

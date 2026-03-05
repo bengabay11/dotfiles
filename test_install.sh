@@ -95,6 +95,7 @@ test_cli_tools_exists() {
         "htop installation:htop"
         "IPython installation:ipython3"
         "ripgrep installation:rg"
+        "jq installation:jq"
         "fd installation:fd"
         "ShellCheck installation:shellcheck"
         "zoxide installation:zoxide"

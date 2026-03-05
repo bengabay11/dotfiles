@@ -31,6 +31,7 @@ A comprehensive dotfiles setup for macOS and Linux (Ubuntu/Debian-based; include
 - **htop** - Interactive process viewer
 - **ipython** - Enhanced interactive Python shell
 - **ripgrep** - Fast text search tool (rg command)
+- **jq** - Command-line JSON processor
 - **fd** - Simple, fast and user-friendly alternative to `find`
 - **ShellCheck** - Shell script static analysis tool
 - **zoxide** - Smart directory navigation with `z`

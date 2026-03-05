@@ -84,6 +84,7 @@ install_cli_tools() {
         "kubectl:kubectl:kubectl version --client:kubernetes-cli"
         "kubectx:kubectx:kubectx -h:kubectx"
         "speedtest-cli:speedtest-cli:speedtest-cli --version:speedtest-cli"
+        "cloudflared:cloudflared:cloudflared --version:cloudflared"
         "fzf:fzf:fzf --version:fzf"
         "tldr:tldr:tldr --version:tldr"
         "zoxide:zoxide:zoxide --version:zoxide"

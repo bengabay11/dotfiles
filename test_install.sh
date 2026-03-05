@@ -104,6 +104,7 @@ test_cli_tools_exists() {
         "zoxide installation:zoxide"
         "helm installation:helm"
         "speedtest-cli installation:speedtest-cli"
+        "cloudflared installation:cloudflared"
         "fzf installation:fzf"
         "tldr installation:tldr"
         "delta installation:delta"

@@ -62,6 +62,7 @@ install_cli_tools_with_apt() {
         "fzf:fzf:fzf --version:fzf"
         "tldr:tldr:tldr --version:tldr"
         "Speedtest CLI:speedtest-cli:speedtest-cli --version:speedtest-cli"
+        "cloudflared:cloudflared:cloudflared --version:cloudflared"
         "Java JDK:javac:javac -version:default-jdk"
         "TShark:tshark:tshark --version:tshark"
         "GitHub CLI:gh:gh --version:gh"

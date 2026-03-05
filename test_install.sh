@@ -100,6 +100,7 @@ test_cli_tools_exists() {
         "helm installation:helm"
         "speedtest-cli installation:speedtest-cli"
         "fzf installation:fzf"
+        "tldr installation:tldr"
         "delta installation:delta"
         "Java (openjdk) installation:java"
         "net-tools installation:ifconfig"

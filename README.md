@@ -34,6 +34,7 @@ A comprehensive dotfiles setup for macOS and Linux (Ubuntu/Debian-based; include
 - **fd** - Simple, fast and user-friendly alternative to `find`
 - **zoxide** - Smart directory navigation with `z`
 - **fzf** - Command-line fuzzy finder
+- **tldr** - Simplified community-driven man pages
 - **delta** - Syntax-highlighting pager for git diffs
 - **watch** - Periodically run a command and display output
 - **helm** - Kubernetes package manager

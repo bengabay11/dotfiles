@@ -101,6 +101,7 @@ test_cli_tools_exists() {
         "speedtest-cli installation:speedtest-cli"
         "fzf installation:fzf"
         "delta installation:delta"
+        "glow installation:glow"
         "Java (openjdk) installation:java"
         "net-tools installation:ifconfig"
         "watch installation:watch"

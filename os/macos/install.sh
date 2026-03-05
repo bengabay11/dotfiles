@@ -82,6 +82,7 @@ install_cli_tools() {
         "fzf:fzf:fzf --version:fzf"
         "zoxide:zoxide:zoxide --version:zoxide"
         "delta:delta:delta --version:git-delta"
+        "glow:glow:glow --version:glow"
         "act:act:act --version:act"
         "GitHub CLI:gh:gh --version:gh"
     )

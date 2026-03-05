@@ -71,6 +71,7 @@ install_cli_tools_with_cargo() {
     local tools=(
         "eza:eza:eza --version:eza"
         "git-delta:delta:delta --version:git-delta"
+        "glow:glow:glow --version:glow"
     )
     install_tools_with_package_manager "cargo" "cargo" "cargo install" tools
 }
@@ -233,7 +234,7 @@ main() {
     echo -e "   ${BLUE}1.${NC} ${WHITE}🔄 Update apt and base packages${NC}"
     echo -e "   ${BLUE}2.${NC} ${WHITE}🛠️  Install command-line tools (git, python, node, etc.)${NC}"
     echo -e "   ${BLUE}3.${NC} ${WHITE}🦀 Install Rust programming language${NC}"
-    echo -e "   ${BLUE}4.${NC} ${WHITE}🧰 Install tools via cargo (eza, git-delta)${NC}"
+    echo -e "   ${BLUE}4.${NC} ${WHITE}🧰 Install tools via cargo (eza, git-delta, glow)${NC}"
     echo -e "   ${BLUE}5.${NC} ${WHITE}⎈ Install helm CLI${NC}"
     echo -e "   ${BLUE}6.${NC} ${WHITE}🐚 Install and configure Oh My Zsh${NC}"
     echo -e "   ${BLUE}7.${NC} ${WHITE}🔌 Install Zsh plugins and themes${NC}"

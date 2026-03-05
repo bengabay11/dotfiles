@@ -35,6 +35,7 @@ A comprehensive dotfiles setup for macOS and Linux (Ubuntu/Debian-based; include
 - **zoxide** - Smart directory navigation with `z`
 - **fzf** - Command-line fuzzy finder
 - **delta** - Syntax-highlighting pager for git diffs
+- **glow** - Terminal Markdown renderer
 - **watch** - Periodically run a command and display output
 - **helm** - Kubernetes package manager
 - **speedtest-cli** - Command-line internet speed test tool

@@ -211,7 +211,7 @@ install_cli_tools() {
     try_install_pre_commit
     try_install_poetry
     try_install_kubectl
-    try_install_kubectl
+    try_install_k9s
     try_install_claude_code
 }
 

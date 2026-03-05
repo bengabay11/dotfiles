@@ -58,6 +58,7 @@ install_cli_tools_with_apt() {
         "zoxide:zoxide:zoxide --version:zoxide"
         "fzf:fzf:fzf --version:fzf"
         "Speedtest CLI:speedtest-cli:speedtest-cli --version:speedtest-cli"
+        "k9s:k9s:k9s version:k9s"
         "Java JDK:javac:javac -version:default-jdk"
         "TShark:tshark:tshark --version:tshark"
         "GitHub CLI:gh:gh --version:gh"

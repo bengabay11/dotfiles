@@ -32,6 +32,7 @@ A comprehensive dotfiles setup for macOS and Linux (Ubuntu/Debian-based; include
 - **ipython** - Enhanced interactive Python shell
 - **ripgrep** - Fast text search tool (rg command)
 - **fd** - Simple, fast and user-friendly alternative to `find`
+- **tree** - Display directories as a tree view
 - **zoxide** - Smart directory navigation with `z`
 - **fzf** - Command-line fuzzy finder
 - **delta** - Syntax-highlighting pager for git diffs
@@ -185,6 +186,7 @@ Linux only:
 - Oh My Zsh with Powerlevel10k theme for beautiful, informative prompt
 - Enhanced ls commands using `eza`
 - Enhanced cat using `bat`
+- Directory tree views using `tree`
 - Smart directory switching with `zoxide`
 - Comprehensive git aliases and development shortcuts
 - Modular utilities system that automatically loads all `.sh` files from `~/.config/shell-utils/`

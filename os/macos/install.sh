@@ -76,6 +76,7 @@ install_cli_tools() {
         "IPython:ipython:ipython --version:ipython"
         "ripgrep:rg:rg --version:ripgrep"
         "fd:fd:fd --version:fd"
+        "ShellCheck:shellcheck:shellcheck --version:shellcheck"
         "Helm:helm:helm version --short:helm"
         "kubectl:kubectl:kubectl version --client:kubernetes-cli"
         "speedtest-cli:speedtest-cli:speedtest-cli --version:speedtest-cli"

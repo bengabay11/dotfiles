@@ -31,10 +31,13 @@ A comprehensive dotfiles setup for macOS and Linux (Ubuntu/Debian-based; include
 - **htop** - Interactive process viewer
 - **ipython** - Enhanced interactive Python shell
 - **ripgrep** - Fast text search tool (rg command)
+- **jq** - Command-line JSON processor
 - **fd** - Simple, fast and user-friendly alternative to `find`
 - **tree** - Display directories as a tree view
+- **ShellCheck** - Shell script static analysis tool
 - **zoxide** - Smart directory navigation with `z`
 - **fzf** - Command-line fuzzy finder
+- **tldr** - Simplified community-driven man pages
 - **delta** - Syntax-highlighting pager for git diffs
 - **watch** - Periodically run a command and display output
 - **helm** - Kubernetes package manager

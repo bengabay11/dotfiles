@@ -118,6 +118,7 @@ test_cli_tools_exists() {
         "act installation:act"
         "GitHub CLI installation:gh"
         "evalcache installation:evalcache"
+        "AWS CLI installation:aws"
     )
 
     for entry in "${tools[@]}"; do

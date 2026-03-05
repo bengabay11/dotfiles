@@ -117,6 +117,7 @@ test_cli_tools_exists() {
         "Java installation:javac"
         "act installation:act"
         "GitHub CLI installation:gh"
+        "evalcache installation:evalcache"
     )
 
     for entry in "${tools[@]}"; do

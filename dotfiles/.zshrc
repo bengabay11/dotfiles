@@ -95,7 +95,7 @@ plugins=(
 
 source $ZSH/oh-my-zsh.sh
 
-eval "$(zoxide init zsh)"
+_evalcache zoxide init zsh
 
 # Fix zoxide recursive cd issue
 _z_cd() {
@@ -140,7 +140,7 @@ export PATH="$PATH:/opt/mssql-tools18/bin"
 # pyenv setup
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
+_evalcache pyenv init -
 
 # Claude Code CLI setup
 if [ -d "$HOME/.claude/bin" ] && [[ ":$PATH:" != *":$HOME/.claude/bin:"* ]]; then

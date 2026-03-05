@@ -91,6 +91,7 @@ install_cli_tools() {
         "glow:glow:glow --version:glow"
         "act:act:act --version:act"
         "GitHub CLI:gh:gh --version:gh"
+        "evalcache:evalcache:evalcache --version:evalcache"
     )
     install_tools_with_package_manager "Homebrew" "brew" "brew install" tools
 

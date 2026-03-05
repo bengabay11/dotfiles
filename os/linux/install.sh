@@ -185,6 +185,24 @@ try_install_poetry() {
     fi
 }
 
+try_install_evalcache() {
+    local tool_name="evalcache"
+    if command -v "$tool_name" > /dev/null 2>&1; then
+        log_found "$tool_name is already installed"
+        return 0
+    fi
+
+    log_install "$tool_name"
+    mkdir -p "$HOME/.local/bin"
+    if curl -fsSL "https://raw.githubusercontent.com/mroth/evalcache/main/evalcache" -o "$HOME/.local/bin/evalcache" \
+        && chmod +x "$HOME/.local/bin/evalcache"; then
+        log_success "$tool_name installed successfully"
+    else
+        log_error "Failed to install $tool_name"
+        FAILED_INSTALLATIONS+=("$tool_name")
+    fi
+}
+
 try_install_k9s() {
     local tool_name="k9s"
     if ! command -v k9s > /dev/null 2>&1; then
@@ -230,6 +248,7 @@ install_cli_tools() {
     install_tools_with_npm
 
     try_install_uv
+    try_install_evalcache
     try_install_ruff
     try_install_helm
     try_install_glow

@@ -37,6 +37,7 @@ A comprehensive dotfiles setup for macOS and Linux (Ubuntu/Debian-based; include
 - **ShellCheck** - Shell script static analysis tool
 - **zoxide** - Smart directory navigation with `z`
 - **fzf** - Command-line fuzzy finder
+- **evalcache** - Caches expensive shell init commands for faster terminal startup
 - **tldr** - Simplified community-driven man pages
 - **delta** - Syntax-highlighting pager for git diffs
 - **glow** - Terminal Markdown renderer
@@ -197,6 +198,7 @@ Linux only:
 - Modular utilities system that automatically loads all `.sh` files from `~/.config/shell-utils/`
 - Useful functions for productivity and development workflows
 - Command history optimization and plugin support
+- Faster startup by caching expensive shell initialization (`zoxide`, `pyenv`) with `evalcache`
 
 For customization instructions and contribution guidelines, see [CONTRIBUTING.md](CONTRIBUTING.md).
 

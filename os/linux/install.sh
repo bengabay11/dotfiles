@@ -71,7 +71,6 @@ install_cli_tools_with_cargo() {
     local tools=(
         "eza:eza:eza --version:eza"
         "git-delta:delta:delta --version:git-delta"
-        "glow:glow:glow --version:glow"
     )
     install_tools_with_package_manager "cargo" "cargo" "cargo install" tools
 }
@@ -113,6 +112,26 @@ try_install_helm() {
         fi
     else
         log_found "$tool_name is already installed ($(helm version --short 2> /dev/null || echo version unknown))"
+    fi
+}
+
+try_install_glow() {
+    local tool_name="glow"
+    if command -v glow > /dev/null 2>&1; then
+        log_found "$tool_name is already installed ($(glow --version 2> /dev/null || echo version unknown))"
+        return 0
+    fi
+
+    log_install "$tool_name"
+    if sudo mkdir -p /etc/apt/keyrings &&
+        curl -fsSL https://repo.charm.sh/apt/gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/charm.gpg &&
+        echo "deb [signed-by=/etc/apt/keyrings/charm.gpg] https://repo.charm.sh/apt/ * *" | sudo tee /etc/apt/sources.list.d/charm.list > /dev/null &&
+        sudo apt-get update -y &&
+        sudo DEBIAN_FRONTEND=noninteractive apt-get install -y glow; then
+        log_success "$tool_name installed successfully"
+    else
+        log_error "Failed to install $tool_name"
+        FAILED_INSTALLATIONS+=("$tool_name")
     fi
 }
 
@@ -189,6 +208,7 @@ install_cli_tools() {
     try_install_uv
     try_install_ruff
     try_install_helm
+    try_install_glow
     try_install_act
     try_install_pre_commit
     try_install_poetry
@@ -234,7 +254,7 @@ main() {
     echo -e "   ${BLUE}1.${NC} ${WHITE}🔄 Update apt and base packages${NC}"
     echo -e "   ${BLUE}2.${NC} ${WHITE}🛠️  Install command-line tools (git, python, node, etc.)${NC}"
     echo -e "   ${BLUE}3.${NC} ${WHITE}🦀 Install Rust programming language${NC}"
-    echo -e "   ${BLUE}4.${NC} ${WHITE}🧰 Install tools via cargo (eza, git-delta, glow)${NC}"
+    echo -e "   ${BLUE}4.${NC} ${WHITE}🧰 Install tools via cargo (eza, git-delta)${NC}"
     echo -e "   ${BLUE}5.${NC} ${WHITE}⎈ Install helm CLI${NC}"
     echo -e "   ${BLUE}6.${NC} ${WHITE}🐚 Install and configure Oh My Zsh${NC}"
     echo -e "   ${BLUE}7.${NC} ${WHITE}🔌 Install Zsh plugins and themes${NC}"

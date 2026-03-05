@@ -77,7 +77,7 @@ install_cli_tools() {
         "ripgrep:rg:rg --version:ripgrep"
         "fd:fd:fd --version:fd"
         "Helm:helm:helm version --short:helm"
-        "k9s:k9s:k9s version:k9s"
+        "k9s:k9s:k9s version:derailed/k9s/k9s"
         "kubectl:kubectl:kubectl version --client:kubernetes-cli"
         "speedtest-cli:speedtest-cli:speedtest-cli --version:speedtest-cli"
         "fzf:fzf:fzf --version:fzf"

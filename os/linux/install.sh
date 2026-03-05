@@ -56,6 +56,7 @@ install_cli_tools_with_apt() {
         "fd (fd-find):fdfind:fdfind --version:fd-find"
         "IPython3:ipython3:ipython3 --version:ipython3"
         "zoxide:zoxide:zoxide --version:zoxide"
+        "direnv:direnv:direnv version:direnv"
         "fzf:fzf:fzf --version:fzf"
         "Speedtest CLI:speedtest-cli:speedtest-cli --version:speedtest-cli"
         "Java JDK:javac:javac -version:default-jdk"

@@ -81,6 +81,7 @@ install_cli_tools() {
         "speedtest-cli:speedtest-cli:speedtest-cli --version:speedtest-cli"
         "fzf:fzf:fzf --version:fzf"
         "zoxide:zoxide:zoxide --version:zoxide"
+        "direnv:direnv:direnv version:direnv"
         "delta:delta:delta --version:git-delta"
         "act:act:act --version:act"
         "GitHub CLI:gh:gh --version:gh"

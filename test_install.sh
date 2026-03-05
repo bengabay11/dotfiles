@@ -97,6 +97,7 @@ test_cli_tools_exists() {
         "ripgrep installation:rg"
         "fd installation:fd"
         "zoxide installation:zoxide"
+        "direnv installation:direnv"
         "helm installation:helm"
         "speedtest-cli installation:speedtest-cli"
         "fzf installation:fzf"

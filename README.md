@@ -33,6 +33,7 @@ A comprehensive dotfiles setup for macOS and Linux (Ubuntu/Debian-based; include
 - **ripgrep** - Fast text search tool (rg command)
 - **fd** - Simple, fast and user-friendly alternative to `find`
 - **zoxide** - Smart directory navigation with `z`
+- **direnv** - Automatic environment variable loading per project
 - **fzf** - Command-line fuzzy finder
 - **delta** - Syntax-highlighting pager for git diffs
 - **watch** - Periodically run a command and display output

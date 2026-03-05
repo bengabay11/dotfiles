@@ -119,6 +119,26 @@ try_install_helm() {
     fi
 }
 
+try_install_glow() {
+    local tool_name="glow"
+    if command -v glow > /dev/null 2>&1; then
+        log_found "$tool_name is already installed ($(glow --version 2> /dev/null || echo version unknown))"
+        return 0
+    fi
+
+    log_install "$tool_name"
+    if sudo mkdir -p /etc/apt/keyrings &&
+        curl -fsSL https://repo.charm.sh/apt/gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/charm.gpg &&
+        echo "deb [signed-by=/etc/apt/keyrings/charm.gpg] https://repo.charm.sh/apt/ * *" | sudo tee /etc/apt/sources.list.d/charm.list > /dev/null &&
+        sudo apt-get update -y &&
+        sudo DEBIAN_FRONTEND=noninteractive apt-get install -y glow; then
+        log_success "$tool_name installed successfully"
+    else
+        log_error "Failed to install $tool_name"
+        FAILED_INSTALLATIONS+=("$tool_name")
+    fi
+}
+
 try_install_act() {
     local tool_name="act"
     if ! command -v act > /dev/null 2>&1; then
@@ -192,6 +212,7 @@ install_cli_tools() {
     try_install_uv
     try_install_ruff
     try_install_helm
+    try_install_glow
     try_install_act
     try_install_pre_commit
     try_install_poetry

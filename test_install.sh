@@ -105,6 +105,7 @@ test_cli_tools_exists() {
         "fzf installation:fzf"
         "tldr installation:tldr"
         "delta installation:delta"
+        "glow installation:glow"
         "Java (openjdk) installation:java"
         "net-tools installation:ifconfig"
         "watch installation:watch"

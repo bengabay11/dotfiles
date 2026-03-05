@@ -38,6 +38,7 @@ A comprehensive dotfiles setup for macOS and Linux (Ubuntu/Debian-based; include
 - **fzf** - Command-line fuzzy finder
 - **tldr** - Simplified community-driven man pages
 - **delta** - Syntax-highlighting pager for git diffs
+- **glow** - Terminal Markdown renderer
 - **watch** - Periodically run a command and display output
 - **helm** - Kubernetes package manager
 - **kubectx** - Quickly switch between Kubernetes contexts and namespaces

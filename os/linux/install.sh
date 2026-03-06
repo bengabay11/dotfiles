@@ -67,7 +67,6 @@ install_cli_tools_with_apt() {
         "GitHub CLI:gh:gh --version:gh"
         "AWS CLI:aws:aws --version:awscli"
         "kubectx:kubectx:kubectx --help:kubectx"
-        "starship:starship:starship --version:starship"
     )
     install_tools_with_package_manager "apt" "apt" \
         "sudo DEBIAN_FRONTEND=noninteractive apt-get install -y" tools
@@ -157,6 +156,21 @@ try_install_act() {
     fi
 }
 
+try_install_starship() {
+    local tool_name="starship"
+    if ! command -v starship > /dev/null 2>&1; then
+        log_install $tool_name
+        if ! curl -sS https://starship.rs/install.sh | sh; then
+            log_error "Failed to install $tool_name"
+            FAILED_INSTALLATIONS+=("$tool_name")
+        else
+            log_success "$tool_name installed successfully"
+        fi
+    else
+        log_found "$tool_name is already installed ($(starship --version 2> /dev/null || echo version unknown))"
+    fi
+}
+
 try_install_pre_commit() {
     local tool_name="pre-commit"
     if ! command -v pre-commit > /dev/null 2>&1; then
@@ -236,6 +250,7 @@ install_cli_tools() {
     try_install_helm
     try_install_glow
     try_install_act
+    try_install_starship
     try_install_pre_commit
     try_install_poetry
     try_install_kubectl

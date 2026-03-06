@@ -160,7 +160,7 @@ try_install_starship() {
     local tool_name="starship"
     if ! command -v starship > /dev/null 2>&1; then
         log_install $tool_name
-        if ! curl -sS https://starship.rs/install.sh | sh; then
+        if ! curl -sS https://starship.rs/install.sh | sh -s -- --yes; then
             log_error "Failed to install $tool_name"
             FAILED_INSTALLATIONS+=("$tool_name")
         else

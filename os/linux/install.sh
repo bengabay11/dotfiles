@@ -67,6 +67,7 @@ install_cli_tools_with_apt() {
         "GitHub CLI:gh:gh --version:gh"
         "AWS CLI:aws:aws --version:awscli"
         "kubectx:kubectx:kubectx --help:kubectx"
+        "starship:starship:starship --version:starship"
     )
     install_tools_with_package_manager "apt" "apt" \
         "sudo DEBIAN_FRONTEND=noninteractive apt-get install -y" tools
@@ -129,11 +130,11 @@ try_install_glow() {
     fi
 
     log_install "$tool_name"
-    if sudo mkdir -p /etc/apt/keyrings &&
-        curl -fsSL https://repo.charm.sh/apt/gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/charm.gpg &&
-        echo "deb [signed-by=/etc/apt/keyrings/charm.gpg] https://repo.charm.sh/apt/ * *" | sudo tee /etc/apt/sources.list.d/charm.list > /dev/null &&
-        sudo apt-get update -y &&
-        sudo DEBIAN_FRONTEND=noninteractive apt-get install -y glow; then
+    if sudo mkdir -p /etc/apt/keyrings \
+        && curl -fsSL https://repo.charm.sh/apt/gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/charm.gpg \
+        && echo "deb [signed-by=/etc/apt/keyrings/charm.gpg] https://repo.charm.sh/apt/ * *" | sudo tee /etc/apt/sources.list.d/charm.list > /dev/null \
+        && sudo apt-get update -y \
+        && sudo DEBIAN_FRONTEND=noninteractive apt-get install -y glow; then
         log_success "$tool_name installed successfully"
     else
         log_error "Failed to install $tool_name"

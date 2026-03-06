@@ -45,6 +45,7 @@ A comprehensive dotfiles setup for macOS and Linux (Ubuntu/Debian-based; include
 - **kubectx** - Quickly switch between Kubernetes contexts and namespaces
 - **speedtest-cli** - Command-line internet speed test tool
 - **AWS CLI** - Command-line interface for managing AWS services
+- **neofetch** - System information tool with terminal ASCII art
 
 ### 📱 Applications (macOS)
 

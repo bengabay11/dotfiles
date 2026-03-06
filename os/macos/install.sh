@@ -93,6 +93,7 @@ install_cli_tools() {
         "GitHub CLI:gh:gh --version:gh"
         "AWS CLI:aws:aws --version:awscli"
         "starship:starship:starship --version:starship"
+        "neofetch:neofetch:neofetch --version:neofetch"
     )
     install_tools_with_package_manager "Homebrew" "brew" "brew install" tools
 

@@ -119,6 +119,7 @@ test_cli_tools_exists() {
         "GitHub CLI installation:gh"
         "AWS CLI installation:aws"
         "starship installation:starship"
+        "neofetch installation:neofetch"
     )
 
     for entry in "${tools[@]}"; do

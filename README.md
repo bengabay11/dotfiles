@@ -18,7 +18,7 @@ A comprehensive dotfiles setup for macOS and Linux (Ubuntu/Debian-based; include
 - **OpenJDK (Java)** - Java runtime and tools
 - **Vim** - Text editor with comprehensive configuration
 - **Tmux** - Terminal multiplexer with modern setup
-- **Zsh + Oh My Zsh + Powerlevel10k** - Advanced shell with beautiful theme
+- **Zsh + Oh My Zsh + Starship** - Advanced shell with a fast, modern prompt
 - **bat** - Enhanced cat with syntax highlighting
 - **eza** - Modern ls replacement
 - **ruff** - Fast Python linter
@@ -70,7 +70,7 @@ A comprehensive dotfiles setup for macOS and Linux (Ubuntu/Debian-based; include
 
 - `.vimrc` - Comprehensive Vim configuration with modern features, keybindings, and language-specific settings
 - `.tmux.conf` - Tmux setup with Ctrl-a prefix, mouse support, and improved splitting
-- `.zshrc` - Zsh configuration with Oh My Zsh, Powerlevel10k theme, and modular utilities loading
+- `.zshrc` - Zsh configuration with Oh My Zsh, Starship prompt, plugin support, and modular utilities loading
 - `.gitconfig` - Git configuration with user settings and credential helpers
 
 ### 🧰 Modular Shell Utilities
@@ -124,7 +124,8 @@ Common steps (macOS and Linux):
 - **CLI Tools** - Installs development tools
 - **Rust** - Installs Rust (rustup) and Cargo
 - **Oh My Zsh** - Installs and configures Oh My Zsh
-- **Zsh plugins** - Installs autosuggestions, syntax-highlighting, and Powerlevel10k theme
+- **Zsh plugins** - Installs autosuggestions and syntax-highlighting plugins
+- **Starship** - Installs and configures Starship as the active shell prompt
 - **Dotfiles Setup** - Symlinks configuration files and installs modular shell utilities
 - **Python Setup** - Installs latest Python 3 via pyenv and sets it globally
 
@@ -168,6 +169,32 @@ Linux only:
 
 ### Key Features
 
+#### Shell (Zsh) Configuration
+
+- **Shell**: Zsh is the default interactive shell environment
+- **Prompt/theme**: [Starship](https://starship.rs/) is used as the active prompt/theme
+- **Plugin/theme manager**: [Oh My Zsh](https://ohmyz.sh/) manages shell plugins and can manage themes
+- **Theme compatibility**: Oh My Zsh themes are still supported, and Powerlevel10k remains installable/usable, but theme loading is intentionally disabled in `.zshrc` (`ZSH_THEME=""`) because Starship is the active prompt
+- **Enabled plugins**:
+  - `git`
+  - `zsh-autosuggestions`
+  - `zsh-syntax-highlighting`
+  - `colored-man-pages`
+- **Additional shell enhancements**:
+  - Enhanced `ls` commands via `eza`
+  - Enhanced `cat` via `bat`
+  - Smart directory switching with `zoxide`
+  - Fuzzy finding and completion improvements with `fzf`
+  - Modular utilities loaded from `~/.config/shell-utils/`
+
+#### Tmux Configuration
+
+- `Ctrl-a` as prefix key (instead of default `Ctrl-b`)
+- Mouse support enabled for easier pane interaction
+- Intuitive pane splitting with `\` (vertical) and `-` (horizontal)
+- Easy config reloading with `Ctrl-a r`
+- Simplified, clean configuration focused on essential features
+
 #### Vim Configuration
 
 - Modern vim setup with sensible defaults and true color support
@@ -178,26 +205,6 @@ Linux only:
 - Window and buffer navigation shortcuts
 - Automatic whitespace cleanup and spell checking
 - Enhanced status line with file information
-
-#### Tmux Configuration
-
-- `Ctrl-a` as prefix key (instead of default `Ctrl-b`)
-- Mouse support enabled for easier pane interaction
-- Intuitive pane splitting with `\` (vertical) and `-` (horizontal)
-- Easy config reloading with `Ctrl-a r`
-- Simplified, clean configuration focused on essential features
-
-#### Zsh Configuration
-
-- Oh My Zsh with Powerlevel10k theme for beautiful, informative prompt
-- Enhanced ls commands using `eza`
-- Enhanced cat using `bat`
-- Directory tree views using `tree`
-- Smart directory switching with `zoxide`
-- Comprehensive git aliases and development shortcuts
-- Modular utilities system that automatically loads all `.sh` files from `~/.config/shell-utils/`
-- Useful functions for productivity and development workflows
-- Command history optimization and plugin support
 
 For customization instructions and contribution guidelines, see [CONTRIBUTING.md](CONTRIBUTING.md).
 

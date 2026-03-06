@@ -129,11 +129,11 @@ try_install_glow() {
     fi
 
     log_install "$tool_name"
-    if sudo mkdir -p /etc/apt/keyrings &&
-        curl -fsSL https://repo.charm.sh/apt/gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/charm.gpg &&
-        echo "deb [signed-by=/etc/apt/keyrings/charm.gpg] https://repo.charm.sh/apt/ * *" | sudo tee /etc/apt/sources.list.d/charm.list > /dev/null &&
-        sudo apt-get update -y &&
-        sudo DEBIAN_FRONTEND=noninteractive apt-get install -y glow; then
+    if sudo mkdir -p /etc/apt/keyrings \
+        && curl -fsSL https://repo.charm.sh/apt/gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/charm.gpg \
+        && echo "deb [signed-by=/etc/apt/keyrings/charm.gpg] https://repo.charm.sh/apt/ * *" | sudo tee /etc/apt/sources.list.d/charm.list > /dev/null \
+        && sudo apt-get update -y \
+        && sudo DEBIAN_FRONTEND=noninteractive apt-get install -y glow; then
         log_success "$tool_name installed successfully"
     else
         log_error "Failed to install $tool_name"
@@ -153,6 +153,21 @@ try_install_act() {
         fi
     else
         log_found "$tool_name is already installed ($(act --version 2> /dev/null || echo version unknown))"
+    fi
+}
+
+try_install_starship() {
+    local tool_name="starship"
+    if ! command -v starship > /dev/null 2>&1; then
+        log_install $tool_name
+        if ! curl -sS https://starship.rs/install.sh | sh -s -- --yes; then
+            log_error "Failed to install $tool_name"
+            FAILED_INSTALLATIONS+=("$tool_name")
+        else
+            log_success "$tool_name installed successfully"
+        fi
+    else
+        log_found "$tool_name is already installed ($(starship --version 2> /dev/null || echo version unknown))"
     fi
 }
 
@@ -235,6 +250,7 @@ install_cli_tools() {
     try_install_helm
     try_install_glow
     try_install_act
+    try_install_starship
     try_install_pre_commit
     try_install_poetry
     try_install_kubectl

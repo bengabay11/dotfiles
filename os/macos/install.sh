@@ -92,6 +92,7 @@ install_cli_tools() {
         "act:act:act --version:act"
         "GitHub CLI:gh:gh --version:gh"
         "AWS CLI:aws:aws --version:awscli"
+        "starship:starship:starship --version:starship"
     )
     install_tools_with_package_manager "Homebrew" "brew" "brew install" tools
 

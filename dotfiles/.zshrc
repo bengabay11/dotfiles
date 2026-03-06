@@ -32,11 +32,6 @@ ZSH_THEME=""  # Disable Oh My Zsh theme to use starship
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 # [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-# Initialize starship prompt (with caching for faster startup)
-if command -v starship >/dev/null 2>&1; then
-    _evalcache starship init zsh
-fi
-
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
 # a theme from this variable instead of looking in $ZSH/themes/
@@ -101,11 +96,16 @@ plugins=(
 	git
 	zsh-autosuggestions
 	zsh-syntax-highlighting
-	zsh-evalcache
+	evalcache
 	colored-man-pages
 )
 
 source $ZSH/oh-my-zsh.sh
+
+# Initialize starship prompt (with caching for faster startup)
+if command -v starship >/dev/null 2>&1; then
+    _evalcache starship init zsh
+fi
 
 # Initialize zoxide (with caching for faster startup)
 _evalcache zoxide init zsh

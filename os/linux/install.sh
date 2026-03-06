@@ -299,7 +299,7 @@ main() {
     echo -e "   ${BLUE}4.${NC} ${WHITE}🧰 Install tools via cargo (eza, git-delta)${NC}"
     echo -e "   ${BLUE}5.${NC} ${WHITE}⎈ Install helm CLI${NC}"
     echo -e "   ${BLUE}6.${NC} ${WHITE}🐚 Install and configure Oh My Zsh${NC}"
-    echo -e "   ${BLUE}7.${NC} ${WHITE}🔌 Install Zsh plugins and themes${NC}"
+    echo -e "   ${BLUE}7.${NC} ${WHITE}🔌 Install Zsh plugins and themes (with evalcache for faster startup)${NC}"
     echo -e "   ${BLUE}8.${NC} ${WHITE}📝 Set up dotfiles and modular shell utilities${NC}"
     echo -e "   ${BLUE}9.${NC} ${WHITE}🐍 Configure Python environment with pyenv${NC}"
     echo ""
@@ -309,7 +309,7 @@ main() {
         "install command-line development tools|install_cli_tools|false|always"
         "install Rust programming language|install_rust|false|always"
         "install and configure Oh My Zsh shell framework|install_oh_my_zsh|false|always"
-        "install Zsh plugins and themes (autosuggestions, syntax highlighting, powerlevel10k)|install_zsh_plugins|false|always"
+        "install Zsh plugins and themes (autosuggestions, syntax highlighting, evalcache, powerlevel10k)|install_zsh_plugins|false|always"
         "set up dotfiles and modular shell utilities|setup_dotfiles|true|always"
         "configure Python environment with pyenv|configure_python_env|false|always"
     )

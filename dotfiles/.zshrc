@@ -32,9 +32,9 @@ ZSH_THEME=""  # Disable Oh My Zsh theme to use starship
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 # [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-# Initialize starship prompt
+# Initialize starship prompt (with caching for faster startup)
 if command -v starship >/dev/null 2>&1; then
-    eval "$(starship init zsh)"
+    _evalcache starship init zsh
 fi
 
 # Set list of themes to pick from when loading at random
@@ -101,12 +101,14 @@ plugins=(
 	git
 	zsh-autosuggestions
 	zsh-syntax-highlighting
+	zsh-evalcache
 	colored-man-pages
 )
 
 source $ZSH/oh-my-zsh.sh
 
-eval "$(zoxide init zsh)"
+# Initialize zoxide (with caching for faster startup)
+_evalcache zoxide init zsh
 
 # Fix zoxide recursive cd issue
 _z_cd() {
@@ -148,10 +150,12 @@ _z_cd() {
 # mssql setup
 export PATH="$PATH:/opt/mssql-tools18/bin"
 
-# pyenv setup
+# pyenv setup (with caching for faster startup)
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
+if command -v pyenv >/dev/null 2>&1; then
+    _evalcache pyenv init -
+fi
 
 # Claude Code CLI setup
 if [ -d "$HOME/.claude/bin" ] && [[ ":$PATH:" != *":$HOME/.claude/bin:"* ]]; then

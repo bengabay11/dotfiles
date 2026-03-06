@@ -254,6 +254,7 @@ install_zsh_plugins() {
     local plugins=(
         "zsh-autosuggestions|https://github.com/zsh-users/zsh-autosuggestions.git|plugins"
         "zsh-syntax-highlighting|https://github.com/zsh-users/zsh-syntax-highlighting.git|plugins"
+        "zsh-evalcache|https://github.com/mroth/evalcache.git|plugins"
         "powerlevel10k|https://github.com/romkatv/powerlevel10k.git|themes"
     )
 

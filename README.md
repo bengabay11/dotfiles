@@ -10,18 +10,21 @@ A comprehensive dotfiles setup for macOS and Linux (Ubuntu/Debian-based; include
 
 #### Programming Languages
 
+|                                   |                                    |                                |                                               |
 | --------------------------------- | ---------------------------------- | ------------------------------ | --------------------------------------------- |
 | [Python](https://www.python.org/) | [Rust](https://www.rust-lang.org/) | [Node.js](https://nodejs.org/) | [TypeScript](https://www.typescriptlang.org/) |
 | [OpenJDK](https://openjdk.org/)   |                                    |                                |                                               |
 
 #### Package & Version Management
 
+|                                         |                              |                                       |                                      |
 | --------------------------------------- | ---------------------------- | ------------------------------------- | ------------------------------------ |
 | [pyenv](https://github.com/pyenv/pyenv) | [Yarn](https://yarnpkg.com/) | [uv](https://github.com/astral-sh/uv) | [poetry](https://python-poetry.org/) |
 | [pre-commit](https://pre-commit.com/)   |                              |                                       |                                      |
 
 #### Terminal & Shell
 
+|                                              |                                               |                                        |                                                 |
 | -------------------------------------------- | --------------------------------------------- | -------------------------------------- | ----------------------------------------------- |
 | [Zsh](https://www.zsh.org/)                  | [Oh My Zsh](https://ohmyz.sh/)                | [Starship](https://starship.rs/)       | [Tmux](https://github.com/tmux/tmux)            |
 | [bat](https://github.com/sharkdp/bat)        | [eza](https://github.com/eza-community/eza)   | [fzf](https://github.com/junegunn/fzf) | [zoxide](https://github.com/ajeetdsouza/zoxide) |
@@ -29,6 +32,7 @@ A comprehensive dotfiles setup for macOS and Linux (Ubuntu/Debian-based; include
 
 #### Development Tools
 
+|                                                  |                                    |                                           |                                                       |
 | ------------------------------------------------ | ---------------------------------- | ----------------------------------------- | ----------------------------------------------------- |
 | [Git](https://git-scm.com/)                      | [Vim](https://www.vim.org/)        | [ruff](https://github.com/astral-sh/ruff) | [ShellCheck](https://www.shellcheck.net/)             |
 | [ripgrep](https://github.com/BurntSushi/ripgrep) | [jq](https://jqlang.github.io/jq/) | [fd](https://github.com/sharkdp/fd)       | [tree](https://gitlab.com/OldManProgrammer/unix-tree) |
@@ -37,6 +41,7 @@ A comprehensive dotfiles setup for macOS and Linux (Ubuntu/Debian-based; include
 
 #### System & DevOps
 
+|                                              |                                                                |                                                    |                                                          |
 | -------------------------------------------- | -------------------------------------------------------------- | -------------------------------------------------- | -------------------------------------------------------- |
 | [btop](https://github.com/aristocratos/btop) | [htop](https://htop.dev/)                                      | [nmap](https://nmap.org/)                          | [speedtest-cli](https://github.com/sivel/speedtest-cli)  |
 | [AWS CLI](https://aws.amazon.com/cli/)       | [helm](https://helm.sh/)                                       | [kubectx](https://github.com/ahmetb/kubectx)       | [kubectl](https://kubernetes.io/docs/reference/kubectl/) |
@@ -44,6 +49,7 @@ A comprehensive dotfiles setup for macOS and Linux (Ubuntu/Debian-based; include
 
 ### 📱 Applications (macOS)
 
+|                                                      |                                                  |                                                                   |                                          |
 | ---------------------------------------------------- | ------------------------------------------------ | ----------------------------------------------------------------- | ---------------------------------------- |
 | [iTerm2](https://iterm2.com/)                        | [Warp](https://www.warp.dev/)                    | [Raycast](https://www.raycast.com/)                               | [Cursor](https://cursor.sh/)             |
 | [Visual Studio Code](https://code.visualstudio.com/) | [Google Chrome](https://www.google.com/chrome/)  | [Brave Browser](https://brave.com/)                               | [Slack](https://slack.com/)              |

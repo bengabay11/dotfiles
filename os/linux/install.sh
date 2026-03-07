@@ -82,7 +82,7 @@ install_cli_tools_with_cargo() {
     install_tools_with_package_manager "cargo" "cargo" "cargo install" tools
 }
 
-install_tools_with_npm() {
+install_cli_tools_with_npm() {
     local tools=(
         "Typescript:tsc:tsc --version:typescript"
         "yarn:yarn:yarn --version:yarn"
@@ -171,9 +171,10 @@ install_cli_tools() {
 
     install_cli_tools_with_apt
     install_cli_tools_with_cargo
-    install_tools_with_npm
-
+    install_cli_tools_with_npm
     install_cli_tools_with_custom_commands
+
+    # Tools with complex installation logic that can't be expressed as a single command
     try_install_glow
     try_install_kubectl
     try_install_k9s

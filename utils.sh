@@ -53,7 +53,7 @@ try_install_tool() {
     local tool_version_command="$4"
     if ! command -v $tool_command_name > /dev/null 2>&1; then
         log_install $tool_name
-        if ! $tool_install_command; then
+        if ! eval "$tool_install_command"; then
             log_error "Failed to install $tool_name"
             FAILED_INSTALLATIONS+=("$tool_name")
         else
@@ -292,42 +292,12 @@ install_zsh_plugins() {
     log_success "All Zsh plugins and themes installed successfully"
 }
 
-# Dedicated function for trying install uv (Can't use try_install_tool because the install command has pipe inside)
-try_install_uv() {
-    if ! command -v uv > /dev/null 2>&1; then
-        log_install uv
-        curl -LsSf https://astral.sh/ruff/install.sh | sh
-
-        if ! curl -LsSf https://astral.sh/uv/install.sh | sh; then
-            log_error "Failed to install uv"
-            FAILED_INSTALLATIONS+=("uv")
-        else
-            log_success "uv installed successfully"
-        fi
-    else
-        log_found "uv is already installed ($(uv --version 2> /dev/null || echo version unknown))"
-    fi
-}
-
-# Install Claude Code AI assistant CLI
-# Uses the official installer script which handles PATH setup
 try_install_claude_code() {
-    local tool_name="Claude Code"
-    if ! command -v claude > /dev/null 2>&1; then
-        log_install "$tool_name"
-        if ! curl -fsSL https://claude.ai/install.sh | bash; then
-            log_error "Failed to install $tool_name"
-            FAILED_INSTALLATIONS+=("$tool_name")
-        else
-            # Source the updated PATH if the installer added it
-            if [[ -f "$HOME/.claude/bin/claude" ]]; then
-                export PATH="$HOME/.claude/bin:$PATH"
-            fi
-            log_success "$tool_name installed successfully"
-        fi
-    else
-        log_found "$tool_name is already installed ($(claude --version 2> /dev/null || echo version unknown))"
-    fi
+    try_install_tool "Claude Code" "claude" \
+        "curl -fsSL https://claude.ai/install.sh | bash" \
+        "claude --version"
+    # Ensure PATH is updated if the installer added the binary
+    [[ -f "$HOME/.claude/bin/claude" ]] && export PATH="$HOME/.claude/bin:$PATH"
 }
 
 try_install_python() {

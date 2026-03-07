@@ -144,7 +144,17 @@ Linux only:
 
 1. Restart your terminal or run `source ~/.zshrc`
 
-2. **Handle macOS Security Warnings (macOS only; Important!)**
+2. **Install a Nerd Font**
+
+   A [Nerd Font](https://www.nerdfonts.com/) is required for terminal icons (used by Starship, eza, and other tools) to display correctly. Without one, you'll see placeholder characters or missing icons.
+
+   **To install:**
+
+   - Visit [nerdfonts.com/font-downloads](https://www.nerdfonts.com/font-downloads) and download a font (e.g., **MesloLGS NF** or **FiraCode Nerd Font**)
+   - Install the font on your system
+   - Set it as the default font in your terminal emulator (e.g., iTerm2, Windows Terminal, or your preferred terminal)
+
+3. **Handle macOS Security Warnings (macOS only; Important!)**
 
    When you first open newly installed applications, macOS may show security warnings because they weren't downloaded from the App Store. This is normal and expected.
 
@@ -155,7 +165,7 @@ Linux only:
 
    This only needs to be done once per application.
 
-3. Set your personal Git identity in a private file:
+4. Set your personal Git identity in a private file:
 
    ```bash
    # Create ~/.gitconfig.local with your personal details (not tracked in this repo)

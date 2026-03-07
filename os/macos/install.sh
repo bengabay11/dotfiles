@@ -123,7 +123,6 @@ install_applications() {
         "Typora:typora"
         "DBeaver:dbeaver-community"
         "GitKraken:gitkraken"
-        "NordPass:nordpass"
         "Zoom:zoom"
         "AltTab:alt-tab"
         "Rectangle:rectangle"

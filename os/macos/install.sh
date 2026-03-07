@@ -125,6 +125,9 @@ install_applications() {
         "Typora:typora"
         "DBeaver:dbeaver-community"
         "GitKraken:gitkraken"
+        "Zoom:zoom"
+        "AltTab:alt-tab"
+        "Rectangle:rectangle"
     )
 
     local newly_installed_apps=()

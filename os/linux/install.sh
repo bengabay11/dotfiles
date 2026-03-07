@@ -67,6 +67,7 @@ install_cli_tools_with_apt() {
         "GitHub CLI:gh:gh --version:gh"
         "AWS CLI:aws:aws --version:awscli"
         "kubectx:kubectx:kubectx --help:kubectx"
+        "neofetch:neofetch:neofetch --version:neofetch"
     )
     install_tools_with_package_manager "apt" "apt" \
         "sudo DEBIAN_FRONTEND=noninteractive apt-get install -y" tools
@@ -153,6 +154,21 @@ try_install_act() {
         fi
     else
         log_found "$tool_name is already installed ($(act --version 2> /dev/null || echo version unknown))"
+    fi
+}
+
+try_install_starship() {
+    local tool_name="starship"
+    if ! command -v starship > /dev/null 2>&1; then
+        log_install $tool_name
+        if ! curl -sS https://starship.rs/install.sh | sh -s -- --yes; then
+            log_error "Failed to install $tool_name"
+            FAILED_INSTALLATIONS+=("$tool_name")
+        else
+            log_success "$tool_name installed successfully"
+        fi
+    else
+        log_found "$tool_name is already installed ($(starship --version 2> /dev/null || echo version unknown))"
     fi
 }
 
@@ -257,6 +273,7 @@ install_cli_tools() {
     try_install_helm
     try_install_glow
     try_install_act
+    try_install_starship
     try_install_pre_commit
     try_install_poetry
     try_install_cloudflared
@@ -306,7 +323,7 @@ main() {
     echo -e "   ${BLUE}4.${NC} ${WHITE}🧰 Install tools via cargo (eza, git-delta)${NC}"
     echo -e "   ${BLUE}5.${NC} ${WHITE}⎈ Install helm CLI${NC}"
     echo -e "   ${BLUE}6.${NC} ${WHITE}🐚 Install and configure Oh My Zsh${NC}"
-    echo -e "   ${BLUE}7.${NC} ${WHITE}🔌 Install Zsh plugins and themes${NC}"
+    echo -e "   ${BLUE}7.${NC} ${WHITE}🔌 Install Zsh plugins and themes (with evalcache for faster startup)${NC}"
     echo -e "   ${BLUE}8.${NC} ${WHITE}📝 Set up dotfiles and modular shell utilities${NC}"
     echo -e "   ${BLUE}9.${NC} ${WHITE}🐍 Configure Python environment with pyenv${NC}"
     echo ""
@@ -316,7 +333,7 @@ main() {
         "install command-line development tools|install_cli_tools|false|always"
         "install Rust programming language|install_rust|false|always"
         "install and configure Oh My Zsh shell framework|install_oh_my_zsh|false|always"
-        "install Zsh plugins and themes (autosuggestions, syntax highlighting, powerlevel10k)|install_zsh_plugins|false|always"
+        "install Zsh plugins and themes (autosuggestions, syntax highlighting, evalcache, powerlevel10k)|install_zsh_plugins|false|always"
         "set up dotfiles and modular shell utilities|setup_dotfiles|true|always"
         "configure Python environment with pyenv|configure_python_env|false|always"
     )

@@ -109,8 +109,6 @@ install_applications() {
         "iTerm:iterm2"
         "Warp:warp"
         "Raycast:raycast"
-        "AltTab:alt-tab"
-        "Rectangle:rectangle"
         "Cursor:cursor"
         "Visual Studio Code:visual-studio-code"
         "Google Chrome:google-chrome"
@@ -127,6 +125,8 @@ install_applications() {
         "GitKraken:gitkraken"
         "NordPass:nordpass"
         "Zoom:zoom"
+        "AltTab:alt-tab"
+        "Rectangle:rectangle"
     )
 
     local newly_installed_apps=()

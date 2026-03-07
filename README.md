@@ -55,7 +55,8 @@ A comprehensive dotfiles setup for macOS and Linux (Ubuntu/Debian-based; include
 | [Visual Studio Code](https://code.visualstudio.com/) | [Google Chrome](https://www.google.com/chrome/)  | [Brave Browser](https://brave.com/)                               | [Slack](https://slack.com/)              |
 | [Sublime Text](https://www.sublimetext.com/)         | [Obsidian](https://obsidian.md/)                 | [Docker Desktop](https://www.docker.com/products/docker-desktop/) | [Wireshark](https://www.wireshark.org/)  |
 | [Postman](https://www.postman.com/)                  | [Paintbrush](https://paintbrush.sourceforge.io/) | [Typora](https://typora.io/)                                      | [DBeaver Community](https://dbeaver.io/) |
-| [GitKraken](https://www.gitkraken.com/)              | [Rectangle](https://rectangleapp.com/)           | [AltTab](https://alt-tab-macos.netlify.app/)                                     |                                                                   |                                          |
+| [GitKraken](https://www.gitkraken.com/)              | [NordPass](https://nordpass.com/)                | [Zoom](https://zoom.us/)                                          | [Rectangle](https://rectangleapp.com/)   |
+| [AltTab](https://alt-tab-macos.netlify.app/)         |                                                  |                                                                   |                                          |
 
 ### ⚙️ Configuration Files
 

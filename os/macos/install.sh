@@ -125,6 +125,8 @@ install_applications() {
         "Typora:typora"
         "DBeaver:dbeaver-community"
         "GitKraken:gitkraken"
+        "NordPass:nordpass"
+        "Zoom:zoom"
     )
 
     local newly_installed_apps=()

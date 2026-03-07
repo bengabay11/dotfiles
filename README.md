@@ -4,68 +4,55 @@ A comprehensive dotfiles setup for macOS and Linux (Ubuntu/Debian-based; include
 
 ![Alt text](assets/install_demo.jpeg "Optional title")
 
-
 ## Features
 
 ### 🛠️ Command Line Tools
 
-- **Git** - Version control with optimized configuration
-- **Python 3** (via pyenv) - Python version management
-- **Rust** - Systems programming language with Cargo
-- **Node.js & npm** - JavaScript runtime and package manager
-- **Yarn** - Fast package manager
-- **TypeScript** - Typed JavaScript
-- **OpenJDK (Java)** - Java runtime and tools
-- **Vim** - Text editor with comprehensive configuration
-- **Tmux** - Terminal multiplexer with modern setup
-- **Zsh + Oh My Zsh + Starship** - Advanced shell with a fast, modern prompt
-- **bat** - Enhanced cat with syntax highlighting
-- **eza** - Modern ls replacement
-- **ruff** - Fast Python linter
-- **uv** - Ultra-fast Python package installer
-- **pre-commit** - Git hooks framework
-- **poetry** - Python dependency management
-- **pyenv** - Python version management
-- **btop** - Modern system monitor (alternative to htop)
-- **nmap** - Network discovery and security auditing utility
-- **htop** - Interactive process viewer
-- **ipython** - Enhanced interactive Python shell
-- **ripgrep** - Fast text search tool (rg command)
-- **jq** - Command-line JSON processor
-- **fd** - Simple, fast and user-friendly alternative to `find`
-- **tree** - Display directories as a tree view
-- **ShellCheck** - Shell script static analysis tool
-- **zoxide** - Smart directory navigation with `z`
-- **fzf** - Command-line fuzzy finder
-- **tldr** - Simplified community-driven man pages
-- **delta** - Syntax-highlighting pager for git diffs
-- **glow** - Terminal Markdown renderer
-- **watch** - Periodically run a command and display output
-- **helm** - Kubernetes package manager
-- **kubectx** - Quickly switch between Kubernetes contexts and namespaces
-- **speedtest-cli** - Command-line internet speed test tool
-- **AWS CLI** - Command-line interface for managing AWS services
-- **neofetch** - System information tool with terminal ASCII art
+#### Programming Languages
+
+| | | | |
+| --- | --- | --- | --- |
+| [Python](https://www.python.org/) | [Rust](https://www.rust-lang.org/) | [Node.js](https://nodejs.org/) | [TypeScript](https://www.typescriptlang.org/) |
+| [OpenJDK](https://openjdk.org/) | | | |
+
+#### Package & Version Management
+
+| | | | |
+| --- | --- | --- | --- |
+| [pyenv](https://github.com/pyenv/pyenv) | [Yarn](https://yarnpkg.com/) | [uv](https://github.com/astral-sh/uv) | [poetry](https://python-poetry.org/) |
+| [pre-commit](https://pre-commit.com/) | | | |
+
+#### Terminal & Shell
+
+| | | | |
+| --- | --- | --- | --- |
+| [Zsh](https://www.zsh.org/) | [Oh My Zsh](https://ohmyz.sh/) | [Starship](https://starship.rs/) | [Tmux](https://github.com/tmux/tmux) |
+| [bat](https://github.com/sharkdp/bat) | [eza](https://github.com/eza-community/eza) | [fzf](https://github.com/junegunn/fzf) | [zoxide](https://github.com/ajeetdsouza/zoxide) |
+| [delta](https://github.com/dandavison/delta) | [glow](https://github.com/charmbracelet/glow) | [tldr](https://tldr.sh/) | [watch](https://linux.die.net/man/1/watch) |
+
+#### Development Tools
+
+| | | | |
+| --- | --- | --- | --- |
+| [Git](https://git-scm.com/) | [Vim](https://www.vim.org/) | [ruff](https://github.com/astral-sh/ruff) | [ShellCheck](https://www.shellcheck.net/) |
+| [ripgrep](https://github.com/BurntSushi/ripgrep) | [jq](https://jqlang.github.io/jq/) | [fd](https://github.com/sharkdp/fd) | [tree](https://gitlab.com/OldManProgrammer/unix-tree) |
+| [ipython](https://ipython.org/) | | | |
+
+#### System & DevOps
+
+| | | | |
+| --- | --- | --- | --- |
+| [btop](https://github.com/aristocratos/btop) | [htop](https://htop.dev/) | [nmap](https://nmap.org/) | [speedtest-cli](https://github.com/sivel/speedtest-cli) |
+| [AWS CLI](https://aws.amazon.com/cli/) | [helm](https://helm.sh/) | [kubectx](https://github.com/ahmetb/kubectx) | [neofetch](https://github.com/dylanaraps/neofetch) |
 
 ### 📱 Applications (macOS)
 
-- **iTerm2** - Advanced terminal emulator
-- **Warp** - Modern terminal with AI features
-- **Raycast** - Productivity launcher
-- **Cursor** - AI-powered code editor
-- **Visual Studio Code** - Popular code editor
-
-- **Google Chrome** - Web browser
-- **Brave Browser** - Privacy-focused browser
-- **Slack** - Team communication
-- **Sublime Text** - Lightweight text editor
-- **Obsidian** - Knowledge management and note-taking
-- **Docker Desktop** - Container development platform
-- **Wireshark** - Network protocol analyzer
-- **Postman** - API development and testing tool
-- **Paintbrush** - Simple image editor
-- **Typora** - Markdown editor
-- **DBeaver Community** - Universal database management tool
+|                                                      |                                                  |                                                                   |                                          |
+| ---------------------------------------------------- | ------------------------------------------------ | ----------------------------------------------------------------- | ---------------------------------------- |
+| [iTerm2](https://iterm2.com/)                        | [Warp](https://www.warp.dev/)                    | [Raycast](https://www.raycast.com/)                               | [Cursor](https://cursor.sh/)             |
+| [Visual Studio Code](https://code.visualstudio.com/) | [Google Chrome](https://www.google.com/chrome/)  | [Brave Browser](https://brave.com/)                               | [Slack](https://slack.com/)              |
+| [Sublime Text](https://www.sublimetext.com/)         | [Obsidian](https://obsidian.md/)                 | [Docker Desktop](https://www.docker.com/products/docker-desktop/) | [Wireshark](https://www.wireshark.org/)  |
+| [Postman](https://www.postman.com/)                  | [Paintbrush](https://paintbrush.sourceforge.io/) | [Typora](https://typora.io/)                                      | [DBeaver Community](https://dbeaver.io/) |
 
 ### ⚙️ Configuration Files
 
@@ -147,36 +134,34 @@ Linux only:
 
 2. **Install a Nerd Font**
 
-   A [Nerd Font](https://www.nerdfonts.com/) is required for terminal icons (used by Starship, eza, and other tools) to display correctly. Without one, you'll see placeholder characters or missing icons.
+    A [Nerd Font](https://www.nerdfonts.com/) is required for terminal icons (used by Starship, eza, and other tools) to display correctly. Without one, you'll see placeholder characters or missing icons.
 
-   **To install:**
-
-   - Visit [nerdfonts.com/font-downloads](https://www.nerdfonts.com/font-downloads) and download a font (e.g., **MesloLGS NF** or **FiraCode Nerd Font**)
-   - Install the font on your system
-   - Set it as the default font in your terminal emulator (e.g., iTerm2, Windows Terminal, or your preferred terminal)
+    **To install:**
+    - Visit [nerdfonts.com/font-downloads](https://www.nerdfonts.com/font-downloads) and download a font (e.g., **MesloLGS NF** or **FiraCode Nerd Font**)
+    - Install the font on your system
+    - Set it as the default font in your terminal emulator (e.g., iTerm2, Windows Terminal, or your preferred terminal)
 
 3. **Handle macOS Security Warnings (macOS only; Important!)**
 
-   When you first open newly installed applications, macOS may show security warnings because they weren't downloaded from the App Store. This is normal and expected.
+    When you first open newly installed applications, macOS may show security warnings because they weren't downloaded from the App Store. This is normal and expected.
 
-   **To resolve security warnings:**
+    **To resolve security warnings:**
+    - **Method 1:** Right-click the app in Applications folder → select "Open" → click "Open" in the dialog
+    - **Method 2:** Go to System Settings → Privacy & Security → click "Allow Anyway" next to the blocked app
 
-   - **Method 1:** Right-click the app in Applications folder → select "Open" → click "Open" in the dialog
-   - **Method 2:** Go to System Settings → Privacy & Security → click "Allow Anyway" next to the blocked app
-
-   This only needs to be done once per application.
+    This only needs to be done once per application.
 
 4. Set your personal Git identity in a private file:
 
-   ```bash
-   # Create ~/.gitconfig.local with your personal details (not tracked in this repo)
-   cat > ~/.gitconfig.local <<'EOF'
-   [user]
-     name = Your Name
-     email = your.email@example.com
-     username = your-username
-   EOF
-   ```
+    ```bash
+    # Create ~/.gitconfig.local with your personal details (not tracked in this repo)
+    cat > ~/.gitconfig.local <<'EOF'
+    [user]
+      name = Your Name
+      email = your.email@example.com
+      username = your-username
+    EOF
+    ```
 
 ### Key Features
 
@@ -186,17 +171,7 @@ Linux only:
 - **Prompt/theme**: [Starship](https://starship.rs/) is used as the active prompt/theme
 - **Plugin/theme manager**: [Oh My Zsh](https://ohmyz.sh/) manages shell plugins and can manage themes
 - **Theme compatibility**: Oh My Zsh themes are still supported, and Powerlevel10k remains installable/usable, but theme loading is intentionally disabled in `.zshrc` (`ZSH_THEME=""`) because Starship is the active prompt
-- **Enabled plugins**:
-  - `git`
-  - `zsh-autosuggestions`
-  - `zsh-syntax-highlighting`
-  - `colored-man-pages`
-- **Additional shell enhancements**:
-  - Enhanced `ls` commands via `eza`
-  - Enhanced `cat` via `bat`
-  - Smart directory switching with `zoxide`
-  - Fuzzy finding and completion improvements with `fzf`
-  - Modular utilities loaded from `~/.config/shell-utils/`
+- **Aliases and functions**
 
 #### Tmux Configuration
 

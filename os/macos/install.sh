@@ -84,6 +84,7 @@ install_cli_tools() {
         "kubectl:kubectl:kubectl version --client:kubernetes-cli"
         "kubectx:kubectx:kubectx -h:kubectx"
         "speedtest-cli:speedtest-cli:speedtest-cli --version:speedtest-cli"
+        "cloudflared:cloudflared:cloudflared --version:cloudflared"
         "fzf:fzf:fzf --version:fzf"
         "tldr:tldr:tldr --version:tldr"
         "zoxide:zoxide:zoxide --version:zoxide"
@@ -92,10 +93,12 @@ install_cli_tools() {
         "act:act:act --version:act"
         "GitHub CLI:gh:gh --version:gh"
         "AWS CLI:aws:aws --version:awscli"
+        "starship:starship:starship --version:starship"
+        "neofetch:neofetch:neofetch --version:neofetch"
+        "uv:uv:uv --version:uv"
     )
     install_tools_with_package_manager "Homebrew" "brew" "brew install" tools
 
-    try_install_uv
     try_install_claude_code
 }
 
@@ -197,7 +200,7 @@ main() {
     echo -e "   ${BLUE}3.${NC} ${WHITE}🦀 Install Rust programming language${NC}"
     echo -e "   ${BLUE}4.${NC} ${WHITE}💻 Install GUI applications (VS Code, Chrome, etc.)${NC}"
     echo -e "   ${BLUE}5.${NC} ${WHITE}🐚 Install and configure Oh My Zsh${NC}"
-    echo -e "   ${BLUE}6.${NC} ${WHITE}🔌 Install Zsh plugins and themes${NC}"
+    echo -e "   ${BLUE}6.${NC} ${WHITE}🔌 Install Zsh plugins and themes (with evalcache for faster startup)${NC}"
     echo -e "   ${BLUE}7.${NC} ${WHITE}📝 Set up dotfiles and modular shell utilities${NC}"
     echo -e "   ${BLUE}8.${NC} ${WHITE}🐍 Configure Python environment with pyenv${NC}"
     echo ""
@@ -208,7 +211,7 @@ main() {
         "install Rust programming language|install_rust|false|always"
         "install GUI applications (IDEs, browsers, etc.)|install_applications|false|always"
         "install and configure Oh My Zsh shell framework|install_oh_my_zsh|false|always"
-        "install Zsh plugins and themes (autosuggestions, syntax highlighting, powerlevel10k)|install_zsh_plugins|false|always"
+        "install Zsh plugins and themes (autosuggestions, syntax highlighting, evalcache, powerlevel10k)|install_zsh_plugins|false|always"
         "set up dotfiles and modular shell utilities|setup_dotfiles|true|always"
         "configure Python environment with pyenv|install_latest_python|false|always"
     )

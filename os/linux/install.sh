@@ -67,6 +67,7 @@ install_cli_tools_with_apt() {
         "GitHub CLI:gh:gh --version:gh"
         "AWS CLI:aws:aws --version:awscli"
         "kubectx:kubectx:kubectx --help:kubectx"
+        "neofetch:neofetch:neofetch --version:neofetch"
     )
     install_tools_with_package_manager "apt" "apt" \
         "sudo DEBIAN_FRONTEND=noninteractive apt-get install -y" tools
@@ -81,44 +82,13 @@ install_cli_tools_with_cargo() {
     install_tools_with_package_manager "cargo" "cargo" "cargo install" tools
 }
 
-install_tools_with_npm() {
+install_cli_tools_with_npm() {
     local tools=(
         "Typescript:tsc:tsc --version:typescript"
         "yarn:yarn:yarn --version:yarn"
         "Prettier:prettier:prettier --version:prettier"
     )
     install_tools_with_package_manager "npm" "npm" "npm install -g" tools
-}
-
-try_install_ruff() {
-    local tool_name="ruff"
-    if ! command -v ruff > /dev/null 2>&1; then
-        log_install $tool_name
-        if ! curl -LsSf https://astral.sh/ruff/install.sh | sh; then
-            log_error "Failed to install $tool_name"
-            FAILED_INSTALLATIONS+=("$tool_name")
-        else
-            log_success "$tool_name installed successfully"
-        fi
-    else
-        log_found "$tool_name is already installed ($(ruff --version 2> /dev/null || echo version unknown))"
-    fi
-}
-
-# Dedicated function for trying install helm (Can't use try_install_tool because the install command has pipe inside)
-try_install_helm() {
-    local tool_name="helm"
-    if ! command -v helm > /dev/null 2>&1; then
-        log_install $tool_name
-        if ! curl -fsSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash; then
-            log_error "Failed to install $tool_name"
-            FAILED_INSTALLATIONS+=("$tool_name")
-        else
-            log_success "$tool_name installed successfully"
-        fi
-    else
-        log_found "$tool_name is already installed ($(helm version --short 2> /dev/null || echo version unknown))"
-    fi
 }
 
 try_install_glow() {
@@ -129,60 +99,15 @@ try_install_glow() {
     fi
 
     log_install "$tool_name"
-    if sudo mkdir -p /etc/apt/keyrings &&
-        curl -fsSL https://repo.charm.sh/apt/gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/charm.gpg &&
-        echo "deb [signed-by=/etc/apt/keyrings/charm.gpg] https://repo.charm.sh/apt/ * *" | sudo tee /etc/apt/sources.list.d/charm.list > /dev/null &&
-        sudo apt-get update -y &&
-        sudo DEBIAN_FRONTEND=noninteractive apt-get install -y glow; then
+    if sudo mkdir -p /etc/apt/keyrings \
+        && curl -fsSL https://repo.charm.sh/apt/gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/charm.gpg \
+        && echo "deb [signed-by=/etc/apt/keyrings/charm.gpg] https://repo.charm.sh/apt/ * *" | sudo tee /etc/apt/sources.list.d/charm.list > /dev/null \
+        && sudo apt-get update -y \
+        && sudo DEBIAN_FRONTEND=noninteractive apt-get install -y glow; then
         log_success "$tool_name installed successfully"
     else
         log_error "Failed to install $tool_name"
         FAILED_INSTALLATIONS+=("$tool_name")
-    fi
-}
-
-try_install_act() {
-    local tool_name="act"
-    if ! command -v act > /dev/null 2>&1; then
-        log_install $tool_name
-        if ! curl -s https://raw.githubusercontent.com/nektos/act/master/install.sh | sudo bash -s -- -b /usr/local/bin; then
-            log_error "Failed to install $tool_name"
-            FAILED_INSTALLATIONS+=("$tool_name")
-        else
-            log_success "$tool_name installed successfully"
-        fi
-    else
-        log_found "$tool_name is already installed ($(act --version 2> /dev/null || echo version unknown))"
-    fi
-}
-
-try_install_pre_commit() {
-    local tool_name="pre-commit"
-    if ! command -v pre-commit > /dev/null 2>&1; then
-        log_install $tool_name
-        if ! pip install pre-commit; then
-            log_error "Failed to install $tool_name"
-            FAILED_INSTALLATIONS+=("$tool_name")
-        else
-            log_success "$tool_name installed successfully"
-        fi
-    else
-        log_found "$tool_name is already installed ($(pre-commit --version 2> /dev/null || echo version unknown))"
-    fi
-}
-
-try_install_poetry() {
-    local tool_name="poetry"
-    if ! command -v poetry > /dev/null 2>&1; then
-        log_install $tool_name
-        if ! curl -sSL https://install.python-poetry.org | python3 -; then
-            log_error "Failed to install $tool_name"
-            FAILED_INSTALLATIONS+=("$tool_name")
-        else
-            log_success "$tool_name installed successfully"
-        fi
-    else
-        log_found "$tool_name is already installed ($(poetry --version 2> /dev/null || echo version unknown))"
     fi
 }
 
@@ -205,6 +130,28 @@ try_install_k9s() {
     fi
 }
 
+try_install_cloudflared() {
+    local tool_name="cloudflared"
+    if command -v cloudflared > /dev/null 2>&1; then
+        log_found "$tool_name is already installed ($(cloudflared --version 2> /dev/null || echo version unknown))"
+        return 0
+    fi
+
+    log_install "$tool_name"
+    local codename
+    codename="$(lsb_release -cs 2> /dev/null || echo focal)"
+    if sudo mkdir -p --mode=0755 /usr/share/keyrings \
+        && curl -fsSL https://pkg.cloudflare.com/cloudflare-main.gpg | sudo tee /usr/share/keyrings/cloudflare-main.gpg > /dev/null \
+        && echo "deb [signed-by=/usr/share/keyrings/cloudflare-main.gpg] https://pkg.cloudflare.com/cloudflared ${codename} main" | sudo tee /etc/apt/sources.list.d/cloudflared.list > /dev/null \
+        && sudo apt-get update -y \
+        && sudo DEBIAN_FRONTEND=noninteractive apt-get install -y cloudflared; then
+        log_success "$tool_name installed successfully"
+    else
+        log_error "Failed to install $tool_name"
+        FAILED_INSTALLATIONS+=("$tool_name")
+    fi
+}
+
 try_install_kubectl() {
     local tool_name="kubectl"
     if ! command -v kubectl > /dev/null 2>&1; then
@@ -223,20 +170,35 @@ try_install_kubectl() {
     fi
 }
 
+install_cli_tools_with_custom_commands() {
+    # Format: "display_name@command@version_command@install_command"
+    # Uses @ as delimiter (safe: not present in URLs or these install commands)
+    local tools=(
+        "uv@uv@uv --version@curl -LsSf https://astral.sh/uv/install.sh | sh"
+        "ruff@ruff@ruff --version@curl -LsSf https://astral.sh/ruff/install.sh | sh"
+        "helm@helm@helm version --short@curl -fsSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash"
+        "act@act@act --version@curl -s https://raw.githubusercontent.com/nektos/act/master/install.sh | sudo bash -s -- -b /usr/local/bin"
+        "starship@starship@starship --version@curl -sS https://starship.rs/install.sh | sh -s -- --yes"
+        "pre-commit@pre-commit@pre-commit --version@pip install pre-commit"
+        "poetry@poetry@poetry --version@curl -sSL https://install.python-poetry.org | python3 -"
+    )
+    for entry in "${tools[@]}"; do
+        IFS="@" read -r display_name command version_command install_command <<< "$entry"
+        try_install_tool "$display_name" "$command" "$install_command" "$version_command"
+    done
+}
+
 install_cli_tools() {
     log_info "Installing command-line tools..."
 
     install_cli_tools_with_apt
     install_cli_tools_with_cargo
-    install_tools_with_npm
+    install_cli_tools_with_npm
+    install_cli_tools_with_custom_commands
 
-    try_install_uv
-    try_install_ruff
-    try_install_helm
+    # Tools with complex installation logic that can't be expressed as a single command
     try_install_glow
-    try_install_act
-    try_install_pre_commit
-    try_install_poetry
+    try_install_cloudflared
     try_install_kubectl
     try_install_k9s
     try_install_claude_code
@@ -283,7 +245,7 @@ main() {
     echo -e "   ${BLUE}4.${NC} ${WHITE}🧰 Install tools via cargo (eza, git-delta)${NC}"
     echo -e "   ${BLUE}5.${NC} ${WHITE}⎈ Install helm CLI${NC}"
     echo -e "   ${BLUE}6.${NC} ${WHITE}🐚 Install and configure Oh My Zsh${NC}"
-    echo -e "   ${BLUE}7.${NC} ${WHITE}🔌 Install Zsh plugins and themes${NC}"
+    echo -e "   ${BLUE}7.${NC} ${WHITE}🔌 Install Zsh plugins and themes (with evalcache for faster startup)${NC}"
     echo -e "   ${BLUE}8.${NC} ${WHITE}📝 Set up dotfiles and modular shell utilities${NC}"
     echo -e "   ${BLUE}9.${NC} ${WHITE}🐍 Configure Python environment with pyenv${NC}"
     echo ""
@@ -293,7 +255,7 @@ main() {
         "install command-line development tools|install_cli_tools|false|always"
         "install Rust programming language|install_rust|false|always"
         "install and configure Oh My Zsh shell framework|install_oh_my_zsh|false|always"
-        "install Zsh plugins and themes (autosuggestions, syntax highlighting, powerlevel10k)|install_zsh_plugins|false|always"
+        "install Zsh plugins and themes (autosuggestions, syntax highlighting, evalcache, powerlevel10k)|install_zsh_plugins|false|always"
         "set up dotfiles and modular shell utilities|setup_dotfiles|true|always"
         "configure Python environment with pyenv|configure_python_env|false|always"
     )

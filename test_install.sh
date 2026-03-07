@@ -104,6 +104,7 @@ test_cli_tools_exists() {
         "zoxide installation:zoxide"
         "helm installation:helm"
         "speedtest-cli installation:speedtest-cli"
+        "cloudflared installation:cloudflared"
         "fzf installation:fzf"
         "tldr installation:tldr"
         "delta installation:delta"
@@ -118,6 +119,8 @@ test_cli_tools_exists() {
         "act installation:act"
         "GitHub CLI installation:gh"
         "AWS CLI installation:aws"
+        "starship installation:starship"
+        "neofetch installation:neofetch"
     )
 
     for entry in "${tools[@]}"; do

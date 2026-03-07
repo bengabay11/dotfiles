@@ -2,7 +2,7 @@
 
 A comprehensive dotfiles setup for macOS and Linux (Ubuntu/Debian-based; includes WSL).
 
-<img src="assets/install_demo.jpeg" width="600" alt="Install demo">
+![Alt text](assets/install_demo.jpeg "Optional title")
 
 ## Features
 

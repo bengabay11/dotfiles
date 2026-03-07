@@ -45,7 +45,7 @@ A comprehensive dotfiles setup for macOS and Linux (Ubuntu/Debian-based; include
 | -------------------------------------------- | -------------------------------------------------------------- | -------------------------------------------------- | -------------------------------------------------------- |
 | [btop](https://github.com/aristocratos/btop) | [htop](https://htop.dev/)                                      | [nmap](https://nmap.org/)                          | [speedtest-cli](https://github.com/sivel/speedtest-cli)  |
 | [AWS CLI](https://aws.amazon.com/cli/)       | [helm](https://helm.sh/)                                       | [kubectx](https://github.com/ahmetb/kubectx)       | [kubectl](https://kubernetes.io/docs/reference/kubectl/) |
-| [k9s](https://k9scli.io/)                    | [TShark](https://www.wireshark.org/docs/man-pages/tshark.html) | [neofetch](https://github.com/dylanaraps/neofetch) |                                                          |
+| [k9s](https://k9scli.io/)                    | [TShark](https://www.wireshark.org/docs/man-pages/tshark.html) | [neofetch](https://github.com/dylanaraps/neofetch) | [cloudflared](https://github.com/cloudflare/cloudflared) |
 
 ### 📱 Applications (macOS)
 

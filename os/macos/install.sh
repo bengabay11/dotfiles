@@ -99,7 +99,9 @@ install_cli_tools() {
     )
     install_tools_with_package_manager "Homebrew" "brew" "brew install" tools
 
+    # Tools with complex installation logic that can't be expressed as a single command
     try_install_claude_code
+    try_install_starship_preset
 }
 
 install_applications() {

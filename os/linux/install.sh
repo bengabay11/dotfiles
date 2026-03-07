@@ -202,6 +202,7 @@ install_cli_tools() {
     try_install_kubectl
     try_install_k9s
     try_install_claude_code
+    try_install_starship_preset
 }
 
 install_pyenv() {

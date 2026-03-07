@@ -62,7 +62,6 @@ install_cli_tools_with_apt() {
         "fzf:fzf:fzf --version:fzf"
         "tldr:tldr:tldr --version:tldr"
         "Speedtest CLI:speedtest-cli:speedtest-cli --version:speedtest-cli"
-        "cloudflared:cloudflared:cloudflared --version:cloudflared"
         "Java JDK:javac:javac -version:default-jdk"
         "TShark:tshark:tshark --version:tshark"
         "GitHub CLI:gh:gh --version:gh"
@@ -130,11 +129,11 @@ try_install_glow() {
     fi
 
     log_install "$tool_name"
-    if sudo mkdir -p /etc/apt/keyrings &&
-        curl -fsSL https://repo.charm.sh/apt/gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/charm.gpg &&
-        echo "deb [signed-by=/etc/apt/keyrings/charm.gpg] https://repo.charm.sh/apt/ * *" | sudo tee /etc/apt/sources.list.d/charm.list > /dev/null &&
-        sudo apt-get update -y &&
-        sudo DEBIAN_FRONTEND=noninteractive apt-get install -y glow; then
+    if sudo mkdir -p /etc/apt/keyrings \
+        && curl -fsSL https://repo.charm.sh/apt/gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/charm.gpg \
+        && echo "deb [signed-by=/etc/apt/keyrings/charm.gpg] https://repo.charm.sh/apt/ * *" | sudo tee /etc/apt/sources.list.d/charm.list > /dev/null \
+        && sudo apt-get update -y \
+        && sudo DEBIAN_FRONTEND=noninteractive apt-get install -y glow; then
         log_success "$tool_name installed successfully"
     else
         log_error "Failed to install $tool_name"
@@ -206,6 +205,28 @@ try_install_k9s() {
     fi
 }
 
+try_install_cloudflared() {
+    local tool_name="cloudflared"
+    if command -v cloudflared > /dev/null 2>&1; then
+        log_found "$tool_name is already installed ($(cloudflared --version 2> /dev/null || echo version unknown))"
+        return 0
+    fi
+
+    log_install "$tool_name"
+    local codename
+    codename="$(lsb_release -cs 2> /dev/null || echo focal)"
+    if sudo mkdir -p --mode=0755 /usr/share/keyrings \
+        && curl -fsSL https://pkg.cloudflare.com/cloudflare-main.gpg | sudo tee /usr/share/keyrings/cloudflare-main.gpg > /dev/null \
+        && echo "deb [signed-by=/usr/share/keyrings/cloudflare-main.gpg] https://pkg.cloudflare.com/cloudflared ${codename} main" | sudo tee /etc/apt/sources.list.d/cloudflared.list > /dev/null \
+        && sudo apt-get update -y \
+        && sudo DEBIAN_FRONTEND=noninteractive apt-get install -y cloudflared; then
+        log_success "$tool_name installed successfully"
+    else
+        log_error "Failed to install $tool_name"
+        FAILED_INSTALLATIONS+=("$tool_name")
+    fi
+}
+
 try_install_kubectl() {
     local tool_name="kubectl"
     if ! command -v kubectl > /dev/null 2>&1; then
@@ -238,6 +259,7 @@ install_cli_tools() {
     try_install_act
     try_install_pre_commit
     try_install_poetry
+    try_install_cloudflared
     try_install_kubectl
     try_install_k9s
     try_install_claude_code

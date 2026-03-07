@@ -149,6 +149,9 @@ test_apps() {
         "Typora"
         "DBeaver"
         "GitKraken"
+        "zoom.us"
+        "AltTab"
+        "Rectangle"
     )
 
     for app in "${apps[@]}"; do

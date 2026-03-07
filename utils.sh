@@ -292,6 +292,22 @@ install_zsh_plugins() {
     log_success "All Zsh plugins and themes installed successfully"
 }
 
+try_install_starship_preset() {
+    local preset="gruvbox-rainbow"
+    local config="$HOME/.config/starship.toml"
+    if [[ -f "$config" ]]; then
+        log_found "starship config already exists ($config)"
+    else
+        log_install "starship $preset preset"
+        if starship preset "$preset" -o "$config"; then
+            log_success "starship $preset preset installed to $config"
+        else
+            log_error "Failed to install starship $preset preset"
+            FAILED_INSTALLATIONS+=("starship-preset-$preset")
+        fi
+    fi
+}
+
 try_install_claude_code() {
     try_install_tool "Claude Code" "claude" \
         "curl -fsSL https://claude.ai/install.sh | bash" \

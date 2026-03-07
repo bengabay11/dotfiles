@@ -91,37 +91,6 @@ install_tools_with_npm() {
     install_tools_with_package_manager "npm" "npm" "npm install -g" tools
 }
 
-try_install_ruff() {
-    local tool_name="ruff"
-    if ! command -v ruff > /dev/null 2>&1; then
-        log_install $tool_name
-        if ! curl -LsSf https://astral.sh/ruff/install.sh | sh; then
-            log_error "Failed to install $tool_name"
-            FAILED_INSTALLATIONS+=("$tool_name")
-        else
-            log_success "$tool_name installed successfully"
-        fi
-    else
-        log_found "$tool_name is already installed ($(ruff --version 2> /dev/null || echo version unknown))"
-    fi
-}
-
-# Dedicated function for trying install helm (Can't use try_install_tool because the install command has pipe inside)
-try_install_helm() {
-    local tool_name="helm"
-    if ! command -v helm > /dev/null 2>&1; then
-        log_install $tool_name
-        if ! curl -fsSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash; then
-            log_error "Failed to install $tool_name"
-            FAILED_INSTALLATIONS+=("$tool_name")
-        else
-            log_success "$tool_name installed successfully"
-        fi
-    else
-        log_found "$tool_name is already installed ($(helm version --short 2> /dev/null || echo version unknown))"
-    fi
-}
-
 try_install_glow() {
     local tool_name="glow"
     if command -v glow > /dev/null 2>&1; then
@@ -139,66 +108,6 @@ try_install_glow() {
     else
         log_error "Failed to install $tool_name"
         FAILED_INSTALLATIONS+=("$tool_name")
-    fi
-}
-
-try_install_act() {
-    local tool_name="act"
-    if ! command -v act > /dev/null 2>&1; then
-        log_install $tool_name
-        if ! curl -s https://raw.githubusercontent.com/nektos/act/master/install.sh | sudo bash -s -- -b /usr/local/bin; then
-            log_error "Failed to install $tool_name"
-            FAILED_INSTALLATIONS+=("$tool_name")
-        else
-            log_success "$tool_name installed successfully"
-        fi
-    else
-        log_found "$tool_name is already installed ($(act --version 2> /dev/null || echo version unknown))"
-    fi
-}
-
-try_install_starship() {
-    local tool_name="starship"
-    if ! command -v starship > /dev/null 2>&1; then
-        log_install $tool_name
-        if ! curl -sS https://starship.rs/install.sh | sh -s -- --yes; then
-            log_error "Failed to install $tool_name"
-            FAILED_INSTALLATIONS+=("$tool_name")
-        else
-            log_success "$tool_name installed successfully"
-        fi
-    else
-        log_found "$tool_name is already installed ($(starship --version 2> /dev/null || echo version unknown))"
-    fi
-}
-
-try_install_pre_commit() {
-    local tool_name="pre-commit"
-    if ! command -v pre-commit > /dev/null 2>&1; then
-        log_install $tool_name
-        if ! pip install pre-commit; then
-            log_error "Failed to install $tool_name"
-            FAILED_INSTALLATIONS+=("$tool_name")
-        else
-            log_success "$tool_name installed successfully"
-        fi
-    else
-        log_found "$tool_name is already installed ($(pre-commit --version 2> /dev/null || echo version unknown))"
-    fi
-}
-
-try_install_poetry() {
-    local tool_name="poetry"
-    if ! command -v poetry > /dev/null 2>&1; then
-        log_install $tool_name
-        if ! curl -sSL https://install.python-poetry.org | python3 -; then
-            log_error "Failed to install $tool_name"
-            FAILED_INSTALLATIONS+=("$tool_name")
-        else
-            log_success "$tool_name installed successfully"
-        fi
-    else
-        log_found "$tool_name is already installed ($(poetry --version 2> /dev/null || echo version unknown))"
     fi
 }
 
@@ -239,6 +148,24 @@ try_install_kubectl() {
     fi
 }
 
+install_cli_tools_with_custom_commands() {
+    # Format: "display_name@command@version_command@install_command"
+    # Uses @ as delimiter (safe: not present in URLs or these install commands)
+    local tools=(
+        "uv@uv@uv --version@curl -LsSf https://astral.sh/uv/install.sh | sh"
+        "ruff@ruff@ruff --version@curl -LsSf https://astral.sh/ruff/install.sh | sh"
+        "helm@helm@helm version --short@curl -fsSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash"
+        "act@act@act --version@curl -s https://raw.githubusercontent.com/nektos/act/master/install.sh | sudo bash -s -- -b /usr/local/bin"
+        "starship@starship@starship --version@curl -sS https://starship.rs/install.sh | sh -s -- --yes"
+        "pre-commit@pre-commit@pre-commit --version@pip install pre-commit"
+        "poetry@poetry@poetry --version@curl -sSL https://install.python-poetry.org | python3 -"
+    )
+    for entry in "${tools[@]}"; do
+        IFS="@" read -r display_name command version_command install_command <<< "$entry"
+        try_install_tool "$display_name" "$command" "$install_command" "$version_command"
+    done
+}
+
 install_cli_tools() {
     log_info "Installing command-line tools..."
 
@@ -246,14 +173,8 @@ install_cli_tools() {
     install_cli_tools_with_cargo
     install_tools_with_npm
 
-    try_install_uv
-    try_install_ruff
-    try_install_helm
+    install_cli_tools_with_custom_commands
     try_install_glow
-    try_install_act
-    try_install_starship
-    try_install_pre_commit
-    try_install_poetry
     try_install_kubectl
     try_install_k9s
     try_install_claude_code

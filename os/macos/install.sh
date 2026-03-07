@@ -94,10 +94,10 @@ install_cli_tools() {
         "AWS CLI:aws:aws --version:awscli"
         "starship:starship:starship --version:starship"
         "neofetch:neofetch:neofetch --version:neofetch"
+        "uv:uv:uv --version:uv"
     )
     install_tools_with_package_manager "Homebrew" "brew" "brew install" tools
 
-    try_install_uv
     try_install_claude_code
 }
 

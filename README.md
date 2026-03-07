@@ -2,7 +2,7 @@
 
 A comprehensive dotfiles setup for macOS and Linux (Ubuntu/Debian-based; includes WSL).
 
-![Alt text](assets/install_demo.jpeg "Optional title")
+<img src="assets/install_demo.jpeg" width="600" alt="Install demo">
 
 ## Features
 
@@ -10,40 +10,42 @@ A comprehensive dotfiles setup for macOS and Linux (Ubuntu/Debian-based; include
 
 #### Programming Languages
 
-| | | | |
-| --- | --- | --- | --- |
+|                                   |                                    |                                |                                               |
+| --------------------------------- | ---------------------------------- | ------------------------------ | --------------------------------------------- |
 | [Python](https://www.python.org/) | [Rust](https://www.rust-lang.org/) | [Node.js](https://nodejs.org/) | [TypeScript](https://www.typescriptlang.org/) |
-| [OpenJDK](https://openjdk.org/) | | | |
+| [OpenJDK](https://openjdk.org/)   |                                    |                                |                                               |
 
 #### Package & Version Management
 
-| | | | |
-| --- | --- | --- | --- |
+|                                         |                              |                                       |                                      |
+| --------------------------------------- | ---------------------------- | ------------------------------------- | ------------------------------------ |
 | [pyenv](https://github.com/pyenv/pyenv) | [Yarn](https://yarnpkg.com/) | [uv](https://github.com/astral-sh/uv) | [poetry](https://python-poetry.org/) |
-| [pre-commit](https://pre-commit.com/) | | | |
+| [pre-commit](https://pre-commit.com/)   |                              |                                       |                                      |
 
 #### Terminal & Shell
 
-| | | | |
-| --- | --- | --- | --- |
-| [Zsh](https://www.zsh.org/) | [Oh My Zsh](https://ohmyz.sh/) | [Starship](https://starship.rs/) | [Tmux](https://github.com/tmux/tmux) |
-| [bat](https://github.com/sharkdp/bat) | [eza](https://github.com/eza-community/eza) | [fzf](https://github.com/junegunn/fzf) | [zoxide](https://github.com/ajeetdsouza/zoxide) |
-| [delta](https://github.com/dandavison/delta) | [glow](https://github.com/charmbracelet/glow) | [tldr](https://tldr.sh/) | [watch](https://linux.die.net/man/1/watch) |
+|                                              |                                               |                                        |                                                 |
+| -------------------------------------------- | --------------------------------------------- | -------------------------------------- | ----------------------------------------------- |
+| [Zsh](https://www.zsh.org/)                  | [Oh My Zsh](https://ohmyz.sh/)                | [Starship](https://starship.rs/)       | [Tmux](https://github.com/tmux/tmux)            |
+| [bat](https://github.com/sharkdp/bat)        | [eza](https://github.com/eza-community/eza)   | [fzf](https://github.com/junegunn/fzf) | [zoxide](https://github.com/ajeetdsouza/zoxide) |
+| [delta](https://github.com/dandavison/delta) | [glow](https://github.com/charmbracelet/glow) | [tldr](https://tldr.sh/)               | [watch](https://linux.die.net/man/1/watch)      |
 
 #### Development Tools
 
-| | | | |
-| --- | --- | --- | --- |
-| [Git](https://git-scm.com/) | [Vim](https://www.vim.org/) | [ruff](https://github.com/astral-sh/ruff) | [ShellCheck](https://www.shellcheck.net/) |
-| [ripgrep](https://github.com/BurntSushi/ripgrep) | [jq](https://jqlang.github.io/jq/) | [fd](https://github.com/sharkdp/fd) | [tree](https://gitlab.com/OldManProgrammer/unix-tree) |
-| [ipython](https://ipython.org/) | | | |
+|                                                  |                                    |                                           |                                                       |
+| ------------------------------------------------ | ---------------------------------- | ----------------------------------------- | ----------------------------------------------------- |
+| [Git](https://git-scm.com/)                      | [Vim](https://www.vim.org/)        | [ruff](https://github.com/astral-sh/ruff) | [ShellCheck](https://www.shellcheck.net/)             |
+| [ripgrep](https://github.com/BurntSushi/ripgrep) | [jq](https://jqlang.github.io/jq/) | [fd](https://github.com/sharkdp/fd)       | [tree](https://gitlab.com/OldManProgrammer/unix-tree) |
+| [ipython](https://ipython.org/)                  | [prettier](https://prettier.io/)   | [act](https://github.com/nektos/act)      | [GitHub CLI](https://cli.github.com/)                 |
+| [Claude Code](https://claude.ai/code)            |                                    |                                           |                                                       |
 
 #### System & DevOps
 
-| | | | |
-| --- | --- | --- | --- |
-| [btop](https://github.com/aristocratos/btop) | [htop](https://htop.dev/) | [nmap](https://nmap.org/) | [speedtest-cli](https://github.com/sivel/speedtest-cli) |
-| [AWS CLI](https://aws.amazon.com/cli/) | [helm](https://helm.sh/) | [kubectx](https://github.com/ahmetb/kubectx) | [neofetch](https://github.com/dylanaraps/neofetch) |
+|                                              |                                                                |                                                    |                                                          |
+| -------------------------------------------- | -------------------------------------------------------------- | -------------------------------------------------- | -------------------------------------------------------- |
+| [btop](https://github.com/aristocratos/btop) | [htop](https://htop.dev/)                                      | [nmap](https://nmap.org/)                          | [speedtest-cli](https://github.com/sivel/speedtest-cli)  |
+| [AWS CLI](https://aws.amazon.com/cli/)       | [helm](https://helm.sh/)                                       | [kubectx](https://github.com/ahmetb/kubectx)       | [kubectl](https://kubernetes.io/docs/reference/kubectl/) |
+| [k9s](https://k9scli.io/)                    | [TShark](https://www.wireshark.org/docs/man-pages/tshark.html) | [neofetch](https://github.com/dylanaraps/neofetch) |                                                          |
 
 ### 📱 Applications (macOS)
 
@@ -53,6 +55,7 @@ A comprehensive dotfiles setup for macOS and Linux (Ubuntu/Debian-based; include
 | [Visual Studio Code](https://code.visualstudio.com/) | [Google Chrome](https://www.google.com/chrome/)  | [Brave Browser](https://brave.com/)                               | [Slack](https://slack.com/)              |
 | [Sublime Text](https://www.sublimetext.com/)         | [Obsidian](https://obsidian.md/)                 | [Docker Desktop](https://www.docker.com/products/docker-desktop/) | [Wireshark](https://www.wireshark.org/)  |
 | [Postman](https://www.postman.com/)                  | [Paintbrush](https://paintbrush.sourceforge.io/) | [Typora](https://typora.io/)                                      | [DBeaver Community](https://dbeaver.io/) |
+| [GitKraken](https://www.gitkraken.com/)              |                                                  |                                                                   |                                          |
 
 ### ⚙️ Configuration Files
 
@@ -68,13 +71,6 @@ The dotfiles include a modular utilities system located at `~/.config/shell-util
 - **`functions.sh`** - Essential functions like `extract()`, `mkcd()`, and beautiful logging functions
 - **`aliases.sh`** - Cross-shell aliases for everyday commands
 - **Extensible** - Add your own `.sh` files to the directory and they'll be automatically loaded
-
-**Key utilities include:**
-
-- `extract <file>` - Universal archive extractor (zip, tar, rar, etc.)
-- `mkcd <dir>` - Create directory and navigate to it
-- Beautiful logging functions with colors and icons for scripts
-- And more...
 
 ## Installation
 

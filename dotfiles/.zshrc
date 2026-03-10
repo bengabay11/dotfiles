@@ -172,6 +172,12 @@ if [[ -d "$SHELL_UTILS_DIR" ]]; then
     done
 fi
 
+# Load local .zshrc file for machine-specific configurations
+LOCAL_ZSHRC="$HOME/.zshrc.local"
+if [[ -r "$LOCAL_ZSHRC" ]]; then
+    source "$LOCAL_ZSHRC"
+fi
+
 # FZF Configuration
 if command -v fzf >/dev/null 2>&1; then
     # Prefer built-in initializer when available (typically on macOS/Homebrew)

@@ -184,17 +184,17 @@ install_rust() {
 setup_dotfiles() {
     log_info "Setting up dotfiles..."
 
-    # Dynamically discover all dotfiles recursively from the repository
-    local dotfiles_dir="$DOTFILES_ROOT/dotfiles"
+    # Dynamically discover all tracked dotfiles recursively from the git repository
     while IFS= read -r -d '' file; do
-        local relative_path="${file#$dotfiles_dir/}"
+        # file is relative to repo root (e.g., "dotfiles/.shell-utils/aliases.sh")
+        local relative_path="${file#dotfiles/}"
         local target_path="$HOME/$relative_path"
 
         if [[ -f "$target_path" ]]; then
             log_warning "Backing up existing $relative_path to $relative_path.backup"
             mv "$target_path" "$target_path.backup"
         fi
-    done < <(find "$dotfiles_dir" -type f ! -name "setup.sh" ! -name ".stowrc" -print0)
+    done < <(cd "$DOTFILES_ROOT" && git ls-files -z dotfiles/ | grep -zv -e '/setup.sh$' -e '/.stowrc$')
 
     log_info "Running stow to symlink dotfiles..."
     if (cd "$DOTFILES_ROOT/dotfiles" && bash setup.sh); then

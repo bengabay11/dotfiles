@@ -9,7 +9,7 @@ set -euo pipefail
 # Source shared utilities
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DOTFILES_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
-source "$DOTFILES_ROOT/dotfiles/functions.sh"
+source "$DOTFILES_ROOT/dotfiles/.shell-utils/functions.sh"
 source "$DOTFILES_ROOT/utils.sh"
 
 # Check if we're on macOS

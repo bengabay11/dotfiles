@@ -163,7 +163,7 @@ if [ -d "$HOME/.claude/bin" ] && [[ ":$PATH:" != *":$HOME/.claude/bin:"* ]]; the
 fi
 
 # Load shell utilities from modular system
-SHELL_UTILS_DIR="$HOME/.config/shell-utils"
+SHELL_UTILS_DIR="$HOME/.shell-utils"
 if [[ -d "$SHELL_UTILS_DIR" ]]; then
     for util_file in "$SHELL_UTILS_DIR"/*; do
         if [[ -r "$util_file" && -f "$util_file" ]]; then

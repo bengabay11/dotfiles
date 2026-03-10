@@ -186,11 +186,11 @@ test_dotfiles() {
     run_test "Oh My Zsh main script" "test_file_exists '$HOME/.oh-my-zsh/oh-my-zsh.sh'"
     echo ""
 
-    run_test "Modular shell utilities system is configured" "grep -q '.config/shell-utils' '$HOME/.zshrc'"
-    run_test "functions.sh symlink exists" "test_symlink_exists '$HOME/.config/shell-utils/functions.sh'"
-    run_test "functions.sh target exists" "test_symlink_target_exists '$HOME/.config/shell-utils/functions.sh'"
-    run_test "aliases.sh symlink exists" "test_symlink_exists '$HOME/.config/shell-utils/aliases.sh'"
-    run_test "aliases.sh target exists" "test_symlink_target_exists '$HOME/.config/shell-utils/aliases.sh'"
+    run_test "Modular shell utilities system is configured" "grep -q '.shell-utils' '$HOME/.zshrc'"
+    run_test "functions.sh symlink exists" "test_symlink_exists '$HOME/.shell-utils/functions.sh'"
+    run_test "functions.sh target exists" "test_symlink_target_exists '$HOME/.shell-utils/functions.sh'"
+    run_test "aliases.sh symlink exists" "test_symlink_exists '$HOME/.shell-utils/aliases.sh'"
+    run_test "aliases.sh target exists" "test_symlink_target_exists '$HOME/.shell-utils/aliases.sh'"
     echo ""
 }
 

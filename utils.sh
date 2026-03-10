@@ -184,38 +184,31 @@ install_rust() {
 setup_dotfiles() {
     log_info "Setting up dotfiles..."
 
-    # Create necessary directories
-    mkdir -p "$HOME/.config"
-    mkdir -p "$HOME/.config/shell-utils"
+    # Check if stow is installed
+    if ! command -v stow > /dev/null 2>&1; then
+        log_error "GNU Stow is not installed - skipping dotfiles setup"
+        log_info "Please ensure stow is installed in the CLI tools stage"
+        FAILED_INSTALLATIONS+=("dotfiles setup (stow not available)")
+        return 1
+    fi
 
-    local dotfiles=(".vimrc" ".tmux.conf" ".zshrc" ".gitconfig")
-    for dotfile in "${dotfiles[@]}"; do
-        if [[ -f "$HOME/$dotfile" ]]; then
-            log_warning "Backing up existing $dotfile to $dotfile.backup"
-            mv "$HOME/$dotfile" "$HOME/$dotfile.backup"
-        fi
-        ln -sf "$DOTFILES_ROOT/dotfiles/$dotfile" "$HOME/$dotfile"
-    done
-
-    log_info "Setting up modular shell utilities..."
-    local utils=("functions.sh" "aliases.sh")
-    for util in "${utils[@]}"; do
-        local source_file="$DOTFILES_ROOT/dotfiles/$util"
-        local target_file="$HOME/.config/shell-utils/$util"
-
-        if [[ -f "$source_file" ]]; then
-            if [[ -e "$target_file" ]]; then
-                log_warning "Backing up existing $(basename "$target_file") to $(basename "$target_file").backup"
-                mv "$target_file" "$target_file.backup"
-            fi
-            ln -sf "$source_file" "$target_file"
-            log_success "$util symlinked to ~/.config/shell-utils/"
+    # Run the setup script which uses stow
+    local setup_script="$DOTFILES_ROOT/dotfiles/setup.sh"
+    if [[ -f "$setup_script" ]]; then
+        log_info "Running stow to symlink dotfiles..."
+        if bash "$setup_script"; then
+            log_success "Dotfiles symlinked successfully via GNU Stow"
+            log_info "Dotfiles are now managed with GNU Stow - add more files to dotfiles/ and re-run setup.sh"
         else
-            log_warning "$util not found - skipping"
+            log_error "Failed to setup dotfiles with stow"
+            FAILED_INSTALLATIONS+=("dotfiles setup")
+            return 1
         fi
-    done
-
-    log_info "You can now add more utility files to ~/.config/shell-utils/ and they will be automatically loaded"
+    else
+        log_error "Setup script not found: $setup_script"
+        FAILED_INSTALLATIONS+=("dotfiles setup")
+        return 1
+    fi
 }
 
 # Install Oh My Zsh

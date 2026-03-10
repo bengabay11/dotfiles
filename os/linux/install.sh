@@ -68,6 +68,7 @@ install_cli_tools_with_apt() {
         "AWS CLI:aws:aws --version:awscli"
         "kubectx:kubectx:kubectx --help:kubectx"
         "neofetch:neofetch:neofetch --version:neofetch"
+        "stow:stow:stow --version:stow"
     )
     install_tools_with_package_manager "apt" "apt" \
         "sudo DEBIAN_FRONTEND=noninteractive apt-get install -y" tools

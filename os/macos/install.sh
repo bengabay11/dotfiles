@@ -96,6 +96,7 @@ install_cli_tools() {
         "starship:starship:starship --version:starship"
         "neofetch:neofetch:neofetch --version:neofetch"
         "uv:uv:uv --version:uv"
+        "stow:stow:stow --version:stow"
     )
     install_tools_with_package_manager "Homebrew" "brew" "brew install" tools
 

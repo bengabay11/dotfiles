@@ -121,6 +121,7 @@ test_cli_tools_exists() {
         "starship installation:starship"
         "neofetch installation:neofetch"
         "stow installation:stow"
+        "yazi installation:yazi"
     )
 
     for entry in "${tools[@]}"; do
@@ -134,6 +135,7 @@ test_apps() {
     apps=(
         "iTerm"
         "Warp"
+        "Ghostty"
         "Raycast"
         "Cursor"
         "Visual Studio Code"

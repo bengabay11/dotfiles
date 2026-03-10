@@ -1,0 +1,13 @@
+[opener]
+edit = [
+  { run = 'cursor "$@"', desc = "Open in Cursor", block = true },
+]
+
+[open]
+rules = [
+  { mime = "text/*", use = "edit" },
+  { mime = "application/json", use = "edit" },
+  { mime = "application/javascript", use = "edit" },
+  { mime = "application/x-shellscript", use = "edit" },
+  { name = "*.{ts,tsx,js,jsx,py,go,rs,c,cpp,h,hpp,java,kt,swift,php,rb,lua,vim,sh,bash,zsh,fish,conf,toml,yaml,yml,json,xml,html,css,scss,sass,md,txt}", use = "edit" },
+]

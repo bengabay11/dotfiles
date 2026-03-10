@@ -184,12 +184,6 @@ install_rust() {
 setup_dotfiles() {
     log_info "Setting up dotfiles..."
 
-    if ! command -v stow > /dev/null 2>&1; then
-        log_error "GNU Stow is not installed - skipping dotfiles setup"
-        FAILED_INSTALLATIONS+=("dotfiles setup (stow not available)")
-        return 1
-    fi
-
     local dotfiles=(".vimrc" ".tmux.conf" ".zshrc" ".gitconfig")
     for dotfile in "${dotfiles[@]}"; do
         if [[ -f "$HOME/$dotfile" ]]; then

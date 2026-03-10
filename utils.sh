@@ -198,23 +198,11 @@ setup_dotfiles() {
         fi
     done
 
-    local setup_script="$DOTFILES_ROOT/dotfiles/setup.sh"
-    local dotfiles_dir="$DOTFILES_ROOT/dotfiles"
-    if [[ -f "$setup_script" ]]; then
-        log_info "Running stow to symlink dotfiles..."
-        local original_dir="$PWD"
-        cd "$dotfiles_dir" || return 1
-        if bash setup.sh; then
-            cd "$original_dir"
-            log_success "Dotfiles symlinked successfully via GNU Stow"
-        else
-            cd "$original_dir"
-            log_error "Failed to setup dotfiles with stow"
-            FAILED_INSTALLATIONS+=("dotfiles setup")
-            return 1
-        fi
+    log_info "Running stow to symlink dotfiles..."
+    if (cd "$DOTFILES_ROOT/dotfiles" && bash setup.sh); then
+        log_success "Dotfiles symlinked successfully via GNU Stow"
     else
-        log_error "Setup script not found: $setup_script"
+        log_error "Failed to setup dotfiles with stow"
         FAILED_INSTALLATIONS+=("dotfiles setup")
         return 1
     fi

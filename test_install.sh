@@ -63,9 +63,9 @@ test_symlink_exists() {
 
 test_symlink_target_exists() {
     local link="$1"
-    local target
-    target=$(readlink "$link")
-    [[ -f "$target" ]]
+    # Check if the symlink's target is a valid file
+    # Using test -e follows the symlink and checks if target exists
+    [[ -e "$link" ]]
 }
 
 test_cli_tools_exists() {
@@ -188,10 +188,10 @@ test_dotfiles() {
     echo ""
 
     run_test "Modular shell utilities system is configured" "grep -q '.shell-utils' '$HOME/.zshrc'"
-    run_test "functions.sh symlink exists" "test_symlink_exists '$HOME/.shell-utils/functions.sh'"
-    run_test "functions.sh target exists" "test_symlink_target_exists '$HOME/.shell-utils/functions.sh'"
-    run_test "aliases.sh symlink exists" "test_symlink_exists '$HOME/.shell-utils/aliases.sh'"
-    run_test "aliases.sh target exists" "test_symlink_target_exists '$HOME/.shell-utils/aliases.sh'"
+    run_test ".shell-utils directory symlink exists" "test_symlink_exists '$HOME/.shell-utils'"
+    run_test ".shell-utils target directory exists" "test_symlink_target_exists '$HOME/.shell-utils'"
+    run_test "functions.sh exists" "test_file_exists '$HOME/.shell-utils/functions.sh'"
+    run_test "aliases.sh exists" "test_file_exists '$HOME/.shell-utils/aliases.sh'"
     echo ""
 }
 

@@ -89,6 +89,7 @@ install_cli_tools() {
         "tldr:tldr:tldr --version:tldr"
         "zoxide:zoxide:zoxide --version:zoxide"
         "delta:delta:delta --version:git-delta"
+        "carapace:carapace:carapace --version:carapace"
         "glow:glow:glow --version:glow"
         "act:act:act --version:act"
         "GitHub CLI:gh:gh --version:gh"

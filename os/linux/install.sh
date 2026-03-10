@@ -78,6 +78,7 @@ install_cli_tools_with_cargo() {
     local tools=(
         "eza:eza:eza --version:eza"
         "git-delta:delta:delta --version:git-delta"
+        "carapace:carapace:carapace --version:carapace-bin"
     )
     install_tools_with_package_manager "cargo" "cargo" "cargo install" tools
 }

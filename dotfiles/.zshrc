@@ -110,6 +110,11 @@ fi
 # Initialize zoxide (with caching for faster startup)
 _evalcache zoxide init zsh
 
+# Initialize carapace completions
+if command -v carapace >/dev/null 2>&1; then
+    source <(carapace _carapace)
+fi
+
 # Fix zoxide recursive cd issue
 _z_cd() {
 	builtin cd "$@" || return "$?"

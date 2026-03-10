@@ -191,13 +191,11 @@ setup_dotfiles() {
     fi
 
     log_info "Checking for existing dotfiles to backup..."
-    local backup_suffix=".backup-$(date +%Y%m%d-%H%M%S)"
-    local dotfiles_to_check=(".vimrc" ".tmux.conf" ".zshrc" ".gitconfig" ".shell-utils")
-    for dotfile in "${dotfiles_to_check[@]}"; do
-        local target="$HOME/$dotfile"
-        if [[ -e "$target" && ! -L "$target" ]]; then
-            log_warning "Backing up existing $dotfile to ${dotfile}${backup_suffix}"
-            mv "$target" "${target}${backup_suffix}"
+    local dotfiles=(".vimrc" ".tmux.conf" ".zshrc" ".gitconfig")
+    for dotfile in "${dotfiles[@]}"; do
+        if [[ -f "$HOME/$dotfile" ]]; then
+            log_warning "Backing up existing $dotfile to $dotfile.backup"
+            mv "$HOME/$dotfile" "$HOME/$dotfile.backup"
         fi
     done
 

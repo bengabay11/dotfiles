@@ -8,8 +8,8 @@ set -uo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 shopt -s expand_aliases # Allow aliases (from aliases.sh) to work in this non-interactive script
-source "$SCRIPT_DIR/dotfiles/functions.sh"
-source "$SCRIPT_DIR/dotfiles/aliases.sh"
+source "$SCRIPT_DIR/dotfiles/.shell-utils/functions.sh"
+source "$SCRIPT_DIR/dotfiles/.shell-utils/aliases.sh"
 
 # Ensure typical user tool paths are available in this test session
 export PATH="$PATH:$HOME/.cargo/bin:$HOME/.pyenv/bin:/usr/bin:/usr/local/bin:$HOME/.local/bin:$HOME/bin"
@@ -63,9 +63,8 @@ test_symlink_exists() {
 
 test_symlink_target_exists() {
     local link="$1"
-    local target
-    target=$(readlink "$link")
-    [[ -f "$target" ]]
+    # Using test -e follows the symlink and checks if target exists
+    [[ -e "$link" ]]
 }
 
 test_cli_tools_exists() {
@@ -121,6 +120,7 @@ test_cli_tools_exists() {
         "AWS CLI installation:aws"
         "starship installation:starship"
         "neofetch installation:neofetch"
+        "stow installation:stow"
     )
 
     for entry in "${tools[@]}"; do
@@ -186,11 +186,11 @@ test_dotfiles() {
     run_test "Oh My Zsh main script" "test_file_exists '$HOME/.oh-my-zsh/oh-my-zsh.sh'"
     echo ""
 
-    run_test "Modular shell utilities system is configured" "grep -q '.config/shell-utils' '$HOME/.zshrc'"
-    run_test "functions.sh symlink exists" "test_symlink_exists '$HOME/.config/shell-utils/functions.sh'"
-    run_test "functions.sh target exists" "test_symlink_target_exists '$HOME/.config/shell-utils/functions.sh'"
-    run_test "aliases.sh symlink exists" "test_symlink_exists '$HOME/.config/shell-utils/aliases.sh'"
-    run_test "aliases.sh target exists" "test_symlink_target_exists '$HOME/.config/shell-utils/aliases.sh'"
+    run_test "Modular shell utilities system is configured" "grep -q '.shell-utils' '$HOME/.zshrc'"
+    run_test ".shell-utils directory symlink exists" "test_symlink_exists '$HOME/.shell-utils'"
+    run_test ".shell-utils target directory exists" "test_symlink_target_exists '$HOME/.shell-utils'"
+    run_test "functions.sh exists" "test_file_exists '$HOME/.shell-utils/functions.sh'"
+    run_test "aliases.sh exists" "test_file_exists '$HOME/.shell-utils/aliases.sh'"
     echo ""
 }
 

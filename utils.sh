@@ -190,7 +190,6 @@ setup_dotfiles() {
         return 1
     fi
 
-    log_info "Checking for existing dotfiles to backup..."
     local dotfiles=(".vimrc" ".tmux.conf" ".zshrc" ".gitconfig")
     for dotfile in "${dotfiles[@]}"; do
         if [[ -f "$HOME/$dotfile" ]]; then

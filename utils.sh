@@ -184,21 +184,17 @@ install_rust() {
 setup_dotfiles() {
     log_info "Setting up dotfiles..."
 
-    # Check if stow is installed
     if ! command -v stow > /dev/null 2>&1; then
         log_error "GNU Stow is not installed - skipping dotfiles setup"
-        log_info "Please ensure stow is installed in the CLI tools stage"
         FAILED_INSTALLATIONS+=("dotfiles setup (stow not available)")
         return 1
     fi
 
-    # Run the setup script which uses stow
     local setup_script="$DOTFILES_ROOT/dotfiles/setup.sh"
     if [[ -f "$setup_script" ]]; then
         log_info "Running stow to symlink dotfiles..."
         if bash "$setup_script"; then
             log_success "Dotfiles symlinked successfully via GNU Stow"
-            log_info "Dotfiles are now managed with GNU Stow - add more files to dotfiles/ and re-run setup.sh"
         else
             log_error "Failed to setup dotfiles with stow"
             FAILED_INSTALLATIONS+=("dotfiles setup")

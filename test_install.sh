@@ -8,8 +8,8 @@ set -uo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 shopt -s expand_aliases # Allow aliases (from aliases.sh) to work in this non-interactive script
-source "$SCRIPT_DIR/dotfiles/functions.sh"
-source "$SCRIPT_DIR/dotfiles/aliases.sh"
+source "$SCRIPT_DIR/dotfiles/.shell-utils/functions.sh"
+source "$SCRIPT_DIR/dotfiles/.shell-utils/aliases.sh"
 
 # Ensure typical user tool paths are available in this test session
 export PATH="$PATH:$HOME/.cargo/bin:$HOME/.pyenv/bin:/usr/bin:/usr/local/bin:$HOME/.local/bin:$HOME/bin"
@@ -121,6 +121,7 @@ test_cli_tools_exists() {
         "AWS CLI installation:aws"
         "starship installation:starship"
         "neofetch installation:neofetch"
+        "stow installation:stow"
     )
 
     for entry in "${tools[@]}"; do

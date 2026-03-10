@@ -63,7 +63,6 @@ test_symlink_exists() {
 
 test_symlink_target_exists() {
     local link="$1"
-    # Check if the symlink's target is a valid file
     # Using test -e follows the symlink and checks if target exists
     [[ -e "$link" ]]
 }

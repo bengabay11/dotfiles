@@ -28,7 +28,8 @@ A comprehensive dotfiles setup for macOS and Linux (Ubuntu/Debian-based; include
 | -------------------------------------------- | --------------------------------------------- | -------------------------------------- | ----------------------------------------------- |
 | [Zsh](https://www.zsh.org/)                  | [Oh My Zsh](https://ohmyz.sh/)                | [Starship](https://starship.rs/)       | [Tmux](https://github.com/tmux/tmux)            |
 | [bat](https://github.com/sharkdp/bat)        | [eza](https://github.com/eza-community/eza)   | [fzf](https://github.com/junegunn/fzf) | [zoxide](https://github.com/ajeetdsouza/zoxide) |
-| [delta](https://github.com/dandavison/delta) | [glow](https://github.com/charmbracelet/glow) | [tldr](https://tldr.sh/)               | [watch](https://linux.die.net/man/1/watch)      |
+| [delta](https://github.com/dandavison/delta) | [glow](https://github.com/charmbracelet/glow) | [tldr](https://tldr.sh/)               | [yazi](https://github.com/sxyazi/yazi)          |
+| [watch](https://linux.die.net/man/1/watch)   |                                               |                                        |                                                 |
 
 #### Development Tools
 
@@ -37,7 +38,7 @@ A comprehensive dotfiles setup for macOS and Linux (Ubuntu/Debian-based; include
 | [Git](https://git-scm.com/)                      | [Vim](https://www.vim.org/)        | [ruff](https://github.com/astral-sh/ruff) | [ShellCheck](https://www.shellcheck.net/)             |
 | [ripgrep](https://github.com/BurntSushi/ripgrep) | [jq](https://jqlang.github.io/jq/) | [fd](https://github.com/sharkdp/fd)       | [tree](https://gitlab.com/OldManProgrammer/unix-tree) |
 | [ipython](https://ipython.org/)                  | [prettier](https://prettier.io/)   | [act](https://github.com/nektos/act)      | [GitHub CLI](https://cli.github.com/)                 |
-| [Claude Code](https://claude.ai/code)            |                                    |                                           |                                                       |
+| [Claude Code](https://claude.ai/code)            | [GNU Stow](https://www.gnu.org/software/stow/)   |                                           |                                                       |
 
 #### System & DevOps
 
@@ -51,18 +52,12 @@ A comprehensive dotfiles setup for macOS and Linux (Ubuntu/Debian-based; include
 
 |                                                      |                                                  |                                                                   |                                          |
 | ---------------------------------------------------- | ------------------------------------------------ | ----------------------------------------------------------------- | ---------------------------------------- |
-| [iTerm2](https://iterm2.com/)                        | [Warp](https://www.warp.dev/)                    | [Raycast](https://www.raycast.com/)                               | [Cursor](https://cursor.sh/)             |
-| [Visual Studio Code](https://code.visualstudio.com/) | [Google Chrome](https://www.google.com/chrome/)  | [Brave Browser](https://brave.com/)                               | [Slack](https://slack.com/)              |
-| [Sublime Text](https://www.sublimetext.com/)         | [Obsidian](https://obsidian.md/)                 | [Docker Desktop](https://www.docker.com/products/docker-desktop/) | [Wireshark](https://www.wireshark.org/)  |
-| [Postman](https://www.postman.com/)                  | [Paintbrush](https://paintbrush.sourceforge.io/) | [Typora](https://typora.io/)                                      | [DBeaver Community](https://dbeaver.io/) |
-| [GitKraken](https://www.gitkraken.com/)              | [Zoom](https://zoom.us/)                         | [Rectangle](https://rectangleapp.com/)                            | [AltTab](https://alt-tab-macos.netlify.app/) |
-
-### ⚙️ Configuration Files
-
-- `.vimrc` - Comprehensive Vim configuration with modern features, keybindings, and language-specific settings
-- `.tmux.conf` - Tmux setup with Ctrl-a prefix, mouse support, and improved splitting
-- `.zshrc` - Zsh configuration with Oh My Zsh, Starship prompt, plugin support, and modular utilities loading
-- `.gitconfig` - Git configuration with user settings and credential helpers
+| [iTerm2](https://iterm2.com/)                        | [Warp](https://www.warp.dev/)                    | [Ghostty](https://ghostty.org/)                                   | [Raycast](https://www.raycast.com/)      |
+| [Cursor](https://cursor.sh/)                         | [Visual Studio Code](https://code.visualstudio.com/) | [Google Chrome](https://www.google.com/chrome/)               | [Brave Browser](https://brave.com/)      |
+| [Slack](https://slack.com/)                          | [Sublime Text](https://www.sublimetext.com/)     | [Obsidian](https://obsidian.md/)                                  | [Docker Desktop](https://www.docker.com/products/docker-desktop/) |
+| [Wireshark](https://www.wireshark.org/)              | [Postman](https://www.postman.com/)              | [Paintbrush](https://paintbrush.sourceforge.io/)                  | [Typora](https://typora.io/)             |
+| [DBeaver Community](https://dbeaver.io/)             | [GitKraken](https://www.gitkraken.com/)          | [Zoom](https://zoom.us/)                                          | [Rectangle](https://rectangleapp.com/)   |
+| [AltTab](https://alt-tab-macos.netlify.app/)         |                                                  |                                                                   |                                          |
 
 ### 🧰 Modular Shell Utilities
 
@@ -71,6 +66,23 @@ The dotfiles include a modular utilities system located at `~/.shell-utils/`:
 - **`functions.sh`** - Essential functions like `extract()`, `mkcd()`, and beautiful logging functions
 - **`aliases.sh`** - Cross-shell aliases for everyday commands
 - **Extensible** - Add your own `.sh` files to the directory and they'll be automatically loaded
+
+### 📦 Dotfiles Management with GNU Stow
+
+This repository uses [GNU Stow](https://www.gnu.org/software/stow/) for dotfiles management. The `dotfiles/` folder is a standard stow package that mirrors your home directory structure.
+
+**How it works:**
+- Files and directories in `dotfiles/` are symlinked to your home directory (not copied)
+- Changes to files in the repo are immediately reflected in your system
+
+**Installation vs. Sync:**
+- **`./install.sh`** - Full installation: backs up existing dotfiles (`.vimrc`, `.zshrc`, etc.) to `.backup` before creating symlinks
+- **`./dotfiles/setup.sh`** - Direct sync: runs stow without backing up files (use this for updates after initial install)
+
+**To add new dotfiles:**
+1. Add the file to the `dotfiles/` directory (e.g., `dotfiles/.bashrc`)
+2. Run `cd dotfiles && ./setup.sh` to create the symlink
+3. The file will now be symlinked to your home directory (`~/.bashrc`)
 
 ## Installation
 
@@ -110,7 +122,7 @@ Common steps (macOS and Linux):
 - **Oh My Zsh** - Installs and configures Oh My Zsh
 - **Zsh plugins** - Installs autosuggestions and syntax-highlighting plugins
 - **Starship** - Installs and configures Starship as the active shell prompt
-- **Dotfiles Setup** - Symlinks configuration files and installs modular shell utilities
+- **Dotfiles Setup** - Uses GNU Stow to symlink configuration files from `dotfiles/` to your home directory
 - **Python Setup** - Installs latest Python 3 via pyenv and sets it globally
 
 macOS only:

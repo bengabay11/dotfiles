@@ -7,7 +7,7 @@ set -euo pipefail
 # Source shared utilities
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DOTFILES_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
-source "$DOTFILES_ROOT/dotfiles/functions.sh"
+source "$DOTFILES_ROOT/dotfiles/.shell-utils/functions.sh"
 source "$DOTFILES_ROOT/utils.sh"
 
 # Global array to track failed installations
@@ -96,6 +96,7 @@ install_cli_tools() {
         "starship:starship:starship --version:starship"
         "neofetch:neofetch:neofetch --version:neofetch"
         "uv:uv:uv --version:uv"
+        "stow:stow:stow --version:stow"
     )
     install_tools_with_package_manager "Homebrew" "brew" "brew install" tools
 

@@ -66,7 +66,7 @@ A comprehensive dotfiles setup for macOS and Linux (Ubuntu/Debian-based; include
 
 ### 🧰 Modular Shell Utilities
 
-The dotfiles include a modular utilities system located at `~/.config/shell-utils/`:
+The dotfiles include a modular utilities system located at `~/.shell-utils/`:
 
 - **`functions.sh`** - Essential functions like `extract()`, `mkcd()`, and beautiful logging functions
 - **`aliases.sh`** - Cross-shell aliases for everyday commands

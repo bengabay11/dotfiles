@@ -182,6 +182,7 @@ install_cli_tools_with_custom_commands() {
         "starship@starship@starship --version@curl -sS https://starship.rs/install.sh | sh -s -- --yes"
         "pre-commit@pre-commit@pre-commit --version@pip install pre-commit"
         "poetry@poetry@poetry --version@curl -sSL https://install.python-poetry.org | python3 -"
+        "yazi@yazi@yazi --version@cargo install --locked yazi-fm yazi-cli"
     )
     for entry in "${tools[@]}"; do
         IFS="@" read -r display_name command version_command install_command <<< "$entry"

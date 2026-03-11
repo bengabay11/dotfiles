@@ -53,7 +53,7 @@ try_install_tool() {
     local tool_version_command="$4"
     if ! command -v $tool_command_name > /dev/null 2>&1; then
         log_install $tool_name
-        if ! $tool_install_command; then
+        if ! eval "$tool_install_command"; then
             log_error "Failed to install $tool_name"
             FAILED_INSTALLATIONS+=("$tool_name")
         else
@@ -184,38 +184,26 @@ install_rust() {
 setup_dotfiles() {
     log_info "Setting up dotfiles..."
 
-    # Create necessary directories
-    mkdir -p "$HOME/.config"
-    mkdir -p "$HOME/.config/shell-utils"
+    # Dynamically discover all tracked dotfiles recursively from the git repository
+    while IFS= read -r -d '' file; do
+        # file is relative to repo root (e.g., "dotfiles/.shell-utils/aliases.sh")
+        local relative_path="${file#dotfiles/}"
+        local target_path="$HOME/$relative_path"
 
-    local dotfiles=(".vimrc" ".tmux.conf" ".zshrc" ".gitconfig")
-    for dotfile in "${dotfiles[@]}"; do
-        if [[ -f "$HOME/$dotfile" ]]; then
-            log_warning "Backing up existing $dotfile to $dotfile.backup"
-            mv "$HOME/$dotfile" "$HOME/$dotfile.backup"
+        if [[ -f "$target_path" ]]; then
+            log_warning "Backing up existing $relative_path to $relative_path.backup"
+            mv "$target_path" "$target_path.backup"
         fi
-        ln -sf "$DOTFILES_ROOT/dotfiles/$dotfile" "$HOME/$dotfile"
-    done
+    done < <(cd "$DOTFILES_ROOT" && git ls-files -z dotfiles/ | grep -zv -e '/setup.sh$' -e '/.stowrc$')
 
-    log_info "Setting up modular shell utilities..."
-    local utils=("functions.sh" "aliases.sh")
-    for util in "${utils[@]}"; do
-        local source_file="$DOTFILES_ROOT/dotfiles/$util"
-        local target_file="$HOME/.config/shell-utils/$util"
-
-        if [[ -f "$source_file" ]]; then
-            if [[ -e "$target_file" ]]; then
-                log_warning "Backing up existing $(basename "$target_file") to $(basename "$target_file").backup"
-                mv "$target_file" "$target_file.backup"
-            fi
-            ln -sf "$source_file" "$target_file"
-            log_success "$util symlinked to ~/.config/shell-utils/"
-        else
-            log_warning "$util not found - skipping"
-        fi
-    done
-
-    log_info "You can now add more utility files to ~/.config/shell-utils/ and they will be automatically loaded"
+    log_info "Running stow to symlink dotfiles..."
+    if (cd "$DOTFILES_ROOT/dotfiles" && bash setup.sh); then
+        log_success "Dotfiles symlinked successfully via GNU Stow"
+    else
+        log_error "Failed to setup dotfiles with stow"
+        FAILED_INSTALLATIONS+=("dotfiles setup")
+        return 1
+    fi
 }
 
 # Install Oh My Zsh
@@ -254,6 +242,7 @@ install_zsh_plugins() {
     local plugins=(
         "zsh-autosuggestions|https://github.com/zsh-users/zsh-autosuggestions.git|plugins"
         "zsh-syntax-highlighting|https://github.com/zsh-users/zsh-syntax-highlighting.git|plugins"
+        "evalcache|https://github.com/mroth/evalcache.git|plugins"
         "powerlevel10k|https://github.com/romkatv/powerlevel10k.git|themes"
     )
 
@@ -291,42 +280,28 @@ install_zsh_plugins() {
     log_success "All Zsh plugins and themes installed successfully"
 }
 
-# Dedicated function for trying install uv (Can't use try_install_tool because the install command has pipe inside)
-try_install_uv() {
-    if ! command -v uv > /dev/null 2>&1; then
-        log_install uv
-        curl -LsSf https://astral.sh/ruff/install.sh | sh
-
-        if ! curl -LsSf https://astral.sh/uv/install.sh | sh; then
-            log_error "Failed to install uv"
-            FAILED_INSTALLATIONS+=("uv")
-        else
-            log_success "uv installed successfully"
-        fi
+try_install_starship_preset() {
+    local preset="gruvbox-rainbow"
+    local config="$HOME/.config/starship.toml"
+    if [[ -f "$config" ]]; then
+        log_found "starship config already exists ($config)"
     else
-        log_found "uv is already installed ($(uv --version 2> /dev/null || echo version unknown))"
+        log_install "starship $preset preset"
+        if starship preset "$preset" -o "$config"; then
+            log_success "starship $preset preset installed to $config"
+        else
+            log_error "Failed to install starship $preset preset"
+            FAILED_INSTALLATIONS+=("starship-preset-$preset")
+        fi
     fi
 }
 
-# Install Claude Code AI assistant CLI
-# Uses the official installer script which handles PATH setup
 try_install_claude_code() {
-    local tool_name="Claude Code"
-    if ! command -v claude > /dev/null 2>&1; then
-        log_install "$tool_name"
-        if ! curl -fsSL https://claude.ai/install.sh | bash; then
-            log_error "Failed to install $tool_name"
-            FAILED_INSTALLATIONS+=("$tool_name")
-        else
-            # Source the updated PATH if the installer added it
-            if [[ -f "$HOME/.claude/bin/claude" ]]; then
-                export PATH="$HOME/.claude/bin:$PATH"
-            fi
-            log_success "$tool_name installed successfully"
-        fi
-    else
-        log_found "$tool_name is already installed ($(claude --version 2> /dev/null || echo version unknown))"
-    fi
+    try_install_tool "Claude Code" "claude" \
+        "curl -fsSL https://claude.ai/install.sh | bash" \
+        "claude --version"
+    # Ensure PATH is updated if the installer added the binary
+    [[ -f "$HOME/.claude/bin/claude" ]] && export PATH="$HOME/.claude/bin:$PATH"
 }
 
 try_install_python() {

@@ -1,0 +1,31 @@
+# Run `ghostty +show-config --default --docs` to view a list of
+# all available config options and their default values.
+
+# Additionally, each config option is also explained in detail
+# on Ghostty's website, at https://ghostty.org/docs/config.
+
+# Font
+font-family = "JetBrainsMono Nerd Font"
+font-size = 18
+font-thicken = true
+
+# Adds spacing between terminal content and window borders.
+window-padding-x = 10
+window-padding-y = 10
+
+theme = Gruvbox Dark
+# theme = Catppuccin Mocha
+# theme = TokyoNight
+
+# Controls how many lines you can scroll back.
+scrollback-limit = 100000
+
+# Background
+background-opacity = 0.8
+background-blur = 90
+
+# Automatically copies text when selected.
+copy-on-select = clipboard
+
+# Whether to start the window in a maximized state.
+maximize = true

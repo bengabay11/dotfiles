@@ -4,89 +4,85 @@ A comprehensive dotfiles setup for macOS and Linux (Ubuntu/Debian-based; include
 
 ![Alt text](assets/install_demo.jpeg "Optional title")
 
-
 ## Features
 
 ### 🛠️ Command Line Tools
 
-- **Git** - Version control with optimized configuration
-- **Python 3** (via pyenv) - Python version management
-- **Rust** - Systems programming language with Cargo
-- **Node.js & npm** - JavaScript runtime and package manager
-- **Yarn** - Fast package manager
-- **TypeScript** - Typed JavaScript
-- **OpenJDK (Java)** - Java runtime and tools
-- **Vim** - Text editor with comprehensive configuration
-- **Tmux** - Terminal multiplexer with modern setup
-- **Zsh + Oh My Zsh + Powerlevel10k** - Advanced shell with beautiful theme
-- **bat** - Enhanced cat with syntax highlighting
-- **eza** - Modern ls replacement
-- **ruff** - Fast Python linter
-- **uv** - Ultra-fast Python package installer
-- **pre-commit** - Git hooks framework
-- **poetry** - Python dependency management
-- **pyenv** - Python version management
-- **btop** - Modern system monitor (alternative to htop)
-- **nmap** - Network discovery and security auditing utility
-- **htop** - Interactive process viewer
-- **ipython** - Enhanced interactive Python shell
-- **ripgrep** - Fast text search tool (rg command)
-- **jq** - Command-line JSON processor
-- **fd** - Simple, fast and user-friendly alternative to `find`
-- **tree** - Display directories as a tree view
-- **ShellCheck** - Shell script static analysis tool
-- **zoxide** - Smart directory navigation with `z`
-- **fzf** - Command-line fuzzy finder
-- **tldr** - Simplified community-driven man pages
-- **delta** - Syntax-highlighting pager for git diffs
-- **glow** - Terminal Markdown renderer
-- **watch** - Periodically run a command and display output
-- **helm** - Kubernetes package manager
-- **kubectx** - Quickly switch between Kubernetes contexts and namespaces
-- **speedtest-cli** - Command-line internet speed test tool
-- **AWS CLI** - Command-line interface for managing AWS services
+#### Programming Languages
+
+|                                   |                                    |                                |                                               |
+| --------------------------------- | ---------------------------------- | ------------------------------ | --------------------------------------------- |
+| [Python](https://www.python.org/) | [Rust](https://www.rust-lang.org/) | [Node.js](https://nodejs.org/) | [TypeScript](https://www.typescriptlang.org/) |
+| [OpenJDK](https://openjdk.org/)   |                                    |                                |                                               |
+
+#### Package & Version Management
+
+|                                         |                              |                                       |                                      |
+| --------------------------------------- | ---------------------------- | ------------------------------------- | ------------------------------------ |
+| [pyenv](https://github.com/pyenv/pyenv) | [Yarn](https://yarnpkg.com/) | [uv](https://github.com/astral-sh/uv) | [poetry](https://python-poetry.org/) |
+| [pre-commit](https://pre-commit.com/)   |                              |                                       |                                      |
+
+#### Terminal & Shell
+
+|                                              |                                               |                                        |                                                 |
+| -------------------------------------------- | --------------------------------------------- | -------------------------------------- | ----------------------------------------------- |
+| [Zsh](https://www.zsh.org/)                  | [Oh My Zsh](https://ohmyz.sh/)                | [Starship](https://starship.rs/)       | [Tmux](https://github.com/tmux/tmux)            |
+| [bat](https://github.com/sharkdp/bat)        | [eza](https://github.com/eza-community/eza)   | [fzf](https://github.com/junegunn/fzf) | [zoxide](https://github.com/ajeetdsouza/zoxide) |
+| [delta](https://github.com/dandavison/delta) | [glow](https://github.com/charmbracelet/glow) | [tldr](https://tldr.sh/)               | [yazi](https://github.com/sxyazi/yazi)          |
+| [watch](https://linux.die.net/man/1/watch)   | [carapace](https://github.com/carapace-sh/carapace-bin) |                              |                                                 |
+
+#### Development Tools
+
+|                                                  |                                    |                                           |                                                       |
+| ------------------------------------------------ | ---------------------------------- | ----------------------------------------- | ----------------------------------------------------- |
+| [Git](https://git-scm.com/)                      | [Vim](https://www.vim.org/)        | [ruff](https://github.com/astral-sh/ruff) | [ShellCheck](https://www.shellcheck.net/)             |
+| [ripgrep](https://github.com/BurntSushi/ripgrep) | [jq](https://jqlang.github.io/jq/) | [fd](https://github.com/sharkdp/fd)       | [tree](https://gitlab.com/OldManProgrammer/unix-tree) |
+| [ipython](https://ipython.org/)                  | [prettier](https://prettier.io/)   | [act](https://github.com/nektos/act)      | [GitHub CLI](https://cli.github.com/)                 |
+| [Claude Code](https://claude.ai/code)            | [GNU Stow](https://www.gnu.org/software/stow/)   |                                           |                                                       |
+
+#### System & DevOps
+
+|                                              |                                                                |                                                    |                                                          |
+| -------------------------------------------- | -------------------------------------------------------------- | -------------------------------------------------- | -------------------------------------------------------- |
+| [btop](https://github.com/aristocratos/btop) | [htop](https://htop.dev/)                                      | [nmap](https://nmap.org/)                          | [speedtest-cli](https://github.com/sivel/speedtest-cli)  |
+| [AWS CLI](https://aws.amazon.com/cli/)       | [helm](https://helm.sh/)                                       | [kubectx](https://github.com/ahmetb/kubectx)       | [kubectl](https://kubernetes.io/docs/reference/kubectl/) |
+| [k9s](https://k9scli.io/)                    | [TShark](https://www.wireshark.org/docs/man-pages/tshark.html) | [neofetch](https://github.com/dylanaraps/neofetch) | [cloudflared](https://github.com/cloudflare/cloudflared) |
 
 ### 📱 Applications (macOS)
 
-- **iTerm2** - Advanced terminal emulator
-- **Warp** - Modern terminal with AI features
-- **Raycast** - Productivity launcher
-- **Cursor** - AI-powered code editor
-- **Visual Studio Code** - Popular code editor
-
-- **Google Chrome** - Web browser
-- **Brave Browser** - Privacy-focused browser
-- **Slack** - Team communication
-- **Sublime Text** - Lightweight text editor
-- **Obsidian** - Knowledge management and note-taking
-- **Docker Desktop** - Container development platform
-- **Wireshark** - Network protocol analyzer
-- **Postman** - API development and testing tool
-- **Paintbrush** - Simple image editor
-- **Typora** - Markdown editor
-- **DBeaver Community** - Universal database management tool
-
-### ⚙️ Configuration Files
-
-- `.vimrc` - Comprehensive Vim configuration with modern features, keybindings, and language-specific settings
-- `.tmux.conf` - Tmux setup with Ctrl-a prefix, mouse support, and improved splitting
-- `.zshrc` - Zsh configuration with Oh My Zsh, Powerlevel10k theme, and modular utilities loading
-- `.gitconfig` - Git configuration with user settings and credential helpers
+|                                                      |                                                  |                                                                   |                                          |
+| ---------------------------------------------------- | ------------------------------------------------ | ----------------------------------------------------------------- | ---------------------------------------- |
+| [iTerm2](https://iterm2.com/)                        | [Warp](https://www.warp.dev/)                    | [Ghostty](https://ghostty.org/)                                   | [Raycast](https://www.raycast.com/)      |
+| [Cursor](https://cursor.sh/)                         | [Visual Studio Code](https://code.visualstudio.com/) | [Google Chrome](https://www.google.com/chrome/)               | [Brave Browser](https://brave.com/)      |
+| [Slack](https://slack.com/)                          | [Sublime Text](https://www.sublimetext.com/)     | [Obsidian](https://obsidian.md/)                                  | [Docker Desktop](https://www.docker.com/products/docker-desktop/) |
+| [Wireshark](https://www.wireshark.org/)              | [Postman](https://www.postman.com/)              | [Paintbrush](https://paintbrush.sourceforge.io/)                  | [Typora](https://typora.io/)             |
+| [DBeaver Community](https://dbeaver.io/)             | [GitKraken](https://www.gitkraken.com/)          | [Zoom](https://zoom.us/)                                          | [Rectangle](https://rectangleapp.com/)   |
+| [AltTab](https://alt-tab-macos.netlify.app/)         |                                                  |                                                                   |                                          |
 
 ### 🧰 Modular Shell Utilities
 
-The dotfiles include a modular utilities system located at `~/.config/shell-utils/`:
+The dotfiles include a modular utilities system located at `~/.shell-utils/`:
 
 - **`functions.sh`** - Essential functions like `extract()`, `mkcd()`, and beautiful logging functions
 - **`aliases.sh`** - Cross-shell aliases for everyday commands
 - **Extensible** - Add your own `.sh` files to the directory and they'll be automatically loaded
 
-**Key utilities include:**
+### 📦 Dotfiles Management with GNU Stow
 
-- `extract <file>` - Universal archive extractor (zip, tar, rar, etc.)
-- `mkcd <dir>` - Create directory and navigate to it
-- Beautiful logging functions with colors and icons for scripts
-- And more...
+This repository uses [GNU Stow](https://www.gnu.org/software/stow/) for dotfiles management. The `dotfiles/` folder is a standard stow package that mirrors your home directory structure.
+
+**How it works:**
+- Files and directories in `dotfiles/` are symlinked to your home directory (not copied)
+- Changes to files in the repo are immediately reflected in your system
+
+**Installation vs. Sync:**
+- **`./install.sh`** - Full installation: backs up existing dotfiles (`.vimrc`, `.zshrc`, etc.) to `.backup` before creating symlinks
+- **`./dotfiles/setup.sh`** - Direct sync: runs stow without backing up files (use this for updates after initial install)
+
+**To add new dotfiles:**
+1. Add the file to the `dotfiles/` directory (e.g., `dotfiles/.bashrc`)
+2. Run `cd dotfiles && ./setup.sh` to create the symlink
+3. The file will now be symlinked to your home directory (`~/.bashrc`)
 
 ## Installation
 
@@ -124,8 +120,9 @@ Common steps (macOS and Linux):
 - **CLI Tools** - Installs development tools
 - **Rust** - Installs Rust (rustup) and Cargo
 - **Oh My Zsh** - Installs and configures Oh My Zsh
-- **Zsh plugins** - Installs autosuggestions, syntax-highlighting, and Powerlevel10k theme
-- **Dotfiles Setup** - Symlinks configuration files and installs modular shell utilities
+- **Zsh plugins** - Installs autosuggestions and syntax-highlighting plugins
+- **Starship** - Installs and configures Starship as the active shell prompt
+- **Dotfiles Setup** - Uses GNU Stow to symlink configuration files from `dotfiles/` to your home directory
 - **Python Setup** - Installs latest Python 3 via pyenv and sets it globally
 
 macOS only:
@@ -143,30 +140,55 @@ Linux only:
 
 1. Restart your terminal or run `source ~/.zshrc`
 
-2. **Handle macOS Security Warnings (macOS only; Important!)**
+2. **Install a Nerd Font**
 
-   When you first open newly installed applications, macOS may show security warnings because they weren't downloaded from the App Store. This is normal and expected.
+    A [Nerd Font](https://www.nerdfonts.com/) is required for terminal icons (used by Starship, eza, and other tools) to display correctly. Without one, you'll see placeholder characters or missing icons.
 
-   **To resolve security warnings:**
+    **To install:**
+    - Visit [nerdfonts.com/font-downloads](https://www.nerdfonts.com/font-downloads) and download a font (e.g., **MesloLGS NF** or **FiraCode Nerd Font**)
+    - Install the font on your system
+    - Set it as the default font in your terminal emulator (e.g., iTerm2, Windows Terminal, or your preferred terminal)
 
-   - **Method 1:** Right-click the app in Applications folder → select "Open" → click "Open" in the dialog
-   - **Method 2:** Go to System Settings → Privacy & Security → click "Allow Anyway" next to the blocked app
+3. **Handle macOS Security Warnings (macOS only; Important!)**
 
-   This only needs to be done once per application.
+    When you first open newly installed applications, macOS may show security warnings because they weren't downloaded from the App Store. This is normal and expected.
 
-3. Set your personal Git identity in a private file:
+    **To resolve security warnings:**
+    - **Method 1:** Right-click the app in Applications folder → select "Open" → click "Open" in the dialog
+    - **Method 2:** Go to System Settings → Privacy & Security → click "Allow Anyway" next to the blocked app
 
-   ```bash
-   # Create ~/.gitconfig.local with your personal details (not tracked in this repo)
-   cat > ~/.gitconfig.local <<'EOF'
-   [user]
-     name = Your Name
-     email = your.email@example.com
-     username = your-username
-   EOF
-   ```
+    This only needs to be done once per application.
+
+4. Set your personal Git identity in a private file:
+
+    ```bash
+    # Create ~/.gitconfig.local with your personal details (not tracked in this repo)
+    cat > ~/.gitconfig.local <<'EOF'
+    [user]
+      name = Your Name
+      email = your.email@example.com
+      username = your-username
+    EOF
+    ```
 
 ### Key Features
+
+#### Shell (Zsh) Configuration
+
+- **Shell**: Zsh is the default interactive shell environment
+- **Prompt/theme**: [Starship](https://starship.rs/) is used as the active prompt/theme
+- **Plugin/theme manager**: [Oh My Zsh](https://ohmyz.sh/) manages shell plugins and can manage themes
+- **Theme compatibility**: Oh My Zsh themes are still supported, and Powerlevel10k remains installable/usable, but theme loading is intentionally disabled in `.zshrc` (`ZSH_THEME=""`) because Starship is the active prompt
+- **Aliases and functions**
+- **Completions**: [carapace](https://github.com/carapace-sh/carapace-bin) is initialized in `.zshrc` for richer shell completions
+
+#### Tmux Configuration
+
+- `Ctrl-a` as prefix key (instead of default `Ctrl-b`)
+- Mouse support enabled for easier pane interaction
+- Intuitive pane splitting with `\` (vertical) and `-` (horizontal)
+- Easy config reloading with `Ctrl-a r`
+- Simplified, clean configuration focused on essential features
 
 #### Vim Configuration
 
@@ -178,26 +200,6 @@ Linux only:
 - Window and buffer navigation shortcuts
 - Automatic whitespace cleanup and spell checking
 - Enhanced status line with file information
-
-#### Tmux Configuration
-
-- `Ctrl-a` as prefix key (instead of default `Ctrl-b`)
-- Mouse support enabled for easier pane interaction
-- Intuitive pane splitting with `\` (vertical) and `-` (horizontal)
-- Easy config reloading with `Ctrl-a r`
-- Simplified, clean configuration focused on essential features
-
-#### Zsh Configuration
-
-- Oh My Zsh with Powerlevel10k theme for beautiful, informative prompt
-- Enhanced ls commands using `eza`
-- Enhanced cat using `bat`
-- Directory tree views using `tree`
-- Smart directory switching with `zoxide`
-- Comprehensive git aliases and development shortcuts
-- Modular utilities system that automatically loads all `.sh` files from `~/.config/shell-utils/`
-- Useful functions for productivity and development workflows
-- Command history optimization and plugin support
 
 For customization instructions and contribution guidelines, see [CONTRIBUTING.md](CONTRIBUTING.md).
 

@@ -1,0 +1,33 @@
+name: Run Pre-Commit Hooks
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  pre-commit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - uses: pre-commit/action@v3.0.1
+        if: github.event_name == 'pull_request'
+        with:
+          extra_args: --verbose --show-diff-on-failure --from-ref origin/${{ github.base_ref }} --to-ref HEAD
+        env:
+          PRE_COMMIT_COLOR: always
+
+      - uses: pre-commit/action@v3.0.1
+        if: github.event_name == 'push'
+        with:
+          extra_args: --verbose --show-diff-on-failure --all-files
+        env:
+          PRE_COMMIT_COLOR: always

@@ -4,13 +4,13 @@
 # This file can be sources by bash, zsh, and other POSIX-compliant shell
 
 # Core
-alias cat=bat
+alias cat="bat"
 alias ls="eza --icons --hyperlink --sort=type"
-alias locate=mdfind
 alias quit="exit"
 alias speedtest="speedtest-cli"
-alias ipython=ipython3
-alias cd=z
+alias ipython="ipython3"
+alias cd="z"
+alias grep="rg"
 
 # AWS
 alias sso="aws sso login"

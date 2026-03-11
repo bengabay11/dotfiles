@@ -7,7 +7,7 @@ set -euo pipefail
 # Source shared utilities
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DOTFILES_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
-source "$DOTFILES_ROOT/dotfiles/functions.sh"
+source "$DOTFILES_ROOT/dotfiles/.shell-utils/functions.sh"
 source "$DOTFILES_ROOT/utils.sh"
 
 # Global array to track failed installations
@@ -68,6 +68,7 @@ install_cli_tools_with_apt() {
         "AWS CLI:aws:aws --version:awscli"
         "kubectx:kubectx:kubectx --help:kubectx"
         "neofetch:neofetch:neofetch --version:neofetch"
+        "stow:stow:stow --version:stow"
     )
     install_tools_with_package_manager "apt" "apt" \
         "sudo DEBIAN_FRONTEND=noninteractive apt-get install -y" tools
@@ -78,8 +79,9 @@ install_cli_tools_with_cargo() {
     local tools=(
         "eza:eza:eza --version:eza"
         "git-delta:delta:delta --version:git-delta"
+        "yazi:yazi:yazi --version:yazi-build"
     )
-    install_tools_with_package_manager "cargo" "cargo" "cargo install" tools
+    install_tools_with_package_manager "cargo" "cargo" "cargo install --locked" tools
 }
 
 install_cli_tools_with_npm() {

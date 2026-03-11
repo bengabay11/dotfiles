@@ -184,38 +184,26 @@ install_rust() {
 setup_dotfiles() {
     log_info "Setting up dotfiles..."
 
-    # Create necessary directories
-    mkdir -p "$HOME/.config"
-    mkdir -p "$HOME/.config/shell-utils"
+    # Dynamically discover all tracked dotfiles recursively from the git repository
+    while IFS= read -r -d '' file; do
+        # file is relative to repo root (e.g., "dotfiles/.shell-utils/aliases.sh")
+        local relative_path="${file#dotfiles/}"
+        local target_path="$HOME/$relative_path"
 
-    local dotfiles=(".vimrc" ".tmux.conf" ".zshrc" ".gitconfig")
-    for dotfile in "${dotfiles[@]}"; do
-        if [[ -f "$HOME/$dotfile" ]]; then
-            log_warning "Backing up existing $dotfile to $dotfile.backup"
-            mv "$HOME/$dotfile" "$HOME/$dotfile.backup"
+        if [[ -f "$target_path" ]]; then
+            log_warning "Backing up existing $relative_path to $relative_path.backup"
+            mv "$target_path" "$target_path.backup"
         fi
-        ln -sf "$DOTFILES_ROOT/dotfiles/$dotfile" "$HOME/$dotfile"
-    done
+    done < <(cd "$DOTFILES_ROOT" && git ls-files -z dotfiles/ | grep -zv -e '/setup.sh$' -e '/.stowrc$')
 
-    log_info "Setting up modular shell utilities..."
-    local utils=("functions.sh" "aliases.sh")
-    for util in "${utils[@]}"; do
-        local source_file="$DOTFILES_ROOT/dotfiles/$util"
-        local target_file="$HOME/.config/shell-utils/$util"
-
-        if [[ -f "$source_file" ]]; then
-            if [[ -e "$target_file" ]]; then
-                log_warning "Backing up existing $(basename "$target_file") to $(basename "$target_file").backup"
-                mv "$target_file" "$target_file.backup"
-            fi
-            ln -sf "$source_file" "$target_file"
-            log_success "$util symlinked to ~/.config/shell-utils/"
-        else
-            log_warning "$util not found - skipping"
-        fi
-    done
-
-    log_info "You can now add more utility files to ~/.config/shell-utils/ and they will be automatically loaded"
+    log_info "Running stow to symlink dotfiles..."
+    if (cd "$DOTFILES_ROOT/dotfiles" && bash setup.sh); then
+        log_success "Dotfiles symlinked successfully via GNU Stow"
+    else
+        log_error "Failed to setup dotfiles with stow"
+        FAILED_INSTALLATIONS+=("dotfiles setup")
+        return 1
+    fi
 }
 
 # Install Oh My Zsh

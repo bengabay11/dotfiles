@@ -29,7 +29,7 @@ A comprehensive dotfiles setup for macOS and Linux (Ubuntu/Debian-based; include
 | [Zsh](https://www.zsh.org/)                  | [Oh My Zsh](https://ohmyz.sh/)                | [Starship](https://starship.rs/)       | [Tmux](https://github.com/tmux/tmux)            |
 | [bat](https://github.com/sharkdp/bat)        | [eza](https://github.com/eza-community/eza)   | [fzf](https://github.com/junegunn/fzf) | [zoxide](https://github.com/ajeetdsouza/zoxide) |
 | [delta](https://github.com/dandavison/delta) | [glow](https://github.com/charmbracelet/glow) | [tldr](https://tldr.sh/)               | [yazi](https://github.com/sxyazi/yazi)          |
-| [watch](https://linux.die.net/man/1/watch)   |                                               |                                        |                                                 |
+| [watch](https://linux.die.net/man/1/watch)   | [carapace](https://github.com/carapace-sh/carapace-bin) |                              |                                                 |
 
 #### Development Tools
 
@@ -180,6 +180,7 @@ Linux only:
 - **Plugin/theme manager**: [Oh My Zsh](https://ohmyz.sh/) manages shell plugins and can manage themes
 - **Theme compatibility**: Oh My Zsh themes are still supported, and Powerlevel10k remains installable/usable, but theme loading is intentionally disabled in `.zshrc` (`ZSH_THEME=""`) because Starship is the active prompt
 - **Aliases and functions**
+- **Completions**: [carapace](https://github.com/carapace-sh/carapace-bin) is initialized in `.zshrc` for richer shell completions
 
 #### Tmux Configuration
 

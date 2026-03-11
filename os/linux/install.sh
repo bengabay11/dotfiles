@@ -172,6 +172,29 @@ try_install_kubectl() {
     fi
 }
 
+try_install_carapace() {
+    local tool_name="carapace"
+    if command -v carapace > /dev/null 2>&1; then
+        log_found "$tool_name is already installed ($(carapace --version 2> /dev/null || echo version unknown))"
+        return 0
+    fi
+
+    log_install "$tool_name"
+    # Add fury.io repository if not already present
+    if [[ ! -f /etc/apt/sources.list.d/fury.list ]] || ! grep -q "apt.fury.io/rsteube" /etc/apt/sources.list.d/fury.list; then
+        echo "deb [trusted=yes] https://apt.fury.io/rsteube/ /" | sudo tee /etc/apt/sources.list.d/fury.list > /dev/null
+    fi
+
+    # Install carapace-bin from fury.io repository
+    if sudo apt-get update -y \
+        && sudo DEBIAN_FRONTEND=noninteractive apt-get install -y carapace-bin; then
+        log_success "$tool_name installed successfully"
+    else
+        log_error "Failed to install $tool_name"
+        FAILED_INSTALLATIONS+=("$tool_name")
+    fi
+}
+
 install_cli_tools_with_custom_commands() {
     # Format: "display_name@command@version_command@install_command"
     # Uses @ as delimiter (safe: not present in URLs or these install commands)
@@ -203,6 +226,7 @@ install_cli_tools() {
     try_install_cloudflared
     try_install_kubectl
     try_install_k9s
+    try_install_carapace
     try_install_claude_code
     try_install_starship_preset
 }

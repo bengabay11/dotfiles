@@ -108,6 +108,7 @@ test_cli_tools_exists() {
         "tldr installation:tldr"
         "delta installation:delta"
         "glow installation:glow"
+        "carapace installation:carapace"
         "Java (openjdk) installation:java"
         "net-tools installation:ifconfig"
         "watch installation:watch"
@@ -173,6 +174,7 @@ test_dotfiles() {
 
     run_test ".zshrc contains Oh My Zsh configuration" "grep -q 'oh-my-zsh' '$HOME/.zshrc'"
     run_test ".zshrc contains export statements" "grep -q 'export' '$HOME/.zshrc'"
+    run_test ".zshrc configures carapace completions" "grep -q 'carapace _carapace' '$HOME/.zshrc'"
 
     # We expect personal details to be stored in ~/.gitconfig.local and included here
     run_test ".gitconfig includes local override file" "grep -q '^[[:space:]]*path = ~/.gitconfig.local' '$HOME/.gitconfig'"

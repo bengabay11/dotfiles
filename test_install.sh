@@ -123,6 +123,11 @@ test_cli_tools_exists() {
         "neofetch installation:neofetch"
         "stow installation:stow"
         "yazi installation:yazi"
+        "ffmpeg installation:ffmpeg"
+        "7-Zip installation:7z"
+        "poppler installation:pdfinfo"
+        "ImageMagick installation:magick"
+        "resvg installation:resvg"
     )
 
     for entry in "${tools[@]}"; do

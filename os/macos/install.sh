@@ -99,6 +99,11 @@ install_cli_tools() {
         "uv:uv:uv --version:uv"
         "stow:stow:stow --version:stow"
         "yazi:yazi:yazi --version:yazi"
+        "ffmpeg:ffmpeg:ffmpeg -version:ffmpeg"
+        "p7zip:7z:7z --help:p7zip"
+        "poppler:pdfinfo:pdfinfo -v:poppler"
+        "ImageMagick:magick:magick --version:imagemagick"
+        "resvg:resvg:resvg --version:resvg"
     )
     install_tools_with_package_manager "Homebrew" "brew" "brew install" tools
 

@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 # FZF Configuration
-if command -v fzf >/dev/null 2>&1; then
+if command -v fzf > /dev/null 2>&1; then
     # Prefer built-in initializer when available (typically on macOS/Homebrew)
-    if fzf --zsh >/dev/null 2>&1; then
+    if fzf --zsh > /dev/null 2>&1; then
         source <(fzf --zsh)
     else
         # Linux/WSL fallback: source from common distro paths or user install
@@ -29,7 +29,7 @@ if command -v fzf >/dev/null 2>&1; then
         --color=marker:#9ece6a,spinner:#bb9af7,header:#73daca"
 
     # Use ripgrep if available for better search performance
-    if command -v rg >/dev/null 2>&1; then
+    if command -v rg > /dev/null 2>&1; then
         export FZF_DEFAULT_COMMAND='rg --files --hidden --follow --no-ignore-vcs -g "!{.git,node_modules}/*" 2>/dev/null'
         export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
     fi

@@ -94,7 +94,7 @@ See [dotfiles/README.md](dotfiles/README.md) for comprehensive dotfiles document
 
 ```bash
 # Clone the repository
-git clone <your-repository-url> ~/dev-environment-setup
+git clone https://github.com/bengabay11/dev-environment-setup.git ~/dev-environment-setup
 cd ~/dev-environment-setup
 
 # Run the installation script

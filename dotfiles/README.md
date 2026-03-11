@@ -28,7 +28,7 @@ You can use these dotfiles independently without the full development environmen
 
 ```bash
 # Clone the repository
-git clone <repository-url> ~/dev-environment-setup
+git clone https://github.com/bengabay11/dev-environment-setup.git ~/dev-environment-setup
 cd ~/dev-environment-setup/dotfiles
 
 # Install GNU Stow if needed

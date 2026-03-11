@@ -77,10 +77,10 @@ The `dotfiles/` subdirectory contains configuration files managed via GNU Stow:
 
 - Configuration files for Vim, Tmux, Zsh, Git, and more
 - Symlinked to your home directory (not copied)
-- Can be used independently from the main installation
+- Can be used as a standalone dotfiles project (independent from the main installation)
 - Modular shell utilities system (`~/.shell-utils/`)
 
-See [dotfiles/README.md](dotfiles/README.md) for comprehensive dotfiles documentation
+See [dotfiles/README.md](dotfiles/README.md) for standalone usage and comprehensive documentation
 
 ## Installation
 

@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Main dotfiles installation script
-# Supports: macOS (with easy extensibility for other OSs)
+# Development environment setup - main installation script
+# Supports: macOS and Linux (Ubuntu/Debian-based, including WSL)
 
 set -uo pipefail
 
@@ -20,7 +20,8 @@ while [[ $# -gt 0 ]]; do
             echo "  -y, --yes    Auto-confirm all prompts (non-interactive mode)"
             echo "  -h, --help   Show this help message"
             echo ""
-            echo "This script installs dotfiles and development tools for your system."
+            echo "Complete development environment setup for your workstation."
+            echo "Installs CLI tools, applications, configures shell, and sets up dotfiles."
             echo "Currently supports: macOS, Linux (Ubuntu/Debian-based, including WSL)"
             exit 0
             ;;
@@ -87,7 +88,7 @@ check_os_support() {
 }
 
 main() {
-    log_info "Starting dotfiles installation..."
+    log_info "Starting development environment setup..."
 
     local os
     os=$(detect_os)

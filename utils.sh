@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Installation utility functions for dotfiles setup
+# Installation utility functions for development environment setup
 # Cross-platform compatibility: supports both macOS and Linux
 # This file should be sourced by installation scripts
 

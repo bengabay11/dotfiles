@@ -107,6 +107,14 @@ if command -v starship >/dev/null 2>&1; then
     _evalcache starship init zsh
 fi
 
+# Fix starship prompt disappearing after Ctrl+C
+# TRAPINT is automatically called by zsh when SIGINT (Ctrl+C) is received
+# zle (Zsh Line Editor) checks if prompt is active, then reset-prompt redraws it
+TRAPINT() {
+    zle && zle reset-prompt
+    return 130
+}
+
 # Initialize zoxide (with caching for faster startup)
 _evalcache zoxide init zsh
 

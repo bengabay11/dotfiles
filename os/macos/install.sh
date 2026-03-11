@@ -197,7 +197,7 @@ install_applications() {
 }
 
 main() {
-    log_header "macOS Dotfiles Installation Script"
+    log_header "🚀 MacOS Development Environment Setup"
     log_info_interactive_mode_status
 
     echo ""
@@ -225,7 +225,7 @@ main() {
     process_stages
 
     show_failure_summary
-    log_success "macOS dotfiles installation completed successfully!"
+    log_success "macOS development environment setup completed successfully!"
     echo ""
     log_info "Optional system configuration:"
     log_info "You may want to configure these macOS system preferences:"

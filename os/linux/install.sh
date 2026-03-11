@@ -262,7 +262,7 @@ configure_python_env() {
 }
 
 main() {
-    log_header "🚀 Linux Dotfiles Installation Script"
+    log_header "🚀 Linux Development Environment Setup"
     log_info_interactive_mode_status
     echo ""
     log_step "Installation process includes the following stages:"
@@ -289,7 +289,7 @@ main() {
     process_stages
 
     show_failure_summary
-    log_success "linux dotfiles installation completed successfully!"
+    log_success "Linux development environment setup completed successfully!"
 }
 
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then

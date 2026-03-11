@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Comprehensive test script for dotfiles installation
-# This script verifies that the installation completed successfully
+# Comprehensive test script for development environment setup
+# Verifies CLI tools, applications, dotfiles, and shell configuration
 
 set -uo pipefail
 
@@ -231,7 +231,7 @@ show_tests_summary() {
         log_error "Some tests failed. Please check the output above for details."
         exit 1
     else
-        log_success "All tests passed! macOS installation appears to be working correctly."
+        log_success "All tests passed! Development environment setup is working correctly."
         echo ""
         log_info "You can now:"
         log_info "1. Restart your terminal or run 'source ~/.zshrc'"
@@ -242,7 +242,7 @@ show_tests_summary() {
 }
 
 main() {
-    log_info "Starting comprehensive macOS dotfiles installation tests..."
+    log_info "Starting comprehensive development environment verification..."
     echo ""
 
     parse_args "$@"

@@ -1,14 +1,24 @@
-# Dotfiles
+# Development Environment Setup
 
-A comprehensive dotfiles setup for macOS and Linux (Ubuntu/Debian-based; includes WSL).
+Complete development environment automation for macOS and Linux (Ubuntu/Debian-based; includes WSL).
 
-![Alt text](assets/install_demo.jpeg "Optional title")
+## What This Repository Does
+
+A complete development environment setup that:
+
+- **Installs CLI tools** - Development tools, programming languages, package managers
+- **Installs applications** - IDEs, browsers, productivity apps (macOS)
+- **Configures your shell** - Zsh with Oh My Zsh, Starship prompt, and custom utilities
+- **Manages dotfiles** - Configuration files via GNU Stow
+- **Sets up environments** - Python with pyenv, Rust with cargo, Node.js, and more
+
+See [dotfiles/README.md](dotfiles/README.md) for detailed documentation about configuration files.
 
 ## Features
 
 ### 🛠️ Command Line Tools
 
-#### Programming Languages
+#### Programming Languages & Runtimes
 
 |                                   |                                    |                                |                                               |
 | --------------------------------- | ---------------------------------- | ------------------------------ | --------------------------------------------- |
@@ -22,14 +32,14 @@ A comprehensive dotfiles setup for macOS and Linux (Ubuntu/Debian-based; include
 | [pyenv](https://github.com/pyenv/pyenv) | [Yarn](https://yarnpkg.com/) | [uv](https://github.com/astral-sh/uv) | [poetry](https://python-poetry.org/) |
 | [pre-commit](https://pre-commit.com/)   |                              |                                       |                                      |
 
-#### Terminal & Shell
+#### Terminal & Shell Enhancement
 
 |                                              |                                               |                                        |                                                 |
 | -------------------------------------------- | --------------------------------------------- | -------------------------------------- | ----------------------------------------------- |
 | [Zsh](https://www.zsh.org/)                  | [Oh My Zsh](https://ohmyz.sh/)                | [Starship](https://starship.rs/)       | [Tmux](https://github.com/tmux/tmux)            |
 | [bat](https://github.com/sharkdp/bat)        | [eza](https://github.com/eza-community/eza)   | [fzf](https://github.com/junegunn/fzf) | [zoxide](https://github.com/ajeetdsouza/zoxide) |
 | [delta](https://github.com/dandavison/delta) | [glow](https://github.com/charmbracelet/glow) | [tldr](https://tldr.sh/)               | [yazi](https://github.com/sxyazi/yazi)          |
-| [watch](https://linux.die.net/man/1/watch)   | [carapace](https://github.com/carapace-sh/carapace-bin) |                              |                                                 |
+| [watch](https://linux.die.net/man/1/watch)   |                                               |                                        |                                                 |
 
 #### Development Tools
 
@@ -40,7 +50,7 @@ A comprehensive dotfiles setup for macOS and Linux (Ubuntu/Debian-based; include
 | [ipython](https://ipython.org/)                  | [prettier](https://prettier.io/)   | [act](https://github.com/nektos/act)      | [GitHub CLI](https://cli.github.com/)                 |
 | [Claude Code](https://claude.ai/code)            | [GNU Stow](https://www.gnu.org/software/stow/)   |                                           |                                                       |
 
-#### System & DevOps
+#### System & DevOps Tools
 
 |                                              |                                                                |                                                    |                                                          |
 | -------------------------------------------- | -------------------------------------------------------------- | -------------------------------------------------- | -------------------------------------------------------- |
@@ -49,6 +59,8 @@ A comprehensive dotfiles setup for macOS and Linux (Ubuntu/Debian-based; include
 | [k9s](https://k9scli.io/)                    | [TShark](https://www.wireshark.org/docs/man-pages/tshark.html) | [neofetch](https://github.com/dylanaraps/neofetch) | [cloudflared](https://github.com/cloudflare/cloudflared) |
 
 ### 📱 Applications (macOS)
+
+GUI applications automatically installed via Homebrew Cask:
 
 |                                                      |                                                  |                                                                   |                                          |
 | ---------------------------------------------------- | ------------------------------------------------ | ----------------------------------------------------------------- | ---------------------------------------- |
@@ -59,30 +71,16 @@ A comprehensive dotfiles setup for macOS and Linux (Ubuntu/Debian-based; include
 | [DBeaver Community](https://dbeaver.io/)             | [GitKraken](https://www.gitkraken.com/)          | [Zoom](https://zoom.us/)                                          | [Rectangle](https://rectangleapp.com/)   |
 | [AltTab](https://alt-tab-macos.netlify.app/)         |                                                  |                                                                   |                                          |
 
-### 🧰 Modular Shell Utilities
+### ⚙️ Dotfiles
 
-The dotfiles include a modular utilities system located at `~/.shell-utils/`:
+The `dotfiles/` subdirectory contains configuration files managed via GNU Stow:
 
-- **`functions.sh`** - Essential functions like `extract()`, `mkcd()`, and beautiful logging functions
-- **`aliases.sh`** - Cross-shell aliases for everyday commands
-- **Extensible** - Add your own `.sh` files to the directory and they'll be automatically loaded
+- Configuration files for Vim, Tmux, Zsh, Git, and more
+- Symlinked to your home directory (not copied)
+- Can be used as a standalone dotfiles project (independent from the main installation)
+- Modular shell utilities system (`~/.shell-utils/`)
 
-### 📦 Dotfiles Management with GNU Stow
-
-This repository uses [GNU Stow](https://www.gnu.org/software/stow/) for dotfiles management. The `dotfiles/` folder is a standard stow package that mirrors your home directory structure.
-
-**How it works:**
-- Files and directories in `dotfiles/` are symlinked to your home directory (not copied)
-- Changes to files in the repo are immediately reflected in your system
-
-**Installation vs. Sync:**
-- **`./install.sh`** - Full installation: backs up existing dotfiles (`.vimrc`, `.zshrc`, etc.) to `.backup` before creating symlinks
-- **`./dotfiles/setup.sh`** - Direct sync: runs stow without backing up files (use this for updates after initial install)
-
-**To add new dotfiles:**
-1. Add the file to the `dotfiles/` directory (e.g., `dotfiles/.bashrc`)
-2. Run `cd dotfiles && ./setup.sh` to create the symlink
-3. The file will now be symlinked to your home directory (`~/.bashrc`)
+See [dotfiles/README.md](dotfiles/README.md) for standalone usage and comprehensive documentation
 
 ## Installation
 
@@ -90,14 +88,14 @@ This repository uses [GNU Stow](https://www.gnu.org/software/stow/) for dotfiles
 
 - macOS or Linux (Ubuntu/Debian-based; includes WSL)
 - Internet connection
-- Administrative privileges (sudo)
+- Administrative privileges (sudo access)
 
 ### Quick Install
 
 ```bash
 # Clone the repository
-git clone <your-repository-url> ~/.dotfiles
-cd ~/.dotfiles
+git clone https://github.com/bengabay11/dev-environment-setup.git ~/dev-environment-setup
+cd ~/dev-environment-setup
 
 # Run the installation script
 ./install.sh
@@ -106,112 +104,77 @@ cd ~/.dotfiles
 ./install.sh -y
 ```
 
-### Command Line Options
+## Post-Installation
 
-- `./install.sh` - Interactive mode (prompts for each installation stage)
-- `./install.sh -y` or `./install.sh --yes` - Non-interactive mode (auto-confirms all prompts)
-- `./install.sh -h` or `./install.sh --help` - Show help message
+### 1. Restart Your Shell
 
-### What the installer does
+```bash
+# Apply changes
+source ~/.zshrc
 
-Common steps (macOS and Linux):
+# Or restart your terminal
+```
 
-- **OS Detection** - Automatically detects your operating system
-- **CLI Tools** - Installs development tools
-- **Rust** - Installs Rust (rustup) and Cargo
-- **Oh My Zsh** - Installs and configures Oh My Zsh
-- **Zsh plugins** - Installs autosuggestions and syntax-highlighting plugins
-- **Starship** - Installs and configures Starship as the active shell prompt
-- **Dotfiles Setup** - Uses GNU Stow to symlink configuration files from `dotfiles/` to your home directory
-- **Python Setup** - Installs latest Python 3 via pyenv and sets it globally
+### 2. Install a Nerd Font
 
-macOS only:
+A [Nerd Font](https://www.nerdfonts.com/) is required for terminal icons to display correctly in Starship, eza, and other modern CLI tools.
 
-- **Homebrew** - Installs/updates Homebrew
-- **Applications** - Installs GUI apps via Homebrew Cask (VS Code, Cursor, browsers, etc.)
+**Installation:**
 
-Linux only:
+- Download from [nerdfonts.com/font-downloads](https://www.nerdfonts.com/font-downloads)
+- Install the font on your system
+- Configure your terminal to use it as the default font
 
-- **apt basics** - Updates apt and installs base packages for Ubuntu/Debian
+### 3. Handle macOS Security Warnings (macOS Only)
 
-## Usage
+macOS shows security warnings for apps not downloaded from the App Store. This is normal for Homebrew Cask installations.
 
-### After Installation
+**To resolve:**
 
-1. Restart your terminal or run `source ~/.zshrc`
+- **Method 1:** Right-click app in Applications → "Open" → click "Open" in dialog
+- **Method 2:** System Settings → Privacy & Security → "Allow Anyway"
 
-2. **Install a Nerd Font**
+Only needed once per application.
 
-    A [Nerd Font](https://www.nerdfonts.com/) is required for terminal icons (used by Starship, eza, and other tools) to display correctly. Without one, you'll see placeholder characters or missing icons.
+### 4. Configure Git Identity
 
-    **To install:**
-    - Visit [nerdfonts.com/font-downloads](https://www.nerdfonts.com/font-downloads) and download a font (e.g., **MesloLGS NF** or **FiraCode Nerd Font**)
-    - Install the font on your system
-    - Set it as the default font in your terminal emulator (e.g., iTerm2, Windows Terminal, or your preferred terminal)
+Set your personal Git details in a local file (not tracked in the repository):
 
-3. **Handle macOS Security Warnings (macOS only; Important!)**
+```bash
+cat > ~/.gitconfig.local <<'EOF'
+[user]
+  name = Your Name
+  email = your.email@example.com
+  username = your-username
+EOF
+```
 
-    When you first open newly installed applications, macOS may show security warnings because they weren't downloaded from the App Store. This is normal and expected.
+## Shell
 
-    **To resolve security warnings:**
-    - **Method 1:** Right-click the app in Applications folder → select "Open" → click "Open" in the dialog
-    - **Method 2:** Go to System Settings → Privacy & Security → click "Allow Anyway" next to the blocked app
+- **Ghostty** - Terminal emulator with configuration in `dotfiles/.config/ghostty/`
+- **Zsh** - Default interactive shell with modern features
+- **Starship** - Active prompt with gruvbox-rainbow preset
+- **Oh My Zsh** - Plugin manager (themes disabled in favor of Starship)
+- **Plugins** - Autosuggestions, syntax highlighting, evalcache for fast startup
+- **Custom Utilities** - Functions and aliases loaded from `~/.shell-utils/`
 
-    This only needs to be done once per application.
+## Verify Installation
 
-4. Set your personal Git identity in a private file:
-
-    ```bash
-    # Create ~/.gitconfig.local with your personal details (not tracked in this repo)
-    cat > ~/.gitconfig.local <<'EOF'
-    [user]
-      name = Your Name
-      email = your.email@example.com
-      username = your-username
-    EOF
-    ```
-
-### Key Features
-
-#### Shell (Zsh) Configuration
-
-- **Shell**: Zsh is the default interactive shell environment
-- **Prompt/theme**: [Starship](https://starship.rs/) is used as the active prompt/theme
-- **Plugin/theme manager**: [Oh My Zsh](https://ohmyz.sh/) manages shell plugins and can manage themes
-- **Theme compatibility**: Oh My Zsh themes are still supported, and Powerlevel10k remains installable/usable, but theme loading is intentionally disabled in `.zshrc` (`ZSH_THEME=""`) because Starship is the active prompt
-- **Aliases and functions**
-- **Completions**: [carapace](https://github.com/carapace-sh/carapace-bin) is initialized in `.zshrc` for richer shell completions
-
-#### Tmux Configuration
-
-- `Ctrl-a` as prefix key (instead of default `Ctrl-b`)
-- Mouse support enabled for easier pane interaction
-- Intuitive pane splitting with `\` (vertical) and `-` (horizontal)
-- Easy config reloading with `Ctrl-a r`
-- Simplified, clean configuration focused on essential features
-
-#### Vim Configuration
-
-- Modern vim setup with sensible defaults and true color support
-- Comprehensive syntax highlighting and file type detection
-- Space as leader key with intuitive key mappings
-- Persistent undo, backup, and swap file management
-- Language-specific indentation (Python, JavaScript, TypeScript, Rust, YAML, HTML/CSS)
-- Window and buffer navigation shortcuts
-- Automatic whitespace cleanup and spell checking
-- Enhanced status line with file information
-
-For customization instructions and contribution guidelines, see [CONTRIBUTING.md](CONTRIBUTING.md).
-
-## Testing Your Installation
-
-After running the installer, verify with the comprehensive test script:
+Test your installation with the comprehensive verification script:
 
 ```bash
 ./test_install.sh
 ```
 
-The test script provides detailed output showing which components passed or failed, making it easy to identify any issues with your installation.
+The test script checks:
+
+- CLI tool installations
+- GUI applications (macOS)
+- Configuration file symlinks
+- Shell environment setup
+- Programming language runtimes
+
+Detailed output shows which components passed or failed.
 
 ## License
 

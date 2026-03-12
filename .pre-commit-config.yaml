@@ -27,3 +27,8 @@ repos:
       rev: v1.6.26
       hooks:
           - id: actionlint
+
+    - repo: https://github.com/codespell-project/codespell
+      rev: v2.4.1
+      hooks:
+          - id: codespell

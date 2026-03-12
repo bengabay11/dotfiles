@@ -39,7 +39,8 @@ See [dotfiles/README.md](dotfiles/README.md) for detailed documentation about co
 | [Zsh](https://www.zsh.org/)                  | [Oh My Zsh](https://ohmyz.sh/)                | [Starship](https://starship.rs/)       | [Tmux](https://github.com/tmux/tmux)            |
 | [bat](https://github.com/sharkdp/bat)        | [eza](https://github.com/eza-community/eza)   | [fzf](https://github.com/junegunn/fzf) | [zoxide](https://github.com/ajeetdsouza/zoxide) |
 | [delta](https://github.com/dandavison/delta) | [glow](https://github.com/charmbracelet/glow) | [tldr](https://tldr.sh/)               | [yazi](https://github.com/sxyazi/yazi)          |
-| [watch](https://linux.die.net/man/1/watch)   |                                               |                                        |                                                 |
+| [watch](https://linux.die.net/man/1/watch)   | [ffmpeg](https://ffmpeg.org/)                 | [7-Zip](https://www.7-zip.org/)        | [poppler](https://poppler.freedesktop.org/)     |
+| [ImageMagick](https://imagemagick.org/)      | [resvg](https://github.com/RazrFalcon/resvg)  |                                        |                                                 |
 
 #### Development Tools
 

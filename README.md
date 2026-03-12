@@ -4,15 +4,11 @@ Complete development environment automation for macOS and Linux (Ubuntu/Debian-b
 
 ## What This Repository Does
 
-A complete development environment setup that:
-
 - **Installs CLI tools** - Development tools, programming languages, package managers
 - **Installs applications** - IDEs, browsers, productivity apps (macOS)
 - **Configures your shell** - Zsh with Oh My Zsh, Starship prompt, and custom utilities
 - **Manages dotfiles** - Configuration files via GNU Stow
 - **Sets up environments** - Python with pyenv, Rust with cargo, Node.js, and more
-
-See [dotfiles/README.md](dotfiles/README.md) for detailed documentation about configuration files.
 
 ## Features
 

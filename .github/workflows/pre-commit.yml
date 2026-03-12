@@ -24,6 +24,7 @@ jobs:
           extra_args: --verbose --show-diff-on-failure --from-ref origin/${{ github.base_ref }} --to-ref HEAD
         env:
           PRE_COMMIT_COLOR: always
+          SKIP: no-commit-to-branch
 
       - uses: pre-commit/action@v3.0.1
         if: github.event_name == 'push'
@@ -31,3 +32,4 @@ jobs:
           extra_args: --verbose --show-diff-on-failure --all-files
         env:
           PRE_COMMIT_COLOR: always
+          SKIP: no-commit-to-branch

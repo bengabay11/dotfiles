@@ -126,7 +126,7 @@ test_cli_tools_exists() {
         "ffmpeg installation:ffmpeg"
         "7-Zip installation:7z"
         "poppler installation:pdfinfo"
-        "ImageMagick installation:magick"
+        "ImageMagick installation:convert"
         "resvg installation:resvg"
     )
 

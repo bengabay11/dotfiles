@@ -105,5 +105,6 @@ os/**/logs/
 ##############################
 # Yazi file manager
 ##############################
-# Let package manager handle flavor downloads
+# Let package manager handle flavors and plugins
 dotfiles/.config/yazi/flavors/
+dotfiles/.config/yazi/plugins/

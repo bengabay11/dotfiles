@@ -304,6 +304,16 @@ try_install_claude_code() {
     [[ -f "$HOME/.claude/bin/claude" ]] && export PATH="$HOME/.claude/bin:$PATH"
 }
 
+try_install_yazi_packages() {
+    log_install "yazi plugins and flavors"
+    if ya pkg install; then
+        log_success "yazi plugins and flavors installed successfully"
+    else
+        log_error "Failed to install yazi plugins and flavors"
+        FAILED_INSTALLATIONS+=("yazi plugins/flavors")
+    fi
+}
+
 try_install_python() {
     local python_version=$1
     local tool_name="Python $python_version"

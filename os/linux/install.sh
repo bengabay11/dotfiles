@@ -236,6 +236,7 @@ install_cli_tools() {
     try_install_carapace
     try_install_claude_code
     try_install_starship_preset
+    try_install_yazi_packages
 }
 
 install_pyenv() {

@@ -110,6 +110,7 @@ install_cli_tools() {
     # Tools with complex installation logic that can't be expressed as a single command
     try_install_claude_code
     try_install_starship_preset
+    try_install_yazi_packages
 }
 
 install_applications() {

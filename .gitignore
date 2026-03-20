@@ -101,3 +101,10 @@ os/**/logs/
 # dotfiles/*.local
 # dotfiles/*.secret
 # dotfiles/*.private
+
+##############################
+# Yazi file manager
+##############################
+# Let package manager handle flavors and plugins
+dotfiles/.config/yazi/flavors/
+dotfiles/.config/yazi/plugins/

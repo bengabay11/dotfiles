@@ -11,9 +11,11 @@ repos:
           - id: check-merge-conflict
           - id: check-symlinks
           - id: destroyed-symlinks
+          - id: detect-private-key
           - id: check-case-conflict
           - id: fix-byte-order-marker
           - id: check-vcs-permalinks
+          - id: no-commit-to-branch
           - id: mixed-line-ending
             args: ["--fix=lf"]
 
@@ -32,3 +34,14 @@ repos:
       rev: v1.6.26
       hooks:
           - id: actionlint
+
+    - repo: https://github.com/codespell-project/codespell
+      rev: v2.4.1
+      hooks:
+          - id: codespell
+
+    - repo: https://github.com/gitleaks/gitleaks
+      rev: v8.30.0
+      hooks:
+          - id: gitleaks
+            args: ["--redact"]

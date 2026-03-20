@@ -99,12 +99,18 @@ install_cli_tools() {
         "uv:uv:uv --version:uv"
         "stow:stow:stow --version:stow"
         "yazi:yazi:yazi --version:yazi"
+        "ffmpeg:ffmpeg:ffmpeg -version:ffmpeg"
+        "p7zip:7z:7z --help:p7zip"
+        "poppler:pdfinfo:pdfinfo -v:poppler"
+        "ImageMagick:magick:magick --version:imagemagick"
+        "resvg:resvg:resvg --version:resvg"
     )
     install_tools_with_package_manager "Homebrew" "brew" "brew install" tools
 
     # Tools with complex installation logic that can't be expressed as a single command
     try_install_claude_code
     try_install_starship_preset
+    try_install_yazi_packages
 }
 
 install_applications() {
@@ -197,7 +203,7 @@ install_applications() {
 }
 
 main() {
-    log_header "macOS Dotfiles Installation Script"
+    log_header "🚀 MacOS Development Environment Setup"
     log_info_interactive_mode_status
 
     echo ""
@@ -225,7 +231,7 @@ main() {
     process_stages
 
     show_failure_summary
-    log_success "macOS dotfiles installation completed successfully!"
+    log_success "macOS development environment setup completed successfully!"
     echo ""
     log_info "Optional system configuration:"
     log_info "You may want to configure these macOS system preferences:"

@@ -1,4 +1,4 @@
-name: Test Dotfiles Installation
+name: Test Development Environment Setup
 
 on:
   push:

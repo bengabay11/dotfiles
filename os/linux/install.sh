@@ -69,6 +69,12 @@ install_cli_tools_with_apt() {
         "kubectx:kubectx:kubectx --help:kubectx"
         "neofetch:neofetch:neofetch --version:neofetch"
         "stow:stow:stow --version:stow"
+        "ffmpeg:ffmpeg:ffmpeg -version:ffmpeg"
+        "p7zip:7z:7z --help:p7zip-full"
+        "poppler-utils:pdfinfo:pdfinfo -v:poppler-utils"
+        "ImageMagick:magick:magick --version:imagemagick"
+        "xclip:xclip:xclip -version:xclip"
+        "wl-clipboard:wl-copy:wl-copy --version:wl-clipboard"
     )
     install_tools_with_package_manager "apt" "apt" \
         "sudo DEBIAN_FRONTEND=noninteractive apt-get install -y" tools
@@ -80,6 +86,7 @@ install_cli_tools_with_cargo() {
         "eza:eza:eza --version:eza"
         "git-delta:delta:delta --version:git-delta"
         "yazi:yazi:yazi --version:yazi-build"
+        "resvg:resvg:resvg --version:resvg"
     )
     install_tools_with_package_manager "cargo" "cargo" "cargo install --locked" tools
 }
@@ -229,6 +236,7 @@ install_cli_tools() {
     try_install_carapace
     try_install_claude_code
     try_install_starship_preset
+    try_install_yazi_packages
 }
 
 install_pyenv() {
@@ -262,7 +270,7 @@ configure_python_env() {
 }
 
 main() {
-    log_header "🚀 Linux Dotfiles Installation Script"
+    log_header "🚀 Linux Development Environment Setup"
     log_info_interactive_mode_status
     echo ""
     log_step "Installation process includes the following stages:"
@@ -289,7 +297,7 @@ main() {
     process_stages
 
     show_failure_summary
-    log_success "linux dotfiles installation completed successfully!"
+    log_success "Linux development environment setup completed successfully!"
 }
 
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then

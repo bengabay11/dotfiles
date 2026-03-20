@@ -11,6 +11,7 @@ repos:
           - id: check-merge-conflict
           - id: check-symlinks
           - id: destroyed-symlinks
+          - id: detect-private-key
           - id: check-case-conflict
           - id: fix-byte-order-marker
           - id: check-vcs-permalinks

@@ -11,6 +11,10 @@ alias speedtest="speedtest-cli"
 alias ipython="ipython3"
 alias cd="z"
 alias grep="rg"
+alias cp="cp -irv"
+
+# Python
+alias source_poetry='source "$(poetry env info --path)/bin/activate"'
 
 # AWS
 alias sso="aws sso login"
